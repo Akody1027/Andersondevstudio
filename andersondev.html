@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AndersonDev Studio</title>
+    <style>
+        /* Base Variables & Reset */
+        :root {
+            --bg-color: #050505;
+            --text-main: #ffffff;
+            --text-muted: #9ca3af;
+            --accent: #a855f7;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+        }
+        * { 
+            margin: 0; padding: 0; box-sizing: border-box; 
+            font-family: 'Inter', -apple-system, sans-serif; 
+        }
+        body { 
+            background-color: var(--bg-color); color: var(--text-main); 
+            overflow-x: hidden; scroll-behavior: smooth;
+        }
+
+        /* Typography */
+        h1, h2, h3 { font-weight: 800; letter-spacing: -0.04em; }
+        .text-accent { color: var(--accent); text-shadow: 0 0 15px rgba(168, 85, 247, 0.3); }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-color); }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+        /* Navigation */
+        nav {
+            position: fixed; top: 0; width: 100%; z-index: 100;
+            padding: 25px 8vw; display: flex; justify-content: space-between; align-items: center;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+            backdrop-filter: blur(0px); border-bottom: 1px solid transparent;
+        }
+        nav.scrolled {
+            background: rgba(5, 5, 5, 0.7); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--glass-border); padding: 15px 8vw;
+        }
+        .logo { font-size: 1.5rem; font-weight: 900; letter-spacing: -1px; text-decoration: none; color: #fff; }
+        .nav-links { display: flex; gap: 35px; }
+        .nav-links a {
+            color: var(--text-muted); text-decoration: none; font-weight: 600; font-size: 0.9rem;
+            transition: color 0.3s; position: relative; padding-bottom: 5px;
+        }
+        .nav-links a:hover, .nav-links a.active { color: #fff; }
+        .nav-links a::after {
+            content: ''; position: absolute; bottom: 0; left: 0; width: 0%;
+            height: 2px; background: var(--accent); transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 8px rgba(168, 85, 247, 0.6);
+        }
+        .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+
+        /* Hero Parallax Section */
+        .hero {
+            height: 100vh; display: flex; flex-direction: column; justify-content: center;
+            padding: 0 8vw; position: relative;
+            background-image: linear-gradient(rgba(5,5,5,0.7), rgba(5,5,5,1)), url('https://via.placeholder.com/1920x1080/111/333?text=Parallax+Background+Image');
+            background-attachment: fixed; background-position: center; background-size: cover;
+        }
+        .hero h1 { 
+            font-size: clamp(3rem, 6vw, 6rem); line-height: 1.05; max-width: 900px; margin-bottom: 24px; 
+            transform: translateY(30px); opacity: 0; animation: fadeUp 1s forwards 0.2s;
+        }
+        .hero p { 
+            font-size: clamp(1rem, 1.5vw, 1.2rem); color: var(--text-muted); max-width: 550px; margin-bottom: 40px; line-height: 1.6;
+            transform: translateY(30px); opacity: 0; animation: fadeUp 1s forwards 0.4s;
+        }
+        .btn {
+            padding: 16px 40px; background: #fff; color: #000; text-decoration: none; font-weight: 700;
+            border-radius: 50px; transition: all 0.3s ease; display: inline-flex; align-items: center; justify-content: center;
+            transform: translateY(30px); opacity: 0; animation: fadeUp 1s forwards 0.6s; border: 1px solid #fff;
+        }
+        .btn:hover { 
+            background: transparent; color: #fff; border-color: var(--accent); 
+            box-shadow: inset 0 0 20px rgba(168, 85, 247, 0.2), 0 0 20px rgba(168, 85, 247, 0.4); 
+        }
+
+        /* SVG Wavy Divider */
+        .wave-container { position: absolute; bottom: 0; left: 0; width: 100%; overflow: hidden; line-height: 0; transform: translateY(1px); }
+        .wave-container svg { position: relative; display: block; width: calc(100% + 1.3px); height: 90px; }
+        .wave-container .shape-fill { fill: var(--bg-color); }
+
+        /* Infinite Scrolling Marquee */
+        .marquee-wrapper { 
+            width: 100%; overflow: hidden; background: #fff; color: #000; 
+            padding: 20px 0; transform: rotate(-2deg) scale(1.05); position: relative; z-index: 10; 
+            border-top: 1px solid #333; border-bottom: 1px solid #333;
+        }
+        .marquee { display: flex; white-space: nowrap; animation: scrollText 25s linear infinite; font-weight: 900; font-size: 1.2rem; letter-spacing: 2px;}
+        .marquee span { margin: 0 40px; display: inline-flex; align-items: center;}
+        .marquee span::before { content: ''; display: inline-block; width: 8px; height: 8px; background: var(--accent); border-radius: 50%; margin-right: 40px; }
+
+        /* Section Layouts */
+        section { padding: 120px 8vw; position: relative; }
+        .section-header { margin-bottom: 60px; max-width: 600px; }
+        .section-title { font-size: clamp(2.5rem, 4vw, 3.5rem); margin-bottom: 15px; }
+        .section-subtitle { color: var(--text-muted); font-size: 1.1rem; line-height: 1.6; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; }
+
+        /* Next-Level Glassmorphism Cards */
+        .glass-card {
+            background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border); border-radius: 24px; padding: 40px;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden;
+            opacity: 0; transform: translateY(40px);
+        }
+        .glass-card.visible { opacity: 1; transform: translateY(0); }
+        .glass-card:hover { 
+            transform: translateY(-10px); border-color: rgba(168, 85, 247, 0.4); 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8); background: rgba(255, 255, 255, 0.05);
+        }
+        .glass-card::before {
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(168,85,247,0.08) 0%, transparent 60%);
+            opacity: 0; transition: opacity 0.5s; pointer-events: none;
+        }
+        .glass-card:hover::before { opacity: 1; }
+        .glass-card img { width: 100%; height: 220px; object-fit: cover; border-radius: 16px; margin-bottom: 25px; filter: grayscale(100%); transition: filter 0.5s; }
+        .glass-card:hover img { filter: grayscale(0%); }
+        .glass-card h3 { font-size: 1.8rem; margin-bottom: 15px; }
+        .glass-card p { color: var(--text-muted); line-height: 1.7; font-size: 1rem; }
+
+        /* Pricing Specifics */
+        .pricing-tier { display: flex; flex-direction: column; height: 100%; }
+        .price-wrap { margin: 30px 0; }
+        .price { font-size: 4rem; font-weight: 900; line-height: 1; }
+        .price span { font-size: 1.2rem; color: var(--text-muted); font-weight: 500; }
+        .pricing-tier ul { list-style: none; margin-bottom: 40px; flex-grow: 1; }
+        .pricing-tier ul li { 
+            padding: 15px 0; border-bottom: 1px solid var(--glass-border); color: #ccc; 
+            display: flex; align-items: center; gap: 10px;
+        }
+        .pricing-tier ul li::before { content: '✓'; color: var(--accent); font-weight: bold; }
+        .pricing-tier .btn { width: 100%; margin-top: auto; }
+
+        /* Footer */
+        footer { padding: 60px 8vw; border-top: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
+        footer p { color: var(--text-muted); font-size: 0.9rem; }
+
+        /* Keyframes */
+        @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+        @keyframes scrollText { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav { padding: 20px 5vw; }
+            .nav-links { display: none; /* Add a hamburger menu for mobile production */ }
+            .hero { padding: 0 5vw; }
+            section { padding: 80px 5vw; }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <nav id="navbar">
+        <a href="#home" class="logo">Anderson<span class="text-accent">Dev.</span>studio</a>
+        <div class="nav-links">
+            <a href="#about" class="nav-item">About</a>
+            <a href="#services" class="nav-item">Expertise</a>
+            <a href="#pricing" class="nav-item">Pricing</a>
+        </div>
+    </nav>
+
+    <header class="hero" id="home">
+        <h1>Architecting<br><span class="text-accent">Next-Level</span> Digital Realities.</h1>
+        <p>Premium web development, robust mobile applications, and customized software solutions. Small-town dedication meets world-class, native-feeling architecture.</p>
+        <div>
+            <a href="#pricing" class="btn">Explore Solutions</a>
+        </div>
+        
+        <div class="wave-container">
+            <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C59.71,118.08,130.83,112.44,189.2,92.83,235.26,77.4,281.71,67.75,321.39,56.44Z" class="shape-fill"></path>
+            </svg>
+        </div>
+    </header>
+
+    <div class="marquee-wrapper">
+        <div class="marquee">
+            <span>MODERN UI/UX</span><span>CUSTOM SOFTWARE</span><span>MOBILE APPS</span><span>SCALABLE ARCHITECTURE</span><span>ONGOING MAINTENANCE</span>
+            <span>MODERN UI/UX</span><span>CUSTOM SOFTWARE</span><span>MOBILE APPS</span><span>SCALABLE ARCHITECTURE</span><span>ONGOING MAINTENANCE</span>
+        </div>
+    </div>
+
+    <section id="about">
+        <div class="section-header">
+            <h2 class="section-title">The <span class="text-accent">Advantage</span></h2>
+            <p class="section-subtitle">Get the personalized, dedicated attention of a local small-town partner paired with the technical prowess to build massive, scalable digital systems.</p>
+        </div>
+        <div class="grid">
+            <div class="glass-card observer-item">
+                <img src="https://via.placeholder.com/600x400/111/333?text=Local+Dedicated+Partner" alt="Small Town Developer">
+                <h3>Direct Partnership</h3>
+                <p>Skip the bloated agency fees, account managers, and lack of communication. You work directly with the engineer building your product, ensuring affordable pricing and zero red tape.</p>
+            </div>
+            <div class="glass-card observer-item">
+                <img src="https://via.placeholder.com/600x400/111/333?text=Native+App+Performance" alt="App Development">
+                <h3>Native-App Feel</h3>
+                <p>Every interface is engineered to feel premium. Fluid animations, high-contrast layouts, and vector-perfect designs ensure your software looks and operates like a top-tier native application.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="services">
+        <div class="section-header">
+            <h2 class="section-title">Core <span class="text-accent">Expertise</span></h2>
+        </div>
+        <div class="grid">
+            <div class="glass-card observer-item">
+                <h3>Web Applications</h3>
+                <p>Fully responsive, lightning-fast single-page applications built with modern frameworks to handle complex logic seamlessly.</p>
+            </div>
+            <div class="glass-card observer-item">
+                <h3>Mobile Ecosystems</h3>
+                <p>Cross-platform mobile development designed to dominate the app stores with flawless user experiences and powerful backend integrations.</p>
+            </div>
+            <div class="glass-card observer-item">
+                <h3>System Architecture</h3>
+                <p>Customized software solutions including marketplace payment routing, real-time geographic alerting, and scalable databases.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="pricing">
+        <div class="section-header">
+            <h2 class="section-title">Transparent <span class="text-accent">Pricing</span></h2>
+            <p class="section-subtitle">Reasonable rates designed to forge long-term partnerships, not extract maximum immediate profit.</p>
+        </div>
+        <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));">
+            
+            <div class="glass-card pricing-tier observer-item">
+                <h3>Custom Software Build</h3>
+                <div class="price-wrap">
+                    <div class="price">Variable</div>
+                </div>
+                <ul>
+                    <li>Full Application / Website Architecture</li>
+                    <li>Premium UI/UX Vector Design</li>
+                    <li>Secure Backend & API Integration</li>
+                    <li>100% Source Code Ownership</li>
+                </ul>
+                <a href="#" class="btn">Request a Quote</a>
+            </div>
+            
+            <div class="glass-card pricing-tier observer-item" style="border-color: rgba(168, 85, 247, 0.5); box-shadow: 0 10px 40px rgba(168, 85, 247, 0.1);">
+                <div style="position: absolute; top: 0; right: 0; background: var(--accent); color: #fff; padding: 8px 20px; font-weight: bold; border-bottom-left-radius: 16px;">RECOMMENDED</div>
+                <h3>Ongoing Maintenance</h3>
+                <div class="price-wrap">
+                    <div class="price">$149<span>/mo</span></div>
+                </div>
+                <ul>
+                    <li>Premium Cloud Hosting & SSL</li>
+                    <li>Weekly Security Updates & Backups</li>
+                    <li>24/7 Uptime Monitoring</li>
+                    <li>Minor Bug Fixes & Content Adjustments</li>
+                </ul>
+                <a href="#" class="btn" style="background: var(--accent); color: #fff; border-color: var(--accent);">Secure Retainer</a>
+            </div>
+
+        </div>
+    </section>
+
+    <footer>
+        <a href="#home" class="logo">Anderson<span class="text-accent">Dev</span>.studio</a>
+        <p>&copy; 2026 AndersonDev Studio. Crafted with precision.</p>
+    </footer>
+
+    <script>
+        // Dynamic Navbar Background & Underline Activation
+        const navbar = document.getElementById('navbar');
+        const sections = document.querySelectorAll('section, header');
+        const navItems = document.querySelectorAll('.nav-item');
+
+        window.addEventListener('scroll', () => {
+            // Background blur toggle
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+
+            // Active State logic
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (scrollY >= (sectionTop - sectionHeight / 3)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navItems.forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('href').includes(current)) {
+                    item.classList.add('active');
+                }
+            });
+        });
+
+        // Intersection Observer for Scroll Fade-Up Animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target); // Run once
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.observer-item').forEach(item => {
+            observer.observe(item);
+        });
+    </script>
+</body>
+</html>
