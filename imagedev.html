@@ -303,6 +303,8 @@
               // --- NEW MODULE: VECTOR COOKIE-CUTTER CROP ENGINE ---
         let shapePath = null; let activeImgToCrop = null;
         const SHAPE_PRESETS = [
+          
+            { name: 'Square', path: 'M 10 10 L 90 10 L 90 90 L 10 90 Z' },
             { name: 'Circle', path: 'M 50 0 A 50 50 0 1 0 50 100 A 50 50 0 1 0 50 0 Z' },
             { name: 'Heart', path: 'M 50 30 C 50 30 45 10 25 10 C 5 10 5 35 5 45 C 5 65 50 95 50 95 C 50 95 95 65 95 45 C 95 35 95 10 75 10 C 55 10 50 30 50 30 Z' },
             { name: 'Star', path: 'M 50 5 L 61 39 L 98 39 L 68 61 L 79 95 L 50 74 L 21 95 L 32 61 L 2 39 L 39 39 Z' },
@@ -379,29 +381,25 @@
             if (activeImgToCrop) { canvas.setActiveObject(activeImgToCrop); }
             closeAllPanels();
         });
-
+      
+      
+      
+      
+      
+          
+      
         document.getElementById('btnConfirmCrop').addEventListener('click', () => {
             if (!shapePath || !activeImgToCrop) return;
 
-            const clipPath = new fabric.Path(shapePath.path);
-            
-            const shapeMatrix = shapePath.calcTransformMatrix();
-            const imgMatrix = activeImgToCrop.calcTransformMatrix();
-            const invertedImgMatrix = fabric.util.invertTransform(imgMatrix);
-            const relativeMatrix = fabric.util.multiplyTransformMatrices(invertedImgMatrix, shapeMatrix);
-            
-            const opt = fabric.util.qrDecompose(relativeMatrix);
-            
-            clipPath.set({
-                scaleX: opt.scaleX,
-                scaleY: opt.scaleY,
-                angle: opt.angle,
-                left: opt.translateX,
-                top: opt.translateY,
+            const clipPath = new fabric.Path(shapePath.path, {
+                left: shapePath.left,
+                top: shapePath.top,
+                scaleX: shapePath.scaleX,
+                scaleY: shapePath.scaleY,
+                angle: shapePath.angle,
                 originX: 'center',
                 originY: 'center',
-                flipX: opt.flipX,
-                flipY: opt.flipY
+                absolutePositioned: true
             });
             
             activeImgToCrop.set('clipPath', clipPath);
@@ -409,7 +407,12 @@
             shapePath = null;
             canvas.setActiveObject(activeImgToCrop);
             closeAllPanels();
+            canvas.renderAll();
         });
+
+      
+
+      
 
       
       
