@@ -22,7 +22,7 @@
             background-color: var(--bg-color); color: var(--text-main); 
             overflow-x: hidden; scroll-behavior: smooth;
         }
-
+ 
         /* Typography */
         h1, h2, h3 { font-weight: 800; letter-spacing: -0.04em; }
         .text-accent { color: var(--accent); text-shadow: 0 0 15px rgba(168, 85, 247, 0.3); }
@@ -161,6 +161,144 @@
             .hero { padding: 0 5vw; }
             section { padding: 80px 5vw; }
         }
+      
+      
+              /* --- Bio Trigger Button --- */
+        .bio-trigger {
+            background: var(--glass-bg);
+            border: 1px solid var(--accent);
+            border-radius: 50%;
+            width: 55px;
+            height: 55px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.2);
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        .bio-trigger img { 
+            width: 28px; 
+            height: 28px; 
+            object-fit: contain; 
+            /* Optional: Add filter if prplusericon.png needs to pop more */
+        }
+        .bio-trigger:hover {
+            box-shadow: 0 0 25px rgba(168, 85, 247, 0.6);
+            transform: scale(1.05);
+            background: rgba(168, 85, 247, 0.1);
+        }
+
+        /* --- Bio Modal Container --- */
+        .bio-modal {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            width: min(90vw, 650px);
+            background: rgba(10, 10, 10, 0.85);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border);
+            border-bottom: 2px solid var(--accent);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.9), 0 0 30px rgba(168, 85, 247, 0.15);
+            z-index: 1000;
+            
+            /* Initial Hidden State */
+            opacity: 0;
+            pointer-events: none;
+            /* Shifting down and right by 150px, scaling down slightly */
+            transform: translate(150px, 150px) scale(0.85);
+            /* Custom cubic-bezier for a fluid, snappy pop-up */
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.1); 
+        }
+
+        /* Active State toggled by JS */
+        .bio-modal.active {
+            opacity: 1;
+            pointer-events: all;
+            transform: translate(0, 0) scale(1);
+        }
+        
+        /* --- Close Button --- */
+        .close-bio {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            background: transparent;
+            border: none;
+            color: var(--accent);
+            font-size: 2.2rem;
+            cursor: pointer;
+            line-height: 1;
+            transition: transform 0.3s ease, text-shadow 0.3s ease;
+        }
+        .close-bio:hover {
+            transform: rotate(90deg) scale(1.1);
+            text-shadow: 0 0 12px var(--accent);
+        }
+
+        /* --- Modal Content Layout --- */
+        .bio-content {
+            display: flex;
+            align-items: center;
+            gap: 35px;
+        }
+        .bio-image {
+            width: 140px;
+            height: 140px;
+            border-radius: 20px; /* Modern slightly rounded square */
+            object-fit: cover;
+            border: 1px solid rgba(168, 85, 247, 0.4);
+            box-shadow: inset 0 0 20px rgba(168, 85, 247, 0.2), 0 10px 20px rgba(0,0,0,0.5);
+            filter: grayscale(100%);
+            transition: filter 0.5s ease, transform 0.5s ease;
+            flex-shrink: 0;
+        }
+        .bio-modal:hover .bio-image {
+            filter: grayscale(0%);
+            transform: translateY(-5px);
+        }
+        .bio-text h3 {
+            font-size: 1.6rem;
+            margin-bottom: 12px;
+            color: #fff;
+        }
+        .bio-text p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        /* Mobile Responsiveness for Modal */
+        @media (max-width: 650px) {
+            .bio-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+            }
+            .bio-modal {
+                bottom: 20px;
+                right: 20px;
+                padding: 35px 25px 25px 25px;
+                /* Adjust slide origin for mobile screens */
+                transform: translate(50px, 50px) scale(0.9); 
+            }
+            .bio-image {
+                width: 110px;
+                height: 110px;
+                border-radius: 50%; /* Switch to full circle on mobile */
+            }
+        }
+
+      
+      
+      
+      
+      
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 </head>
@@ -298,11 +436,32 @@
         </div>
     </section>
 
-    <footer>
-        <a href="#home" class="logo">Anderson<span class="text-accent">Dev</span>.studio</a>
-        <p>&copy; 2026 AndersonDev Studio. Crafted with precision.</p>
+ 
+      <footer>
+        <div class="footer-brand" style="display: flex; flex-direction: column; gap: 10px;">
+            <a href="#home" class="logo">Anderson<span class="text-accent">Dev</span>.studio</a>
+            <p>&copy; 2026 AndersonDev Studio. Crafted with precision.</p>
+        </div>
+        
+        <button id="bioTrigger" class="bio-trigger" aria-label="Developer Info">
+            <img src="prplusericon.png" alt="User Icon">
+        </button>
     </footer>
 
+    <div id="bioModal" class="bio-modal">
+        <button id="closeBio" class="close-bio">&times;</button>
+        <div class="bio-content">
+            <img src="profile.png" alt="Developer Profile" class="bio-image">
+            <div class="bio-text">
+                <h3>Architecting Digital Realities.</h3>
+                <p>Hi, I'm the founder of AndersonDev Studio and the lead engineer behind dynamic platforms like Roadwatch Hero. I specialize in bridging the gap between robust, scalable backend architecture and premium, native-feeling user interfaces. Whether navigating two-sided marketplaces, custom operational software, or modern web apps, I build systems designed to look pristine and perform flawlessly.</p>
+            </div>
+        </div>
+    </div>
+
+  
+  
+  
     <script>
         // Dynamic Navbar Background & Underline Activation
         const navbar = document.getElementById('navbar');
@@ -353,6 +512,40 @@
         document.querySelectorAll('.observer-item').forEach(item => {
             observer.observe(item);
         });
+      
+      
+      
+      
+      
+      
+              // Bio Modal Logic
+        const bioTrigger = document.getElementById('bioTrigger');
+        const bioModal = document.getElementById('bioModal');
+        const closeBio = document.getElementById('closeBio');
+
+        // Open Modal
+        bioTrigger.addEventListener('click', () => {
+            bioModal.classList.add('active');
+        });
+
+        // Close Modal
+        closeBio.addEventListener('click', () => {
+            bioModal.classList.remove('active');
+        });
+
+        // Optional: Close Modal when clicking outside of it
+        window.addEventListener('click', (e) => {
+            if (e.target !== bioModal && !bioModal.contains(e.target) && e.target !== bioTrigger && !bioTrigger.contains(e.target)) {
+                bioModal.classList.remove('active');
+            }
+        });
+
+      
+      
+      
+      
+      
+      
     </script>
 </body>
 </html>
