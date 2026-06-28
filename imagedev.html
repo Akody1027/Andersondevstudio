@@ -381,16 +381,15 @@
       
       
       
+     
       
       
-     document.getElementById('btnConfirmCrop').addEventListener('click', () => {
+      
+      document.getElementById('btnConfirmCrop').addEventListener('click', () => {
             if (!shapePath || !activeImgToCrop) return;
 
-            // Hide the orange shape so it is not baked into the export
-            shapePath.visible = false;
-            canvas.renderAll();
-
-            // Get bounding box of shape fill only (no stroke inflation)
+            // STEP 1: Get bounding box FIRST while shape is still visible.
+            // getBoundingRect() returns {0,0,0,0} on hidden objects in Fabric 5 — must run before hiding.
             const origStroke = shapePath.strokeWidth;
             shapePath.set({ strokeWidth: 0 });
             shapePath.setCoords();
@@ -398,16 +397,27 @@
             shapePath.set({ strokeWidth: origStroke });
             shapePath.setCoords();
 
-            // Export the main canvas as a clean flat image (shape is hidden)
-            const fullDataUrl = canvas.toDataURL({ format: 'png', multiplier: 1 });
+            // Snapshot the path properties we need before hiding anything
+            const cx  = shapePath.left;
+            const cy  = shapePath.top;
+            const sx  = shapePath.scaleX;
+            const sy  = shapePath.scaleY;
+            const pox = shapePath.pathOffset ? shapePath.pathOffset.x : 0;
+            const poy = shapePath.pathOffset ? shapePath.pathOffset.y : 0;
+            const rl  = rect.left;
+            const rt  = rect.top;
+            const pathCopy = shapePath.path.slice();
 
-            // Restore shape so user sees it if they cancel
+            // STEP 2: Hide shape, export clean canvas image, restore shape
+            shapePath.visible = false;
+            canvas.renderAll();
+            const fullDataUrl = canvas.toDataURL({ format: 'png', multiplier: 1 });
             shapePath.visible = true;
             canvas.renderAll();
 
+            // STEP 3: Load the clean canvas image and apply the clip mask
             const sourceImg = new Image();
             sourceImg.onload = function () {
-                // Output canvas = exact size of the shape bounding box
                 const outW = Math.ceil(rect.width);
                 const outH = Math.ceil(rect.height);
                 const outCanvas = document.createElement('canvas');
@@ -415,73 +425,36 @@
                 outCanvas.height = outH;
                 const ctx = outCanvas.getContext('2d');
 
-                // Build the clip path in OUTPUT canvas coordinates.
-                // shapePath.left/top = center of shape on main canvas (originX/Y: center).
-                // pathOffset = the local-space center of the raw path data.
-                // So: canvas_pixel = (local_coord - pathOffset) * scale + shapePath.left/top
-                // Shifted into output space: subtract rect.left / rect.top
-                const cx   = shapePath.left;
-                const cy   = shapePath.top;
-                const sx   = shapePath.scaleX;
-                const sy   = shapePath.scaleY;
-                const pox  = shapePath.pathOffset ? shapePath.pathOffset.x : 0;
-                const poy  = shapePath.pathOffset ? shapePath.pathOffset.y : 0;
-                const rl   = rect.left;
-                const rt   = rect.top;
-
-                // Helper: convert local path coord to output canvas pixel
+                // Convert a local-space path coordinate to output canvas pixels
                 function lx(v) { return (v - pox) * sx + cx - rl; }
                 function ly(v) { return (v - poy) * sy + cy - rt; }
 
-                ctx.beginPath();
-                shapePath.path.forEach(function (cmd) {
+                // Build SVG path string in output canvas coordinates for ALL shapes.
+                // Using Path2D for everything (arc and non-arc) is simpler and more reliable.
+                let svgStr = '';
+                pathCopy.forEach(function (cmd) {
                     switch (cmd[0]) {
-                        case 'M': ctx.moveTo(lx(cmd[1]), ly(cmd[2])); break;
-                        case 'L': ctx.lineTo(lx(cmd[1]), ly(cmd[2])); break;
-                        case 'C': ctx.bezierCurveTo(lx(cmd[1]), ly(cmd[2]), lx(cmd[3]), ly(cmd[4]), lx(cmd[5]), ly(cmd[6])); break;
-                        case 'Q': ctx.quadraticCurveTo(lx(cmd[1]), ly(cmd[2]), lx(cmd[3]), ly(cmd[4])); break;
+                        case 'M': svgStr += `M ${lx(cmd[1])} ${ly(cmd[2])} `; break;
+                        case 'L': svgStr += `L ${lx(cmd[1])} ${ly(cmd[2])} `; break;
+                        case 'C': svgStr += `C ${lx(cmd[1])} ${ly(cmd[2])} ${lx(cmd[3])} ${ly(cmd[4])} ${lx(cmd[5])} ${ly(cmd[6])} `; break;
+                        case 'Q': svgStr += `Q ${lx(cmd[1])} ${ly(cmd[2])} ${lx(cmd[3])} ${ly(cmd[4])} `; break;
                         case 'A':
-                            // Fabric A: [cmd, rx, ry, xRot, largeArc, sweep, endX, endY]
-                            // Convert using a temporary path trick via Path2D
-                            // (Native arc() cannot handle elliptical arcs cleanly)
+                            // Arc: rx and ry are radii in local units — scale them too
+                            svgStr += `A ${cmd[1]*sx} ${cmd[2]*sy} ${cmd[3]} ${cmd[4]} ${cmd[5]} ${lx(cmd[6])} ${ly(cmd[7])} `;
                             break;
-                        case 'z': case 'Z': ctx.closePath(); break;
+                        case 'z': case 'Z': svgStr += 'Z '; break;
                     }
                 });
 
-                // For shapes containing arcs (Circle, Moon, Droplet),
-                // rebuild via a full SVG string in output coordinates — safer than arc()
-                const hasArc = shapePath.path.some(c => c[0] === 'A');
-                if (hasArc) {
-                    ctx.closePath();
-                    ctx.beginPath();
-                    let svg = '';
-                    shapePath.path.forEach(function (cmd) {
-                        switch (cmd[0]) {
-                            case 'M': svg += `M ${lx(cmd[1])} ${ly(cmd[2])} `; break;
-                            case 'L': svg += `L ${lx(cmd[1])} ${ly(cmd[2])} `; break;
-                            case 'C': svg += `C ${lx(cmd[1])} ${ly(cmd[2])} ${lx(cmd[3])} ${ly(cmd[4])} ${lx(cmd[5])} ${ly(cmd[6])} `; break;
-                            case 'Q': svg += `Q ${lx(cmd[1])} ${ly(cmd[2])} ${lx(cmd[3])} ${ly(cmd[4])} `; break;
-                            case 'A':
-                                // rx and ry must also be scaled
-                                svg += `A ${cmd[1]*sx} ${cmd[2]*sy} ${cmd[3]} ${cmd[4]} ${cmd[5]} ${lx(cmd[6])} ${ly(cmd[7])} `;
-                                break;
-                            case 'z': case 'Z': svg += 'Z '; break;
-                        }
-                    });
-                    ctx.clip(new Path2D(svg));
-                } else {
-                    ctx.clip();
-                }
-
-                // Draw the full source image offset so (rect.left, rect.top) maps to (0,0)
+                // Apply clip and draw
+                ctx.clip(new Path2D(svgStr));
                 ctx.drawImage(sourceImg, -rl, -rt);
 
-                // Load result back into Fabric
+                // Put the cropped result back into Fabric at the shape's position
                 fabric.Image.fromURL(outCanvas.toDataURL('image/png'), function (newImg) {
                     newImg.set({
-                        left: rect.left + outW / 2,
-                        top:  rect.top  + outH / 2,
+                        left: rl + outW / 2,
+                        top:  rt + outH / 2,
                         originX: 'center',
                         originY: 'center',
                         borderColor: '#ffffff',
@@ -501,7 +474,9 @@
             };
             sourceImg.src = fullDataUrl;
         });
-  
+      
+      
+      
       
 
       
