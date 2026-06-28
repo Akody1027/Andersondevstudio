@@ -296,10 +296,7 @@
       
       
       
-      
-      
-      
-           // --- NEW MODULE: VECTOR COOKIE-CUTTER CROP ENGINE ---
+      // --- NEW MODULE: DESTRUCTIVE BAKE VECTOR CROP ENGINE ---
         let shapePath = null; let activeImgToCrop = null;
 
         const SHAPE_PRESETS = [
@@ -319,6 +316,7 @@
         ];
 
         const shapePresetPanel = document.getElementById('shapePresetPanel');
+        shapePresetPanel.innerHTML = '';
         SHAPE_PRESETS.forEach(preset => {
             const btn = document.createElement('div');
             btn.className = 'font-item'; 
@@ -380,24 +378,19 @@
             if (activeImgToCrop) { canvas.setActiveObject(activeImgToCrop); }
             closeAllPanels();
         });
-      
-      
-      
-      
-      document.getElementById('btnConfirmCrop').addEventListener('click', () => {
+
+        document.getElementById('btnConfirmCrop').addEventListener('click', () => {
             if (!shapePath || !activeImgToCrop) return;
 
             const rect = shapePath.getBoundingRect();
-            const tempCanvasEl = document.createElement('canvas');
-            tempCanvasEl.width = rect.width;
-            tempCanvasEl.height = rect.height;
             
-            const tempFab = new fabric.StaticCanvas(tempCanvasEl, { 
-                width: rect.width, 
-                height: rect.height 
-            });
+            const hiddenCanvas = document.createElement('canvas');
+            hiddenCanvas.width = rect.width;
+            hiddenCanvas.height = rect.height;
 
             activeImgToCrop.clone(function(clonedImg) {
+                const tempFab = new fabric.StaticCanvas(hiddenCanvas, { width: rect.width, height: rect.height });
+                
                 clonedImg.set({
                     left: clonedImg.left - rect.left,
                     top: clonedImg.top - rect.top
@@ -443,10 +436,6 @@
                 });
             });
         });
-      
-      
-      
-      
    
       
       
@@ -524,12 +513,28 @@
         document.getElementById('btnRotate').addEventListener('click', () => { const obj = canvas.getActiveObject(); if (obj) { obj.rotate((obj.angle || 0) + 90); canvas.renderAll(); } });
         document.getElementById('btnDelete').addEventListener('click', () => { const obj = canvas.getActiveObject(); if (obj) { canvas.remove(obj); canvas.discardActiveObject(); canvas.renderAll(); } });
 
-        document.getElementById('btnDownload').addEventListener('click', () => {
-            canvas.discardActiveObject(); closeAllPanels(); canvas.renderAll();
-            const dataURL = canvas.toDataURL({ format: 'png', multiplier: 3, quality: 1, backgroundColor: canvas.backgroundColor });
-            const link = document.createElement('a'); link.download = 'YouCut_Edit_' + Date.now() + '.png'; link.href = dataURL; document.body.appendChild(link); link.click(); document.body.removeChild(link);
-        });
 
+         document.getElementById('btnDownload').addEventListener('click', () => {
+            canvas.discardActiveObject(); 
+            closeAllPanels(); 
+            canvas.renderAll();
+            
+            // Force a frame delay to ensure UI elements are fully cleared from the rendering buffer
+            requestAnimationFrame(() => {
+                const dataURL = canvas.toDataURL({ 
+                    format: 'png', 
+                    multiplier: 3, 
+                    quality: 1, 
+                    backgroundColor: canvas.backgroundColor 
+                });
+                const link = document.createElement('a'); 
+                link.download = 'YouCut_Edit_' + Date.now() + '.png'; 
+                link.href = dataURL; 
+                document.body.appendChild(link); 
+                link.click(); 
+                document.body.removeChild(link);
+            });
+        });
     </script>
 </body>
 </html>
