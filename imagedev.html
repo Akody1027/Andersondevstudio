@@ -383,12 +383,14 @@
       
       
       
-     
-      
-      document.getElementById('btnConfirmCrop').addEventListener('click', () => {
+     document.getElementById('btnConfirmCrop').addEventListener('click', () => {
             if (!shapePath || !activeImgToCrop) return;
 
-            // Get bounding rect without stroke inflation
+            // Hide the orange shape so it is not baked into the export
+            shapePath.visible = false;
+            canvas.renderAll();
+
+            // Get bounding box of shape fill only (no stroke inflation)
             const origStroke = shapePath.strokeWidth;
             shapePath.set({ strokeWidth: 0 });
             shapePath.setCoords();
@@ -396,97 +398,110 @@
             shapePath.set({ strokeWidth: origStroke });
             shapePath.setCoords();
 
-            // Build an off-screen StaticCanvas at the FULL main canvas size.
-            // Pass NO element — let Fabric create its own internal canvas.
-            // This is the only reliable way to use Fabric's compositing in v5.
-            const tempCanvas = new fabric.StaticCanvas(null, {
-                width: canvas.getWidth(),
-                height: canvas.getHeight(),
-                enableRetinaScaling: false
-            });
+            // Export the main canvas as a clean flat image (shape is hidden)
+            const fullDataUrl = canvas.toDataURL({ format: 'png', multiplier: 1 });
 
-            // Clone the image and place it at the same position as on the main canvas
-            activeImgToCrop.clone(function(clonedImg) {
-                // Preserve exact position — originX/Y are already 'center' from addAssetStyle
-                clonedImg.set({
-                    left: activeImgToCrop.left,
-                    top: activeImgToCrop.top,
-                    originX: activeImgToCrop.originX,
-                    originY: activeImgToCrop.originY,
-                    scaleX: activeImgToCrop.scaleX,
-                    scaleY: activeImgToCrop.scaleY,
-                    angle: activeImgToCrop.angle || 0
+            // Restore shape so user sees it if they cancel
+            shapePath.visible = true;
+            canvas.renderAll();
+
+            const sourceImg = new Image();
+            sourceImg.onload = function () {
+                // Output canvas = exact size of the shape bounding box
+                const outW = Math.ceil(rect.width);
+                const outH = Math.ceil(rect.height);
+                const outCanvas = document.createElement('canvas');
+                outCanvas.width  = outW;
+                outCanvas.height = outH;
+                const ctx = outCanvas.getContext('2d');
+
+                // Build the clip path in OUTPUT canvas coordinates.
+                // shapePath.left/top = center of shape on main canvas (originX/Y: center).
+                // pathOffset = the local-space center of the raw path data.
+                // So: canvas_pixel = (local_coord - pathOffset) * scale + shapePath.left/top
+                // Shifted into output space: subtract rect.left / rect.top
+                const cx   = shapePath.left;
+                const cy   = shapePath.top;
+                const sx   = shapePath.scaleX;
+                const sy   = shapePath.scaleY;
+                const pox  = shapePath.pathOffset ? shapePath.pathOffset.x : 0;
+                const poy  = shapePath.pathOffset ? shapePath.pathOffset.y : 0;
+                const rl   = rect.left;
+                const rt   = rect.top;
+
+                // Helper: convert local path coord to output canvas pixel
+                function lx(v) { return (v - pox) * sx + cx - rl; }
+                function ly(v) { return (v - poy) * sy + cy - rt; }
+
+                ctx.beginPath();
+                shapePath.path.forEach(function (cmd) {
+                    switch (cmd[0]) {
+                        case 'M': ctx.moveTo(lx(cmd[1]), ly(cmd[2])); break;
+                        case 'L': ctx.lineTo(lx(cmd[1]), ly(cmd[2])); break;
+                        case 'C': ctx.bezierCurveTo(lx(cmd[1]), ly(cmd[2]), lx(cmd[3]), ly(cmd[4]), lx(cmd[5]), ly(cmd[6])); break;
+                        case 'Q': ctx.quadraticCurveTo(lx(cmd[1]), ly(cmd[2]), lx(cmd[3]), ly(cmd[4])); break;
+                        case 'A':
+                            // Fabric A: [cmd, rx, ry, xRot, largeArc, sweep, endX, endY]
+                            // Convert using a temporary path trick via Path2D
+                            // (Native arc() cannot handle elliptical arcs cleanly)
+                            break;
+                        case 'z': case 'Z': ctx.closePath(); break;
+                    }
                 });
-                tempCanvas.add(clonedImg);
 
-                // Clone the shape and configure it as a pure black mask
-                shapePath.clone(function(clonedShape) {
-                    clonedShape.set({
-                        left: shapePath.left,
-                        top: shapePath.top,
-                        originX: shapePath.originX,
-                        originY: shapePath.originY,
-                        scaleX: shapePath.scaleX,
-                        scaleY: shapePath.scaleY,
-                        angle: shapePath.angle || 0,
-                        fill: 'black',
-                        stroke: null,
-                        strokeWidth: 0,
-                        opacity: 1,
-                        // destination-in: keeps only pixels where the shape overlaps the image
-                        globalCompositeOperation: 'destination-in'
+                // For shapes containing arcs (Circle, Moon, Droplet),
+                // rebuild via a full SVG string in output coordinates — safer than arc()
+                const hasArc = shapePath.path.some(c => c[0] === 'A');
+                if (hasArc) {
+                    ctx.closePath();
+                    ctx.beginPath();
+                    let svg = '';
+                    shapePath.path.forEach(function (cmd) {
+                        switch (cmd[0]) {
+                            case 'M': svg += `M ${lx(cmd[1])} ${ly(cmd[2])} `; break;
+                            case 'L': svg += `L ${lx(cmd[1])} ${ly(cmd[2])} `; break;
+                            case 'C': svg += `C ${lx(cmd[1])} ${ly(cmd[2])} ${lx(cmd[3])} ${ly(cmd[4])} ${lx(cmd[5])} ${ly(cmd[6])} `; break;
+                            case 'Q': svg += `Q ${lx(cmd[1])} ${ly(cmd[2])} ${lx(cmd[3])} ${ly(cmd[4])} `; break;
+                            case 'A':
+                                // rx and ry must also be scaled
+                                svg += `A ${cmd[1]*sx} ${cmd[2]*sy} ${cmd[3]} ${cmd[4]} ${cmd[5]} ${lx(cmd[6])} ${ly(cmd[7])} `;
+                                break;
+                            case 'z': case 'Z': svg += 'Z '; break;
+                        }
                     });
-                    tempCanvas.add(clonedShape);
-                    tempCanvas.renderAll();
+                    ctx.clip(new Path2D(svg));
+                } else {
+                    ctx.clip();
+                }
 
-                    // Read back pixels from the temp canvas's internal native canvas
-                    const nativeCanvas = tempCanvas.getElement();
-                    const nativeCtx = nativeCanvas.getContext('2d');
+                // Draw the full source image offset so (rect.left, rect.top) maps to (0,0)
+                ctx.drawImage(sourceImg, -rl, -rt);
 
-                    // Extract only the shape's bounding region into a final crop canvas
-                    const cropCanvas = document.createElement('canvas');
-                    cropCanvas.width  = Math.ceil(rect.width);
-                    cropCanvas.height = Math.ceil(rect.height);
-                    const cropCtx = cropCanvas.getContext('2d');
-                    cropCtx.drawImage(
-                        nativeCanvas,
-                        Math.floor(rect.left), Math.floor(rect.top),
-                        Math.ceil(rect.width),  Math.ceil(rect.height),
-                        0, 0,
-                        Math.ceil(rect.width),  Math.ceil(rect.height)
-                    );
-
-                    const croppedDataUrl = cropCanvas.toDataURL('image/png');
-
-                    fabric.Image.fromURL(croppedDataUrl, function(newImg) {
-                        newImg.set({
-                            left: rect.left + rect.width  / 2,
-                            top:  rect.top  + rect.height / 2,
-                            originX: 'center',
-                            originY: 'center',
-                            borderColor: '#ffffff',
-                            cornerColor: '#ffffff',
-                            cornerStrokeColor: '#ff6000',
-                            cornerStyle: 'circle',
-                            transparentCorners: false
-                        });
-
-                        canvas.remove(activeImgToCrop);
-                        canvas.remove(shapePath);
-                        shapePath = null;
-
-                        // Clean up the temp canvas to free memory
-                        tempCanvas.dispose();
-
-                        canvas.add(newImg);
-                        canvas.setActiveObject(newImg);
-                        closeAllPanels();
-                        canvas.renderAll();
+                // Load result back into Fabric
+                fabric.Image.fromURL(outCanvas.toDataURL('image/png'), function (newImg) {
+                    newImg.set({
+                        left: rect.left + outW / 2,
+                        top:  rect.top  + outH / 2,
+                        originX: 'center',
+                        originY: 'center',
+                        borderColor: '#ffffff',
+                        cornerColor: '#ffffff',
+                        cornerStrokeColor: '#ff6000',
+                        cornerStyle: 'circle',
+                        transparentCorners: false
                     });
+                    canvas.remove(activeImgToCrop);
+                    canvas.remove(shapePath);
+                    shapePath = null;
+                    canvas.add(newImg);
+                    canvas.setActiveObject(newImg);
+                    closeAllPanels();
+                    canvas.renderAll();
                 });
-            });
+            };
+            sourceImg.src = fullDataUrl;
         });
-      
+  
       
 
       
