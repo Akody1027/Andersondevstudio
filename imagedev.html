@@ -106,6 +106,13 @@
                 <input type="range" id="chromaTolerance" min="0" max="0.5" step="0.01" value="0.1" style="width: 100%;">
             </div>
         </div>
+      
+      
+      
+      
+              <div id="shapePresetPanel" class="floating-panel" style="flex-direction: row; flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start; max-width: 90vw; padding: 10px; gap: 5px;"></div>
+
+      
 
         <div id="cropActionPanel" class="floating-panel">
             <button class="crop-btn" id="btnCancelCrop"><span class="material-symbols-outlined" style="color:#ff4d4f;">close</span> Cancel</button>
@@ -284,44 +291,129 @@
             canvas.renderAll();
         });
 
-        // --- NEW MODULE: NON-DESTRUCTIVE CROP ENGINE ---
-        let cropRect = null; let activeImgToCrop = null;
+      
+      
+      
+      
+      
+      
+      
+      
+      
+              // --- NEW MODULE: VECTOR COOKIE-CUTTER CROP ENGINE ---
+        let shapePath = null; let activeImgToCrop = null;
+        const SHAPE_PRESETS = [
+            { name: 'Circle', path: 'M 50 0 A 50 50 0 1 0 50 100 A 50 50 0 1 0 50 0 Z' },
+            { name: 'Heart', path: 'M 50 30 C 50 30 45 10 25 10 C 5 10 5 35 5 45 C 5 65 50 95 50 95 C 50 95 95 65 95 45 C 95 35 95 10 75 10 C 55 10 50 30 50 30 Z' },
+            { name: 'Star', path: 'M 50 5 L 61 39 L 98 39 L 68 61 L 79 95 L 50 74 L 21 95 L 32 61 L 2 39 L 39 39 Z' },
+            { name: 'Hexagon', path: 'M 50 5 L 90 27.5 L 90 72.5 L 50 95 L 10 72.5 L 10 27.5 Z' },
+            { name: 'Triangle', path: 'M 50 5 L 95 90 L 5 90 Z' },
+            { name: 'Shield', path: 'M 10 10 L 90 10 L 90 40 C 90 70 50 95 50 95 C 50 95 10 70 10 40 Z' },
+            { name: 'Splatter', path: 'M 71.5 28.5 C 80 37 84 49 81 60 C 78 71 68 81 57 85 C 46 89 34 87 25 80 C 16 73 10 61 11 50 C 12 39 20 28 30 19 C 40 10 52 10 61 17 C 70 24 63 20 71.5 28.5 Z' },
+            { name: 'Moon', path: 'M 50 5 A 45 45 0 1 0 95 50 A 35 35 0 0 1 50 5 Z' },
+            { name: 'Droplet', path: 'M 50 5 C 50 5 15 45 15 65 A 35 35 0 1 0 85 65 C 85 45 50 5 50 5 Z' },
+            { name: 'Diamond', path: 'M 50 5 L 90 50 L 50 95 L 10 50 Z' },
+            { name: 'Cloud', path: 'M 25 60 C 25 40 45 35 50 40 C 55 20 85 20 85 45 C 100 45 100 75 85 75 L 25 75 C 10 75 10 60 25 60 Z' },
+            { name: 'Lightning', path: 'M 60 5 L 20 55 L 45 55 L 35 95 L 80 45 L 55 45 Z' }
+        ];
+
+        const shapePresetPanel = document.getElementById('shapePresetPanel');
+        SHAPE_PRESETS.forEach(preset => {
+            const btn = document.createElement('div');
+            btn.className = 'font-item'; 
+            btn.style.padding = '8px 15px';
+            btn.style.fontSize = '14px';
+            btn.style.fontWeight = 'bold';
+            btn.style.borderBottom = 'none';
+            btn.style.borderRight = '1px solid #eee';
+            btn.style.whiteSpace = 'nowrap';
+            btn.innerText = preset.name;
+            btn.onclick = () => spawnCookieCutter(preset.path);
+            shapePresetPanel.appendChild(btn);
+        });
+
         document.getElementById('btnCrop').addEventListener('click', () => {
             activeImgToCrop = canvas.getActiveObject();
             if (!activeImgToCrop || activeImgToCrop.type !== 'image') return;
             
-            closeAllPanels(); document.getElementById('cropActionPanel').classList.add('active');
-            
-            // Create a semi-transparent selection box matching the image dimensions
-            cropRect = new fabric.Rect({
-                fill: 'rgba(0,0,0,0.5)', width: activeImgToCrop.getScaledWidth(), height: activeImgToCrop.getScaledHeight(),
-                left: activeImgToCrop.left, top: activeImgToCrop.top, originX: 'center', originY: 'center',
-                borderColor: '#a6e3a1', cornerColor: '#a6e3a1', transparentCorners: false
-            });
-            canvas.add(cropRect); canvas.setActiveObject(cropRect);
+            closeAllPanels(); 
+            shapePresetPanel.classList.add('active'); 
         });
 
+        function spawnCookieCutter(pathData) {
+            closeAllPanels();
+            document.getElementById('cropActionPanel').classList.add('active');
+
+            if (shapePath) { canvas.remove(shapePath); }
+
+            shapePath = new fabric.Path(pathData);
+            
+            const targetSize = Math.min(activeImgToCrop.getScaledWidth(), activeImgToCrop.getScaledHeight()) * 0.5;
+            const pathScale = targetSize / 100; 
+
+            shapePath.set({
+                fill: 'rgba(255, 96, 0, 0.4)',
+                stroke: '#ff6000',
+                strokeWidth: 2,
+                originX: 'center',
+                originY: 'center',
+                left: activeImgToCrop.left,
+                top: activeImgToCrop.top,
+                scaleX: pathScale,
+                scaleY: pathScale,
+                cornerColor: '#ffffff',
+                cornerStrokeColor: '#ff6000',
+                transparentCorners: false,
+                borderColor: '#ff6000',
+                cornerStyle: 'circle',
+                cornerSize: 15
+            });
+            
+            canvas.add(shapePath);
+            canvas.setActiveObject(shapePath);
+            canvas.renderAll();
+        }
+
         document.getElementById('btnCancelCrop').addEventListener('click', () => {
-            canvas.remove(cropRect); canvas.setActiveObject(activeImgToCrop); closeAllPanels();
+            if (shapePath) { canvas.remove(shapePath); shapePath = null; }
+            if (activeImgToCrop) { canvas.setActiveObject(activeImgToCrop); }
+            closeAllPanels();
         });
 
         document.getElementById('btnConfirmCrop').addEventListener('click', () => {
-            // Apply clipping path to original image based on relative crop rect coordinates
-            const relativeLeft = cropRect.left - activeImgToCrop.left;
-            const relativeTop = cropRect.top - activeImgToCrop.top;
+            if (!shapePath || !activeImgToCrop) return;
+
+            const clipPath = new fabric.Path(shapePath.path);
             
-            const clipPath = new fabric.Rect({
-                width: cropRect.getScaledWidth() / activeImgToCrop.scaleX,
-                height: cropRect.getScaledHeight() / activeImgToCrop.scaleY,
-                left: relativeLeft / activeImgToCrop.scaleX,
-                top: relativeTop / activeImgToCrop.scaleY,
-                originX: 'center', originY: 'center', absolutePositioned: false
+            const shapeMatrix = shapePath.calcTransformMatrix();
+            const imgMatrix = activeImgToCrop.calcTransformMatrix();
+            const invertedImgMatrix = fabric.util.invertTransform(imgMatrix);
+            const relativeMatrix = fabric.util.multiplyTransformMatrices(invertedImgMatrix, shapeMatrix);
+            
+            const opt = fabric.util.qrDecompose(relativeMatrix);
+            
+            clipPath.set({
+                scaleX: opt.scaleX,
+                scaleY: opt.scaleY,
+                angle: opt.angle,
+                left: opt.translateX,
+                top: opt.translateY,
+                originX: 'center',
+                originY: 'center',
+                flipX: opt.flipX,
+                flipY: opt.flipY
             });
             
             activeImgToCrop.set('clipPath', clipPath);
-            canvas.remove(cropRect); canvas.setActiveObject(activeImgToCrop); closeAllPanels();
+            canvas.remove(shapePath);
+            shapePath = null;
+            canvas.setActiveObject(activeImgToCrop);
+            closeAllPanels();
         });
 
+      
+      
+  
         // --- UPGRADED CHROMA KEY (WITH TOLERANCE) ---
         let lastExtractedImage = null; let lastExtractedColor = null;
         document.getElementById('btnExtractColor').addEventListener('click', () => {
