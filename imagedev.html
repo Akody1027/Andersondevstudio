@@ -299,11 +299,12 @@
       
       
       
-      
-              // --- NEW MODULE: VECTOR COOKIE-CUTTER CROP ENGINE ---
+   
+        // --- NEW MODULE: VECTOR COOKIE-CUTTER CROP ENGINE ---
         let shapePath = null; let activeImgToCrop = null;
+        let activePathString = ''; 
+
         const SHAPE_PRESETS = [
-          
             { name: 'Square', path: 'M 10 10 L 90 10 L 90 90 L 10 90 Z' },
             { name: 'Circle', path: 'M 50 0 A 50 50 0 1 0 50 100 A 50 50 0 1 0 50 0 Z' },
             { name: 'Heart', path: 'M 50 30 C 50 30 45 10 25 10 C 5 10 5 35 5 45 C 5 65 50 95 50 95 C 50 95 95 65 95 45 C 95 35 95 10 75 10 C 55 10 50 30 50 30 Z' },
@@ -347,6 +348,8 @@
             document.getElementById('cropActionPanel').classList.add('active');
 
             if (shapePath) { canvas.remove(shapePath); }
+            
+            activePathString = pathData;
 
             shapePath = new fabric.Path(pathData);
             
@@ -381,14 +384,8 @@
             if (activeImgToCrop) { canvas.setActiveObject(activeImgToCrop); }
             closeAllPanels();
         });
-      
-      
-      
-      
-      
-        
 
-              document.getElementById('btnConfirmCrop').addEventListener('click', () => {
+        document.getElementById('btnConfirmCrop').addEventListener('click', () => {
             if (!shapePath || !activeImgToCrop) return;
 
             const imgMatrix = activeImgToCrop.calcTransformMatrix();
@@ -396,9 +393,7 @@
             const shapeCenter = shapePath.getCenterPoint();
             const relativePoint = fabric.util.transformPoint(shapeCenter, invertedImgMatrix);
             
-            canvas.remove(shapePath);
-
-            shapePath.set({
+            const finalClipPath = new fabric.Path(activePathString, {
                 left: relativePoint.x,
                 top: relativePoint.y,
                 scaleX: shapePath.scaleX / activeImgToCrop.scaleX,
@@ -406,20 +401,29 @@
                 angle: shapePath.angle - (activeImgToCrop.angle || 0),
                 originX: 'center',
                 originY: 'center',
-                fill: '#000000',
-                strokeWidth: 0,
                 absolutePositioned: false
             });
             
-            activeImgToCrop.set('clipPath', shapePath);
+            activeImgToCrop.set({
+                clipPath: finalClipPath,
+                dirty: true
+            });
+            
+            canvas.remove(shapePath);
             shapePath = null;
+            activePathString = '';
+            
             canvas.setActiveObject(activeImgToCrop);
             closeAllPanels();
             canvas.renderAll();
         });
 
-   
-
+      
+      
+      
+      
+      
+      
       
 
       
