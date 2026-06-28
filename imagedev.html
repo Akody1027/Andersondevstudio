@@ -378,43 +378,66 @@
             if (activeImgToCrop) { canvas.setActiveObject(activeImgToCrop); }
             closeAllPanels();
         });
-
-        document.getElementById('btnConfirmCrop').addEventListener('click', () => {
+      
+      
+      
+      
+      
+      
+      
+      document.getElementById('btnConfirmCrop').addEventListener('click', () => {
             if (!shapePath || !activeImgToCrop) return;
 
             const rect = shapePath.getBoundingRect();
-            
+
+            // Get the true top-left of the image (accounting for center origin)
+            const imgLeft = activeImgToCrop.left - (activeImgToCrop.getScaledWidth() / 2);
+            const imgTop  = activeImgToCrop.top  - (activeImgToCrop.getScaledHeight() / 2);
+
             const hiddenCanvas = document.createElement('canvas');
-            hiddenCanvas.width = rect.width;
-            hiddenCanvas.height = rect.height;
+            hiddenCanvas.width  = Math.ceil(rect.width);
+            hiddenCanvas.height = Math.ceil(rect.height);
 
             activeImgToCrop.clone(function(clonedImg) {
-                const tempFab = new fabric.StaticCanvas(hiddenCanvas, { width: rect.width, height: rect.height });
-                
+                const tempFab = new fabric.StaticCanvas(hiddenCanvas, {
+                    width:  Math.ceil(rect.width),
+                    height: Math.ceil(rect.height)
+                });
+
+                // Place image relative to the crop bounding box using true top-left coords
                 clonedImg.set({
-                    left: clonedImg.left - rect.left,
-                    top: clonedImg.top - rect.top
+                    originX: 'left',
+                    originY: 'top',
+                    left: imgLeft - rect.left,
+                    top:  imgTop  - rect.top
                 });
                 tempFab.add(clonedImg);
-                
+
                 shapePath.clone(function(clonedShape) {
+                    // Get shape's true top-left (shape also uses center origin)
+                    const shapeLeft = shapePath.left - (shapePath.getScaledWidth()  / 2);
+                    const shapeTop  = shapePath.top  - (shapePath.getScaledHeight() / 2);
+
                     clonedShape.set({
-                        left: clonedShape.left - rect.left,
-                        top: clonedShape.top - rect.top,
+                        originX: 'left',
+                        originY: 'top',
+                        left: shapeLeft - rect.left,
+                        top:  shapeTop  - rect.top,
                         fill: '#000000',
                         opacity: 1,
+                        stroke: null,
                         strokeWidth: 0,
                         globalCompositeOperation: 'destination-in'
                     });
                     tempFab.add(clonedShape);
                     tempFab.renderAll();
-                    
+
                     const croppedDataUrl = tempFab.toDataURL({ format: 'png', multiplier: 1 });
-                    
+
                     fabric.Image.fromURL(croppedDataUrl, function(newImg) {
                         newImg.set({
                             left: rect.left + rect.width / 2,
-                            top: rect.top + rect.height / 2,
+                            top:  rect.top  + rect.height / 2,
                             originX: 'center',
                             originY: 'center',
                             borderColor: '#ffffff',
@@ -423,11 +446,11 @@
                             cornerStyle: 'circle',
                             transparentCorners: false
                         });
-                        
+
                         canvas.remove(activeImgToCrop);
                         canvas.remove(shapePath);
                         shapePath = null;
-                        
+
                         canvas.add(newImg);
                         canvas.setActiveObject(newImg);
                         closeAllPanels();
@@ -436,7 +459,13 @@
                 });
             });
         });
-   
+      
+      
+      
+      
+      
+
+        
       
       
       
