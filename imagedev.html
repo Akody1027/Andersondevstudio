@@ -384,84 +384,83 @@
       
       
       
-      
       document.getElementById('btnConfirmCrop').addEventListener('click', () => {
             if (!shapePath || !activeImgToCrop) return;
 
-            const rect = shapePath.getBoundingRect();
+            // Step 1: Render the ENTIRE main canvas to a native 2D canvas (full resolution)
+            // This captures the image exactly as Fabric has drawn it — scaling, filters, all of it.
+            const fullW = canvas.getWidth();
+            const fullH = canvas.getHeight();
 
-            // Get the true top-left of the image (accounting for center origin)
-            const imgLeft = activeImgToCrop.left - (activeImgToCrop.getScaledWidth() / 2);
+            const fullCanvas = document.createElement('canvas');
+            fullCanvas.width  = fullW;
+            fullCanvas.height = fullH;
+            const fullCtx = fullCanvas.getContext('2d');
+
+            // Draw only the image object onto the full-size canvas at its correct position
+            // We use Fabric's own toCanvasElement() to get the correctly rendered image pixels
+            const imgElement = activeImgToCrop.toCanvasElement();
+            const imgLeft = activeImgToCrop.left - (activeImgToCrop.getScaledWidth()  / 2);
             const imgTop  = activeImgToCrop.top  - (activeImgToCrop.getScaledHeight() / 2);
+            fullCtx.drawImage(imgElement, imgLeft, imgTop, activeImgToCrop.getScaledWidth(), activeImgToCrop.getScaledHeight());
 
-            const hiddenCanvas = document.createElement('canvas');
-            hiddenCanvas.width  = Math.ceil(rect.width);
-            hiddenCanvas.height = Math.ceil(rect.height);
+            // Step 2: Get the shape's bounding box WITHOUT stroke influence
+            // We temporarily zero the stroke, get the rect, then restore it
+            const origStroke = shapePath.strokeWidth;
+            shapePath.set({ strokeWidth: 0 });
+            shapePath.setCoords();
+            const rect = shapePath.getBoundingRect();
+            shapePath.set({ strokeWidth: origStroke });
+            shapePath.setCoords();
 
-            activeImgToCrop.clone(function(clonedImg) {
-                const tempFab = new fabric.StaticCanvas(hiddenCanvas, {
-                    width:  Math.ceil(rect.width),
-                    height: Math.ceil(rect.height)
+            // Step 3: Render the shape as a pure black mask onto the full-size canvas
+            // using 'destination-in' so only pixels inside the shape survive
+            fullCtx.save();
+            fullCtx.globalCompositeOperation = 'destination-in';
+
+            // Translate to where the shape sits on the canvas
+            const shapeLeft = shapePath.left - (shapePath.getScaledWidth()  / 2);
+            const shapeTop  = shapePath.top  - (shapePath.getScaledHeight() / 2);
+            fullCtx.translate(shapeLeft, shapeTop);
+            fullCtx.scale(shapePath.scaleX, shapePath.scaleY);
+
+            // Build a Path2D from the shape's SVG path string
+            const path2D = new Path2D(shapePath.path.map(cmd => cmd.join(' ')).join(' '));
+            fullCtx.fill(path2D);
+            fullCtx.restore();
+
+            // Step 4: Crop the output canvas down to just the shape's bounding box
+            const cropCanvas = document.createElement('canvas');
+            cropCanvas.width  = Math.ceil(rect.width);
+            cropCanvas.height = Math.ceil(rect.height);
+            const cropCtx = cropCanvas.getContext('2d');
+            cropCtx.drawImage(fullCanvas, rect.left, rect.top, rect.width, rect.height, 0, 0, rect.width, rect.height);
+
+            // Step 5: Load the cropped result back into Fabric as a new image object
+            const croppedDataUrl = cropCanvas.toDataURL('image/png');
+            fabric.Image.fromURL(croppedDataUrl, function(newImg) {
+                newImg.set({
+                    left: rect.left + rect.width  / 2,
+                    top:  rect.top  + rect.height / 2,
+                    originX: 'center',
+                    originY: 'center',
+                    borderColor: '#ffffff',
+                    cornerColor: '#ffffff',
+                    cornerStrokeColor: '#ff6000',
+                    cornerStyle: 'circle',
+                    transparentCorners: false
                 });
 
-                // Place image relative to the crop bounding box using true top-left coords
-                clonedImg.set({
-                    originX: 'left',
-                    originY: 'top',
-                    left: imgLeft - rect.left,
-                    top:  imgTop  - rect.top
-                });
-                tempFab.add(clonedImg);
+                canvas.remove(activeImgToCrop);
+                canvas.remove(shapePath);
+                shapePath = null;
 
-                shapePath.clone(function(clonedShape) {
-                    // Get shape's true top-left (shape also uses center origin)
-                    const shapeLeft = shapePath.left - (shapePath.getScaledWidth()  / 2);
-                    const shapeTop  = shapePath.top  - (shapePath.getScaledHeight() / 2);
-
-                    clonedShape.set({
-                        originX: 'left',
-                        originY: 'top',
-                        left: shapeLeft - rect.left,
-                        top:  shapeTop  - rect.top,
-                        fill: '#000000',
-                        opacity: 1,
-                        stroke: null,
-                        strokeWidth: 0,
-                        globalCompositeOperation: 'destination-in'
-                    });
-                    tempFab.add(clonedShape);
-                    tempFab.renderAll();
-
-                    const croppedDataUrl = tempFab.toDataURL({ format: 'png', multiplier: 1 });
-
-                    fabric.Image.fromURL(croppedDataUrl, function(newImg) {
-                        newImg.set({
-                            left: rect.left + rect.width / 2,
-                            top:  rect.top  + rect.height / 2,
-                            originX: 'center',
-                            originY: 'center',
-                            borderColor: '#ffffff',
-                            cornerColor: '#ffffff',
-                            cornerStrokeColor: '#ff6000',
-                            cornerStyle: 'circle',
-                            transparentCorners: false
-                        });
-
-                        canvas.remove(activeImgToCrop);
-                        canvas.remove(shapePath);
-                        shapePath = null;
-
-                        canvas.add(newImg);
-                        canvas.setActiveObject(newImg);
-                        closeAllPanels();
-                        canvas.renderAll();
-                    });
-                });
+                canvas.add(newImg);
+                canvas.setActiveObject(newImg);
+                closeAllPanels();
+                canvas.renderAll();
             });
         });
-      
-      
-      
       
       
 
