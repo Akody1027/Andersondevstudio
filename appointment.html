@@ -189,6 +189,18 @@
         .btn-outline:hover { border-color: var(--text-muted); background: rgba(0,0,0,0.02); }
 
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .month-navigation {
+            display: flex; justify-content: space-between; align-items: center; 
+            margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 2px solid var(--border);
+        }
+        
+        .day-cell.day-past { 
+            background: #f8fafc; border-color: transparent; cursor: not-allowed; opacity: 0.4; box-shadow: none;
+        }
+        .day-cell.day-past .day-num { color: var(--text-muted); }
+        .day-cell.day-past .click-view { background: transparent; color: var(--text-muted); }
+        .day-cell.day-past:hover { transform: none; box-shadow: none; border-color: transparent; }
         
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: transparent; }
@@ -227,6 +239,11 @@
     </div>
 
     <main class="calendar-wrapper">
+        <div class="month-navigation">
+            <button id="prev-month-btn" class="btn btn-outline" style="width: auto; padding: 0.5rem 1rem;" onclick="changeMonth(-1)">&larr; Previous</button>
+            <h2 id="current-month-display" style="font-weight: 800; font-size: 1.75rem; margin: 0; color: var(--text-main);">Month Year</h2>
+            <button id="next-month-btn" class="btn btn-outline" style="width: auto; padding: 0.5rem 1rem;" onclick="changeMonth(1)">Next &rarr;</button>
+        </div>
         <div class="calendar-header">
             <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
         </div>
@@ -262,26 +279,23 @@
 
     <script>
         // --- Application State ---
-        let currentDay = null;
+        const today = new Date();
+        let viewingDate = new Date(today.getFullYear(), today.getMonth(), 1);
+        let currentSelectedFullDate = null;
         let selectedSlotTime = null;
         
         let filterActive = false;
         let filterBeforeMins = null;
         let filterAfterMins = null;
         
-        // Mock Data: This will eventually be fetched from Firebase based on the tenant_id in the URL
-        let masterSlots = [
-            "09:00 AM", "10:00 AM", "11:00 AM", 
-            "01:00 PM", "02:00 PM", "03:00 PM", "04:00 PM"
-        ];
-
-        // Mock Data: Replaces the hardcoded static inputs previously in the HTML
+        let masterSlots = ["09:00 AM", "10:00 AM", "11:00 AM", "01:00 PM", "02:00 PM", "03:00 PM", "04:00 PM"];
         let customFields = ["Full Name", "Phone Number"]; 
 
         let bookings = {}; 
 
         // --- Initialization ---
         document.addEventListener('DOMContentLoaded', () => {
+            renderMonthNavigation();
             generateCalendar();
         });
 
@@ -333,7 +347,7 @@
             if(afterVal) statusText += `After ${formatTime12h(filterAfterMins)}`;
             document.getElementById('active-filter-status').innerText = statusText;
 
-            toggleFilterMenu(); // close dropdown
+            toggleFilterMenu();
             generateCalendar();
         }
 
@@ -349,19 +363,70 @@
             generateCalendar();
         }
 
+        // --- Calendar Navigation ---
+        function changeMonth(offset) {
+            viewingDate.setMonth(viewingDate.getMonth() + offset);
+            renderMonthNavigation();
+            generateCalendar();
+        }
+
+        function renderMonthNavigation() {
+            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            document.getElementById('current-month-display').innerText = `${monthNames[viewingDate.getMonth()]} ${viewingDate.getFullYear()}`;
+
+            const prevBtn = document.getElementById('prev-month-btn');
+            const nextBtn = document.getElementById('next-month-btn');
+
+            // Prevent going into past months
+            if (viewingDate.getFullYear() === today.getFullYear() && viewingDate.getMonth() === today.getMonth()) {
+                prevBtn.disabled = true;
+                prevBtn.style.opacity = '0.3';
+                prevBtn.style.cursor = 'not-allowed';
+            } else {
+                prevBtn.disabled = false;
+                prevBtn.style.opacity = '1';
+                prevBtn.style.cursor = 'pointer';
+            }
+
+            // Cap at 6 months in advance
+            const maxDate = new Date(today.getFullYear(), today.getMonth() + 6, 1);
+            if (viewingDate.getFullYear() === maxDate.getFullYear() && viewingDate.getMonth() === maxDate.getMonth()) {
+                nextBtn.disabled = true;
+                nextBtn.style.opacity = '0.3';
+                nextBtn.style.cursor = 'not-allowed';
+            } else {
+                nextBtn.disabled = false;
+                nextBtn.style.opacity = '1';
+                nextBtn.style.cursor = 'pointer';
+            }
+        }
+
         // --- Calendar Rendering ---
         function generateCalendar() {
             const grid = document.getElementById('calendar-grid');
             grid.innerHTML = '';
             
-            for(let i = 0; i < 3; i++) {
+            const year = viewingDate.getFullYear();
+            const month = viewingDate.getMonth();
+            
+            const firstDayOfMonth = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            
+            // Generate offset empty cells
+            for(let i = 0; i < firstDayOfMonth; i++) {
                 grid.innerHTML += `<div class="day-cell empty"></div>`;
             }
 
-            for(let day = 1; day <= 31; day++) {
-                const dayKey = `day-${day}`;
-                const dayBks = bookings[dayKey] || {};
+            // Generate real days
+            for(let day = 1; day <= daysInMonth; day++) {
+                const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const dayBks = bookings[dateString] || {};
                 
+                // Check if date is in the past
+                const currentIterationDate = new Date(year, month, day);
+                currentIterationDate.setHours(23, 59, 59, 999); 
+                const isPast = currentIterationDate < today;
+
                 let indicatorsHTML = '';
                 const numBks = Object.keys(dayBks).length;
                 if (numBks > 0) {
@@ -372,10 +437,10 @@
                 }
 
                 let modifierClass = "";
-                let clickText = "View Schedule";
-                let allowClick = true;
+                let clickText = isPast ? "Past Date" : "View Schedule";
+                let allowClick = !isPast;
 
-                if(filterActive) {
+                if(!isPast && filterActive) {
                     const availableToday = masterSlots.filter(slot => !dayBks.hasOwnProperty(slot));
                     const matchingSlots = availableToday.filter(slot => {
                         const slotMins = timeToMins(slot);
@@ -394,7 +459,11 @@
                     }
                 }
 
-                const clickAction = allowClick ? `onclick="openDay(${day})"` : '';
+                if (isPast) {
+                    modifierClass = "day-past";
+                }
+
+                const clickAction = allowClick ? `onclick="openDay(${day}, '${dateString}')"` : '';
 
                 grid.innerHTML += `
                     <div class="day-cell ${modifierClass}" ${clickAction}>
@@ -408,20 +477,19 @@
 
         // --- Modals ---
         function openModal(id) { document.getElementById(id).classList.add('active'); }
-        function closeModal(id) {
-            document.getElementById(id).classList.remove('active');
-        }
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
         // --- Day View ---
-        function openDay(day) {
-            currentDay = day;
-            document.getElementById('day-title').innerText = `Current Month ${day}`;
+        function openDay(day, dateString) {
+            currentSelectedFullDate = dateString;
+            
+            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            document.getElementById('day-title').innerText = `${monthNames[viewingDate.getMonth()]} ${day}, ${viewingDate.getFullYear()}`;
             
             const slotsGrid = document.getElementById('slots-grid');
             slotsGrid.innerHTML = '';
 
-            const dayKey = `day-${day}`;
-            const dayBookings = bookings[dayKey] || {};
+            const dayBookings = bookings[dateString] || {};
 
             masterSlots.forEach((time) => {
                 const isBooked = dayBookings.hasOwnProperty(time);
@@ -449,9 +517,8 @@
         // --- Booking Flow & Dynamic Fields ---
         function promptBooking(time) {
             selectedSlotTime = time;
-            document.getElementById('booking-time-display').innerText = `${time} on Day ${currentDay}`;
+            document.getElementById('booking-time-display').innerText = `${time} on ${currentSelectedFullDate}`;
             
-            // Inject Custom Fields into form based on the dynamic array
             const customContainer = document.getElementById('dynamic-booking-fields');
             customContainer.innerHTML = '';
             customFields.forEach((field, index) => {
@@ -467,7 +534,6 @@
         }
 
         function submitBooking() {
-            // Gather custom field data and perform basic validation
             let customData = {};
             let isFormValid = true;
 
@@ -483,17 +549,14 @@
 
             if(!isFormValid) return alert("All fields are required.");
 
-            // Save booking to state
-            const dayKey = `day-${currentDay}`;
-            if (!bookings[dayKey]) bookings[dayKey] = {};
+            if (!bookings[currentSelectedFullDate]) bookings[currentSelectedFullDate] = {};
             
-            bookings[dayKey][selectedSlotTime] = { customData };
+            bookings[currentSelectedFullDate][selectedSlotTime] = { customData };
             
             closeModal('booking-modal');
-            openDay(currentDay);
+            openDay(parseInt(currentSelectedFullDate.split('-')[2]), currentSelectedFullDate);
             generateCalendar(); 
         }
-
     </script>
 </body>
 </html>
