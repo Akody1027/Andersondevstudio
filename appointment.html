@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Scheduling Widget</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --bg-color: #f8fafc;
+            --surface: rgba(255, 255, 255, 0.95);
+            --border: rgba(0, 0, 0, 0.1);
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --green-bg: rgba(34, 197, 94, 0.15);
+            --green-border: rgba(34, 197, 94, 0.5);
+            --green-text: #166534;
+            --red-bg: rgba(239, 68, 68, 0.15);
+            --red-border: rgba(239, 68, 68, 0.5);
+            --red-text: #991b1b;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem 3rem;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: #ffffff;
+            border-bottom: 1px solid var(--border);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+        }
+
+        .logo { 
+            font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px; 
+            background: linear-gradient(135deg, var(--primary), #38bdf8); 
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
+        }
+
+        /* Controls Section (Filters) */
+        .controls-wrapper {
+            max-width: 1400px; margin: 2rem auto 0; padding: 0 3rem;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+
+        .filter-container { position: relative; display: inline-block; }
+        
+        .filter-toggle-btn {
+            display: flex; align-items: center; gap: 0.75rem; background: white;
+            padding: 0.75rem 1.25rem; border-radius: 12px; border: 1px solid var(--border);
+            font-weight: 600; cursor: pointer; transition: all 0.3s; box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+        }
+        .filter-toggle-btn:hover { border-color: var(--primary); }
+        .filter-icon-img { width: 24px; height: 24px; border-radius: 4px; object-fit: cover; }
+
+        .filter-dropdown {
+            position: absolute; top: calc(100% + 10px); left: 0; background: white;
+            border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 320px; z-index: 20;
+            display: none; opacity: 0; transform: translateY(-10px); transition: all 0.3s ease;
+        }
+        .filter-dropdown.active { display: block; opacity: 1; transform: translateY(0); }
+        
+        .filter-group { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem; }
+        .filter-group label { font-size: 0.9rem; font-weight: 600; color: var(--text-muted); }
+        .filter-group input { padding: 0.75rem; border-radius: 10px; border: 1px solid var(--border); outline: none; font-family: 'Inter'; font-weight: 500; width: 100%; }
+        .filter-group input:focus { border-color: var(--primary); }
+        
+        .filter-actions { display: flex; gap: 0.5rem; }
+        
+        .active-filter-status { font-size: 0.95rem; font-weight: 600; color: var(--primary); }
+
+        /* Calendar Grid */
+        .calendar-wrapper { padding: 2rem 3rem; max-width: 1400px; margin: 0 auto; position: relative; z-index: 1; }
+        .calendar-header { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-weight: 600; color: var(--text-muted); margin-bottom: 1rem; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 1rem; }
+        
+        .day-cell {
+            aspect-ratio: 1; border-radius: 16px; position: relative;
+            cursor: pointer; transition: all 0.3s ease;
+            overflow: hidden; display: flex; flex-direction: column;
+            background: #ffffff; border: 2px solid transparent;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+        }
+        
+        .day-cell:hover { transform: translateY(-4px); box-shadow: 0 10px 20px rgba(0,0,0,0.06); border-color: var(--primary); }
+        .day-cell .day-num { position: absolute; top: 16px; left: 20px; font-size: 1.5rem; font-weight: 800; color: var(--text-main); transition: all 0.3s; }
+        .day-cell:hover .day-num { color: var(--primary); }
+        
+        .day-cell .click-view {
+            position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+            background: rgba(79, 70, 229, 0.05); 
+            opacity: 0; font-weight: 600; color: var(--primary);
+            transition: all 0.3s ease; font-size: 1rem;
+        }
+        .day-cell:hover .click-view { opacity: 1; }
+        .day-cell.empty { background: transparent; border: none; box-shadow: none; cursor: default; }
+        .day-cell.empty:hover { transform: none; background: transparent; }
+
+        /* Filter Modifiers for Day Cells */
+        .day-cell.filter-available { background: var(--green-bg); border-color: var(--green-border); }
+        .day-cell.filter-available .day-num { color: var(--green-text); }
+        .day-cell.filter-available .click-view { background: rgba(34, 197, 94, 0.1); color: var(--green-text); }
+
+        .day-cell.filter-unavailable { background: var(--red-bg); border-color: var(--red-border); cursor: not-allowed; }
+        .day-cell.filter-unavailable .day-num { color: var(--red-text); }
+        .day-cell.filter-unavailable .click-view { background: rgba(239, 68, 68, 0.1); color: var(--red-text); content: 'No Matches'; }
+        .day-cell.filter-unavailable:hover { border-color: var(--red-border); transform: none; }
+
+        /* Day Bookings Preview dots */
+        .day-indicators { position: absolute; bottom: 15px; left: 20px; display: flex; gap: 4px; }
+        .indicator-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--text-muted); }
+
+        /* Modals Overlay */
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(15, 23, 42, 0.5);
+            backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 50;
+            opacity: 0; transition: opacity 0.3s ease;
+        }
+        .modal-overlay.active { display: flex; animation: fadeIn 0.3s forwards; }
+
+        /* Day View Modal (90x90) */
+        .modal-90 {
+            width: 90vw; height: 90vh; border-radius: 24px; padding: 3rem;
+            display: flex; flex-direction: column; position: relative;
+            transform: translateY(20px) scale(0.95); transition: all 0.3s ease;
+            background: #ffffff; box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+        }
+        .modal-overlay.active .modal-90 { transform: translateY(0) scale(1); }
+        
+        .modal-close { position: absolute; top: 2rem; right: 2rem; width: 40px; height: 40px; border-radius: 50%; background: rgba(0,0,0,0.05); border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-main); transition: all 0.2s; display: flex; align-items: center; justify-content: center; z-index: 10; }
+        .modal-close:hover { background: rgba(239, 68, 68, 0.1); color: var(--red-text); }
+        
+        .modal-title { font-size: 2.5rem; font-weight: 800; margin-bottom: 2rem; letter-spacing: -1px; }
+
+        .slots-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem; overflow-y: auto; padding-right: 1rem; flex-grow: 1; align-content: start;
+        }
+
+        .slot-card {
+            padding: 1.5rem; border-radius: 16px; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            font-size: 1.25rem; font-weight: 600; transition: all 0.3s ease;
+            position: relative; overflow: hidden;
+        }
+        
+        .slot-available { background: var(--green-bg); border: 1px solid var(--green-border); color: var(--green-text); cursor: pointer; }
+        .slot-available:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(34, 197, 94, 0.15); background: rgba(34, 197, 94, 0.2); }
+        
+        .slot-unavailable { background: var(--red-bg); border: 1px solid var(--red-border); color: var(--red-text); cursor: not-allowed; opacity: 0.8; }
+        
+        .slot-status { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin-top: 0.5rem; font-weight: 800; }
+
+        /* Standard Modals */
+        .modal-standard { width: 100%; max-width: 500px; border-radius: 24px; padding: 2.5rem; position: relative; background: #ffffff; transform: translateY(20px); transition: transform 0.3s ease; box-shadow: 0 20px 50px rgba(0,0,0,0.1); max-height: 90vh; overflow-y: auto; }
+        .modal-overlay.active .modal-standard { transform: translateY(0); }
+
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group label { display: block; font-size: 0.95rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-main); }
+        .form-group input {
+            width: 100%; padding: 1rem; border-radius: 12px; border: 1px solid var(--border);
+            background: #f8fafc; font-size: 1rem; outline: none; transition: all 0.3s; font-weight: 500;
+        }
+        .form-group input:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1); }
+
+        .btn {
+            padding: 1rem 1.5rem; border-radius: 12px; border: none; font-size: 1rem; font-weight: 600;
+            cursor: pointer; transition: all 0.3s; display: inline-flex; justify-content: center; align-items: center; gap: 8px; text-align: center;
+        }
+        .btn-full { width: 100%; }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-hover); transform: translateY(-2px); box-shadow: 0 6px 15px rgba(79, 70, 229, 0.2); }
+        .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-main); }
+        .btn-outline:hover { border-color: var(--text-muted); background: rgba(0,0,0,0.02); }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 8px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.2); }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">Schedulr</div>
+    </header>
+
+    <div class="controls-wrapper">
+        <div class="filter-container">
+            <button class="filter-toggle-btn" onclick="toggleFilterMenu()">
+                <img src="https://via.placeholder.com/24x24.png?text=F" alt="Filter Placeholder" class="filter-icon-img">
+                Filters
+            </button>
+            <div class="filter-dropdown" id="filter-dropdown">
+                <div class="filter-group">
+                    <label>Available Before:</label>
+                    <input type="time" id="filter-before">
+                </div>
+                <div class="filter-group">
+                    <label>Available After:</label>
+                    <input type="time" id="filter-after">
+                </div>
+                <div class="filter-actions">
+                    <button class="btn btn-primary btn-full" onclick="applyFilter()">Apply</button>
+                    <button class="btn btn-outline" onclick="clearFilter()">Clear</button>
+                </div>
+            </div>
+        </div>
+        <div class="active-filter-status" id="active-filter-status"></div>
+    </div>
+
+    <main class="calendar-wrapper">
+        <div class="calendar-header">
+            <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+        </div>
+        <div class="calendar-grid" id="calendar-grid">
+            <!-- Populated by JS -->
+        </div>
+    </main>
+
+    <!-- 90x90 Day View Modal -->
+    <div class="modal-overlay" id="day-modal">
+        <div class="modal-90">
+            <button class="modal-close" onclick="closeModal('day-modal')">&times;</button>
+            <h2 class="modal-title" id="day-title">Select Time</h2>
+            <div class="slots-grid" id="slots-grid">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Form Modal -->
+    <div class="modal-overlay" id="booking-modal">
+        <div class="modal-standard">
+            <button class="modal-close" onclick="closeModal('booking-modal')">&times;</button>
+            <h2 class="modal-title" style="font-size: 2rem; margin-bottom: 0.5rem;" id="booking-header">Confirm Booking</h2>
+            <p style="color: var(--primary); margin-bottom: 2rem; font-weight: 800; font-size: 1.1rem;" id="booking-time-display"></p>
+            
+            <!-- Dynamic Custom Fields Injected Here -->
+            <div id="dynamic-booking-fields"></div>
+
+            <button class="btn btn-primary btn-full" style="margin-top: 1rem;" onclick="submitBooking()" id="btn-submit-booking">Confirm Appointment</button>
+        </div>
+    </div>
+
+    <script>
+        // --- Application State ---
+        let currentDay = null;
+        let selectedSlotTime = null;
+        
+        let filterActive = false;
+        let filterBeforeMins = null;
+        let filterAfterMins = null;
+        
+        // Mock Data: This will eventually be fetched from Firebase based on the tenant_id in the URL
+        let masterSlots = [
+            "09:00 AM", "10:00 AM", "11:00 AM", 
+            "01:00 PM", "02:00 PM", "03:00 PM", "04:00 PM"
+        ];
+
+        // Mock Data: Replaces the hardcoded static inputs previously in the HTML
+        let customFields = ["Full Name", "Phone Number"]; 
+
+        let bookings = {}; 
+
+        // --- Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            generateCalendar();
+        });
+
+        // --- Utility Functions ---
+        function timeToMins(tStr) {
+            if(!tStr) return null;
+            if(tStr.includes('AM') || tStr.includes('PM')) {
+                let [time, modifier] = tStr.split(' ');
+                let [hours, minutes] = time.split(':');
+                if(hours === '12') hours = '00';
+                let mins = parseInt(hours, 10) * 60 + parseInt(minutes, 10);
+                if(modifier === 'PM') mins += 12 * 60;
+                return mins;
+            } else {
+                let [hours, minutes] = tStr.split(':');
+                return parseInt(hours, 10) * 60 + parseInt(minutes, 10);
+            }
+        }
+
+        function formatTime12h(totalMins) {
+            let h = Math.floor(totalMins / 60);
+            let m = totalMins % 60;
+            let ampm = h >= 12 ? 'PM' : 'AM';
+            let th = h % 12; 
+            if(th === 0) th = 12;
+            return `${th.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')} ${ampm}`;
+        }
+
+        // --- Dropdown & Filter Logic ---
+        function toggleFilterMenu() {
+            document.getElementById('filter-dropdown').classList.toggle('active');
+        }
+
+        function applyFilter() {
+            const beforeVal = document.getElementById('filter-before').value;
+            const afterVal = document.getElementById('filter-after').value;
+            
+            if(!beforeVal && !afterVal) {
+                clearFilter();
+                return;
+            }
+
+            filterActive = true;
+            filterBeforeMins = beforeVal ? timeToMins(beforeVal) : null;
+            filterAfterMins = afterVal ? timeToMins(afterVal) : null;
+
+            let statusText = "Filtering: ";
+            if(beforeVal) statusText += `Before ${formatTime12h(filterBeforeMins)} `;
+            if(afterVal) statusText += `After ${formatTime12h(filterAfterMins)}`;
+            document.getElementById('active-filter-status').innerText = statusText;
+
+            toggleFilterMenu(); // close dropdown
+            generateCalendar();
+        }
+
+        function clearFilter() {
+            document.getElementById('filter-before').value = '';
+            document.getElementById('filter-after').value = '';
+            document.getElementById('active-filter-status').innerText = '';
+            filterActive = false;
+            filterBeforeMins = null;
+            filterAfterMins = null;
+            
+            document.getElementById('filter-dropdown').classList.remove('active');
+            generateCalendar();
+        }
+
+        // --- Calendar Rendering ---
+        function generateCalendar() {
+            const grid = document.getElementById('calendar-grid');
+            grid.innerHTML = '';
+            
+            for(let i = 0; i < 3; i++) {
+                grid.innerHTML += `<div class="day-cell empty"></div>`;
+            }
+
+            for(let day = 1; day <= 31; day++) {
+                const dayKey = `day-${day}`;
+                const dayBks = bookings[dayKey] || {};
+                
+                let indicatorsHTML = '';
+                const numBks = Object.keys(dayBks).length;
+                if (numBks > 0) {
+                    indicatorsHTML = `<div class="day-indicators">`;
+                    for(let i=0; i<Math.min(numBks, 3); i++) indicatorsHTML += `<div class="indicator-dot"></div>`;
+                    if(numBks > 3) indicatorsHTML += `<div style="font-size:10px; font-weight:bold; color:var(--text-muted); line-height:8px;">+</div>`;
+                    indicatorsHTML += `</div>`;
+                }
+
+                let modifierClass = "";
+                let clickText = "View Schedule";
+                let allowClick = true;
+
+                if(filterActive) {
+                    const availableToday = masterSlots.filter(slot => !dayBks.hasOwnProperty(slot));
+                    const matchingSlots = availableToday.filter(slot => {
+                        const slotMins = timeToMins(slot);
+                        let isValid = true;
+                        if(filterBeforeMins !== null && slotMins >= filterBeforeMins) isValid = false;
+                        if(filterAfterMins !== null && slotMins <= filterAfterMins) isValid = false;
+                        return isValid;
+                    });
+
+                    if(matchingSlots.length > 0) {
+                        modifierClass = "filter-available";
+                    } else {
+                        modifierClass = "filter-unavailable";
+                        clickText = "No Matches";
+                        allowClick = false; 
+                    }
+                }
+
+                const clickAction = allowClick ? `onclick="openDay(${day})"` : '';
+
+                grid.innerHTML += `
+                    <div class="day-cell ${modifierClass}" ${clickAction}>
+                        <span class="day-num">${day}</span>
+                        ${indicatorsHTML}
+                        <div class="click-view">${clickText}</div>
+                    </div>
+                `;
+            }
+        }
+
+        // --- Modals ---
+        function openModal(id) { document.getElementById(id).classList.add('active'); }
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+
+        // --- Day View ---
+        function openDay(day) {
+            currentDay = day;
+            document.getElementById('day-title').innerText = `Current Month ${day}`;
+            
+            const slotsGrid = document.getElementById('slots-grid');
+            slotsGrid.innerHTML = '';
+
+            const dayKey = `day-${day}`;
+            const dayBookings = bookings[dayKey] || {};
+
+            masterSlots.forEach((time) => {
+                const isBooked = dayBookings.hasOwnProperty(time);
+                
+                if (isBooked) {
+                    slotsGrid.innerHTML += `
+                        <div class="slot-card slot-unavailable">
+                            <div>${time}</div>
+                            <div class="slot-status">Unavailable</div>
+                        </div>
+                    `;
+                } else {
+                    slotsGrid.innerHTML += `
+                        <div class="slot-card slot-available" onclick="promptBooking('${time}')">
+                            <div>${time}</div>
+                            <div class="slot-status">Available</div>
+                        </div>
+                    `;
+                }
+            });
+
+            openModal('day-modal');
+        }
+
+        // --- Booking Flow & Dynamic Fields ---
+        function promptBooking(time) {
+            selectedSlotTime = time;
+            document.getElementById('booking-time-display').innerText = `${time} on Day ${currentDay}`;
+            
+            // Inject Custom Fields into form based on the dynamic array
+            const customContainer = document.getElementById('dynamic-booking-fields');
+            customContainer.innerHTML = '';
+            customFields.forEach((field, index) => {
+                customContainer.innerHTML += `
+                    <div class="form-group">
+                        <label>${field}</label>
+                        <input type="text" id="custom-input-${index}" placeholder="Enter ${field}">
+                    </div>
+                `;
+            });
+
+            openModal('booking-modal');
+        }
+
+        function submitBooking() {
+            // Gather custom field data and perform basic validation
+            let customData = {};
+            let isFormValid = true;
+
+            customFields.forEach((field, index) => {
+                const inputElement = document.getElementById(`custom-input-${index}`);
+                const val = inputElement ? inputElement.value.trim() : '';
+                
+                if (!val) {
+                    isFormValid = false;
+                }
+                customData[field] = val;
+            });
+
+            if(!isFormValid) return alert("All fields are required.");
+
+            // Save booking to state
+            const dayKey = `day-${currentDay}`;
+            if (!bookings[dayKey]) bookings[dayKey] = {};
+            
+            bookings[dayKey][selectedSlotTime] = { customData };
+            
+            closeModal('booking-modal');
+            openDay(currentDay);
+            generateCalendar(); 
+        }
+
+    </script>
+</body>
+</html>

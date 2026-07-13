@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedulr Hub - Business Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --bg-color: #f8fafc;
+            --surface: #ffffff;
+            --border: #e2e8f0;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --green: #22c55e;
+            --red: #ef4444;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        
+        
+                /* --- Marketing Overlay (Landing Page) --- */
+        .marketing-overlay {
+            position: fixed; inset: 0; z-index: 9999;
+            background-color: #ffffff;
+            background-image: 
+                radial-gradient(at 0% 0%, hsla(253,16%,7%,0.03) 0, transparent 50%), 
+                radial-gradient(at 50% 0%, hsla(225,39%,30%,0.03) 0, transparent 50%), 
+                radial-gradient(at 100% 0%, hsla(339,49%,30%,0.03) 0, transparent 50%);
+            display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+            color: var(--text-main); padding: 5rem 2rem;
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            overflow-y: auto; overflow-x: hidden;
+        }
+
+        .marketing-content {
+            position: relative; z-index: 2; max-width: 1000px; text-align: center;
+            animation: slideUpFade 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .marketing-pill {
+            display: inline-block; padding: 0.6rem 1.5rem; border-radius: 50px;
+            background: #f8fafc; border: 1px solid var(--border);
+            color: var(--primary); font-weight: 800; font-size: 0.85rem; margin-bottom: 2rem;
+            text-transform: uppercase; letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+        }
+
+        .hero-title {
+            font-size: 4.5rem; font-weight: 800; letter-spacing: -1.5px; margin-bottom: 1.5rem;
+            color: var(--text-main); line-height: 1.1;
+        }
+
+        .hero-title span {
+            background: linear-gradient(135deg, var(--primary), #ec4899);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem; color: var(--text-muted); margin-bottom: 4rem; max-width: 750px; 
+            margin-left: auto; margin-right: auto; line-height: 1.6; font-weight: 400;
+        }
+
+        .how-it-works-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-bottom: 4rem;
+        }
+
+        @media(max-width: 800px) { .how-it-works-grid { grid-template-columns: 1fr; } }
+
+        .step-card {
+            background: var(--surface); border: 1px solid var(--border);
+            padding: 2.5rem 2rem; border-radius: 20px; text-align: left;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.03);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+            position: relative; overflow: hidden;
+        }
+
+        .step-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(79, 70, 229, 0.1);
+            border-color: rgba(79, 70, 229, 0.3);
+        }
+
+        .step-number {
+            font-size: 0.85rem; font-weight: 800; color: var(--primary);
+            text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1.25rem;
+            display: inline-block; background: rgba(79, 70, 229, 0.1); padding: 0.5rem 1.25rem;
+            border-radius: 8px;
+        }
+
+        .step-title {
+            font-size: 1.25rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.75rem;
+        }
+
+        .step-desc {
+            font-size: 0.95rem; color: var(--text-muted); line-height: 1.6; font-weight: 500;
+        }
+
+        .hero-cta-wrapper { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem; }
+
+        @keyframes slideUpFade {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+  
+
+        /* --- UI Utilities --- */
+        .btn {
+            padding: 0.75rem 1.5rem; border-radius: 8px; border: none; font-size: 0.95rem; font-weight: 600;
+            cursor: pointer; transition: all 0.2s; display: inline-flex; justify-content: center; align-items: center; gap: 8px;
+        }
+        .btn-primary { background: var(--primary); color: white; box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2); }
+        .btn-primary:hover { background: var(--primary-hover); transform: translateY(-1px); box-shadow: 0 6px 10px -1px rgba(79, 70, 229, 0.3); }
+        .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-main); }
+        .btn-outline:hover { border-color: var(--text-muted); background: #f1f5f9; }
+        .btn-danger { background: rgba(239, 68, 68, 0.1); color: var(--red); }
+        .btn-danger:hover { background: rgba(239, 68, 68, 0.2); }
+
+        .form-group { margin-bottom: 1.25rem; }
+        .form-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.4rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+        .form-group input {
+            width: 100%; padding: 0.75rem 1rem; border-radius: 8px; border: 1px solid var(--border);
+            background: #f8fafc; font-size: 1rem; outline: none; transition: all 0.2s; font-weight: 500;
+        }
+        .form-group input:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); }
+        .form-group input[readonly] { background: #e2e8f0; cursor: not-allowed; color: var(--text-muted); }
+
+        .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02); margin-bottom: 2rem; }
+
+        /* --- Landing & Auth View --- */
+        #landing-view {
+            display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); padding: 2rem;
+        }
+        .auth-container { width: 100%; max-width: 400px; }
+        .auth-logo { font-size: 2.5rem; font-weight: 800; letter-spacing: -1px; text-align: center; margin-bottom: 2rem; background: linear-gradient(135deg, var(--primary), #38bdf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        .toggle-auth { text-align: center; margin-top: 1.5rem; font-size: 0.9rem; color: var(--text-muted); cursor: pointer; }
+        .toggle-auth span { color: var(--primary); font-weight: 600; }
+
+        /* --- Admin Dashboard View --- */
+        #admin-view { display: none; }
+        
+        header {
+            display: flex; justify-content: space-between; align-items: center; padding: 1rem 3rem;
+            background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 50;
+        }
+        .header-logo { font-size: 1.25rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 0.5rem; }
+        .header-logo span { color: var(--primary); }
+
+        .user-menu-wrapper { position: relative; }
+        .menu-trigger { background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 0.75rem; font-weight: 600; font-size: 0.95rem; }
+        .menu-trigger img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid var(--border); }
+        
+        .dropdown-menu {
+            position: absolute; right: 0; top: calc(100% + 10px); background: var(--surface); border: 1px solid var(--border);
+            border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 200px; display: none;
+            flex-direction: column; overflow: hidden;
+        }
+        .dropdown-menu.active { display: flex; }
+        .dropdown-item { padding: 0.75rem 1.25rem; text-align: left; background: none; border: none; font-size: 0.9rem; font-weight: 500; cursor: pointer; color: var(--text-main); transition: background 0.2s; border-bottom: 1px solid var(--border); }
+        .dropdown-item:last-child { border-bottom: none; }
+        .dropdown-item:hover { background: #f8fafc; }
+        .dropdown-item.danger { color: var(--red); }
+        .dropdown-item.danger:hover { background: rgba(239, 68, 68, 0.05); }
+
+        /* --- Dashboard Layout --- */
+        .dashboard-container { max-width: 1200px; margin: 2rem auto; padding: 0 2rem; }
+        
+        .tabs { display: flex; gap: 1rem; border-bottom: 1px solid var(--border); margin-bottom: 2rem; overflow-x: auto; }
+        .tab-btn {
+            background: none; border: none; padding: 1rem 0; font-size: 1rem; font-weight: 600;
+            color: var(--text-muted); cursor: pointer; position: relative; transition: color 0.2s; margin-right: 1.5rem;
+        }
+        .tab-btn:hover { color: var(--text-main); }
+        .tab-btn.active { color: var(--primary); }
+        .tab-btn.active::after {
+            content: ''; position: absolute; bottom: -1px; left: 0; right: 0;
+            height: 3px; background: var(--primary); border-radius: 3px 3px 0 0;
+        }
+
+        .tab-content { display: none; animation: fadeIn 0.3s ease; }
+        .tab-content.active { display: block; }
+
+        /* Tab 1: Configuration Grid */
+        .config-grid { display: grid; grid-template-columns: 1fr 400px; gap: 2rem; align-items: start; }
+        @media(max-width: 900px) { .config-grid { grid-template-columns: 1fr; } }
+        
+        .custom-field-row { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1rem; background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 0.5rem; }
+        .remove-field { color: var(--red); background: none; border: none; cursor: pointer; font-weight: bold; }
+
+        /* Live Preview Panel */
+        .preview-panel {
+            background: #ffffff; border: 1px solid var(--primary); border-radius: 16px; padding: 2rem;
+            box-shadow: 0 10px 30px rgba(79, 70, 229, 0.1); position: sticky; top: 100px;
+        }
+        .preview-header { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--primary); font-weight: 800; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 8px; }
+        .preview-header::before { content: ''; width: 8px; height: 8px; background: var(--primary); border-radius: 50%; display: inline-block; animation: pulse 2s infinite; }
+
+        /* Tab 2: Subscription */
+        .pricing-tier { text-align: center; padding: 3rem 2rem; border: 2px solid var(--primary); position: relative; overflow: hidden; max-width: 500px; margin: 0 auto; }
+        .pricing-tier .badge { position: absolute; top: 1rem; right: -2rem; background: var(--primary); color: white; padding: 0.25rem 3rem; transform: rotate(45deg); font-size: 0.75rem; font-weight: 800; text-transform: uppercase; }
+        .price { font-size: 3.5rem; font-weight: 800; color: var(--text-main); margin: 1rem 0; }
+        .price span { font-size: 1rem; color: var(--text-muted); font-weight: 500; }
+        .feature-list { list-style: none; margin: 2rem 0; text-align: left; }
+        .feature-list li { margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; font-weight: 500; }
+        .feature-list li::before { content: '✓'; color: var(--green); font-weight: bold; }
+
+        /* Tab 3 & 4: Embed & Calendar Placeholders */
+        .code-block { background: #0f172a; color: #e2e8f0; padding: 1.5rem; border-radius: 8px; font-family: monospace; font-size: 0.9rem; overflow-x: auto; margin-bottom: 1rem; }
+        .empty-state { text-align: center; padding: 4rem 2rem; color: var(--text-muted); }
+        .empty-state h3 { color: var(--text-main); margin-bottom: 0.5rem; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(79,70,229,0.4); } 70% { box-shadow: 0 0 0 6px rgba(79,70,229,0); } 100% { box-shadow: 0 0 0 0 rgba(79,70,229,0); } }
+  
+
+
+
+        /* --- Dynamic Effects --- */
+        
+        
+                .glass-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 10000;
+            pointer-events: none;
+            background-image: 
+                linear-gradient(
+                    105deg,
+                    rgba(255, 255, 255, 0) 0%,
+                    rgba(255, 255, 255, 0) 45%,
+                    rgba(255, 255, 255, 0.3) 50%,
+                    rgba(255, 255, 255, 0) 55%,
+                    rgba(255, 255, 255, 0) 100%
+                );
+            background-size: 200% 100%;
+            animation: shimmerGlare 6s infinite, deepBreath 6s ease-in-out infinite alternate;
+        }
+
+        
+        
+        
+        
+           
+
+        @keyframes shimmerGlare {
+            0% { background-position: 200% 0, 0 0; }
+            100% { background-position: -200% 0, 0 0; }
+        }
+
+        @keyframes deepBreath {
+            0% { box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.02); }
+            100% { box-shadow: inset 0 0 200px rgba(0, 0, 0, 0.08); }
+        }
+
+                 
+        
+        
+        
+        
+        
+        
+        
+
+        .scroller-container {
+            width: 100vw; margin-left: calc(-50vw + 50%);
+            overflow: hidden; white-space: nowrap; position: relative;
+            padding: 2.5rem 0; margin-top: 5rem;
+            background: rgba(255, 255, 255, 0.6);
+            border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+            box-shadow: 0 4px 30px rgba(0,0,0,0.02);
+            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+        }
+        .scroller-track {
+            display: inline-block; white-space: nowrap;
+            animation: scrollLTR 25s linear infinite;
+            will-change: transform;
+        }
+        .scroller-track span {
+            font-size: 1.75rem; font-weight: 800; text-transform: uppercase;
+            letter-spacing: 2px; margin: 0 3rem; display: inline-block;
+        }
+        .c-black { color: #0f172a; }
+        .c-primary { color: var(--primary); }
+        .c-accent { color: #ec4899; }
+
+        @keyframes scrollLTR {
+            0% { transform: translateX(-50%); }
+            100% { transform: translateX(0%); }
+        }
+
+
+
+
+
+
+  </style>
+</head>
+<body>
+        <div class="glass-overlay"></div>
+
+    
+
+    <!-- ========================================== -->
+    <!-- HIGH-CONVERTING LANDING MODAL              -->
+    <!-- ========================================== -->
+    <div id="marketing-overlay" class="marketing-overlay">
+        <div class="marketing-content">
+            <div class="marketing-pill">The Ultimate Scheduling Infrastructure</div>
+            <h1 class="hero-title">Turn your website into a <span>booking engine.</span></h1>
+            <p class="hero-subtitle">Stop losing clients to friction. Embed a fully customizable, intelligent scheduling interface directly onto your website in minutes. Zero coding required, total professional control.</p>
+            
+            
+             <img src="disimg.png" alt="Schedulr Interface" style="width: 100%; height: auto; border-radius: 0; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); Margin-bottom:10%;">
+
+            
+            <div class="how-it-works-grid">
+                <div class="step-card">
+                    <div class="step-number">Step 1</div>
+                    <h3 class="step-title">Configure Your Rules</h3>
+                    <p class="step-desc">Set your availability, establish automatic time gaps between appointments, and design custom form fields to collect exact client details upfront.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">Step 2</div>
+                    <h3 class="step-title">Copy the Snippet</h3>
+                    <p class="step-desc">Grab your personalized, secure iframe code from the dashboard. It is completely isolated and lightning-fast, ensuring your website speed is never impacted.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">Step 3</div>
+                    <h3 class="step-title">Embed & Convert</h3>
+                    <p class="step-desc">Paste the snippet into WordPress, Wix, Squarespace, or any custom HTML site. Your clients can now book instantly without ever leaving your domain.</p>
+                </div>
+            </div>
+
+            <div class="hero-cta-wrapper">
+                <button class="btn btn-primary" style="font-size: 1.15rem; padding: 1.2rem 3rem; border-radius: 12px; box-shadow: 0 10px 25px rgba(79, 70, 229, 0.3);" onclick="dismissMarketingOverlay()">Get Started for Free</button>
+                <button class="btn btn-outline" style="font-size: 1.15rem; padding: 1.2rem 2.5rem; border-radius: 12px; background: white;" onclick="dismissMarketingOverlay()">Sign In to Dashboard</button>
+            </div>
+            
+           <p style="font-size: 0.85rem; color: var(--text-muted); font-weight: 500;">No credit card required. 14-day free trial on Pro features.</p>
+        
+            
+            <div class="scroller-container">
+                <div class="scroller-track">
+                    <span class="c-black">Unlimited Bookings</span>
+                    <span class="c-primary">Zero Friction</span>
+                    <span class="c-accent">Custom Forms</span>
+                    <span class="c-black">Smart Gap Rules</span>
+                    <span class="c-primary">Instant Setup</span>
+                    <span class="c-black">Unlimited Bookings</span>
+                    <span class="c-primary">Zero Friction</span>
+                    <span class="c-accent">Custom Forms</span>
+                    <span class="c-black">Smart Gap Rules</span>
+                    <span class="c-primary">Instant Setup</span>
+                </div>
+            </div>
+
+
+</div>
+    </div>
+
+
+
+
+
+    
+    
+    
+    
+    
+    
+    
+
+    <!-- ========================================== -->
+    <!-- AUTHENTICATION VIEW                        -->
+    <!-- ========================================== -->
+    <div id="landing-view">
+        <div class="auth-logo">Schedulr</div>
+        <div class="card auth-container" id="login-card">
+            <h2 style="margin-bottom: 1.5rem;">Welcome back</h2>
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" id="auth-email" placeholder="you@business.com">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="auth-password" placeholder="••••••••">
+            </div>
+            <button class="btn btn-primary" style="width: 100%;" onclick="simulateLogin()">Sign In to Dashboard</button>
+            <div class="toggle-auth" onclick="toggleAuthMode()">Don't have an account? <span>Sign up</span></div>
+        </div>
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- ADMIN DASHBOARD VIEW                       -->
+    <!-- ========================================== -->
+    <div id="admin-view">
+        <header>
+            <div class="header-logo">
+                <img src="https://via.placeholder.com/32x32.png?text=S" alt="Logo" style="border-radius: 8px;">
+                Schedulr <span>Hub</span>
+            </div>
+            <div class="user-menu-wrapper">
+                <button class="menu-trigger" onclick="toggleUserMenu()">
+                    <span id="header-user-name">Business Owner</span>
+                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="Avatar">
+                </button>
+                <div class="dropdown-menu" id="user-dropdown">
+                    <button class="dropdown-item">Help & Support</button>
+                    <button class="dropdown-item" onclick="simulateLogout()">Sign Out</button>
+                    <button class="dropdown-item danger">Delete Account</button>
+                </div>
+            </div>
+        </header>
+
+        <div class="dashboard-container">
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchTab('tab-config', this)">Widget Configuration</button>
+                <button class="tab-btn" onclick="switchTab('tab-subscription', this)">Subscription</button>
+                <button class="tab-btn" onclick="switchTab('tab-embed', this)">Installation & Embed</button>
+                <button class="tab-btn" onclick="switchTab('tab-calendar', this)">Appointments</button>
+            </div>
+
+            <!-- TAB 1: CONFIGURATION -->
+            <div id="tab-config" class="tab-content active">
+                <div class="config-grid">
+                    
+                    <!-- Settings Column -->
+                    <div class="settings-col">
+                        <div class="card">
+                            <h3 style="margin-bottom: 1.5rem;">Business Profile</h3>
+                            <div class="form-group">
+                                <label>Account Email (Unchangeable)</label>
+                                <input type="email" value="you@business.com" readonly id="profile-email">
+                            </div>
+                            <div class="form-group">
+                                <label>Business Name</label>
+                                <input type="text" id="profile-biz-name" value="My Awesome Business" onkeyup="updateLivePreview()">
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <h3 style="margin-bottom: 1.5rem;">Schedule Rules</h3>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                                <div class="form-group">
+                                    <label>Start Time</label>
+                                    <input type="time" value="09:00">
+                                </div>
+                                <div class="form-group">
+                                    <label>End Time</label>
+                                    <input type="time" value="17:00">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Appointment Duration / Gap (Minutes)</label>
+                                <input type="number" value="60" min="15" step="15">
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <h3 style="margin-bottom: 1.5rem;">Custom Form Fields</h3>
+                            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">Ask your customers specific questions when they book a slot.</p>
+                            
+                            <div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem;">
+                                <input type="text" id="new-field-input" placeholder="e.g. Car Make / Model" style="flex-grow: 1; padding: 0.75rem; border-radius: 8px; border: 1px solid var(--border);">
+                                <button class="btn btn-outline" onclick="addCustomField()">Add</button>
+                            </div>
+
+                            <div id="custom-fields-list">
+                                <!-- Populated by JS -->
+                            </div>
+                        </div>
+
+                        <!-- Main Save Action -->
+                        <div style="padding: 1rem 0 3rem 0; text-align: right;">
+                            <button class="btn btn-primary" style="padding: 1rem 3rem; font-size: 1.1rem;" onclick="saveConfiguration()">Save All Changes</button>
+                        </div>
+                    </div>
+
+                    <!-- Live Preview Column -->
+                    <div class="preview-col">
+                        <div class="preview-panel">
+                            <div class="preview-header">Live Widget Preview</div>
+                            
+                            <h2 style="font-size: 1.5rem; margin-bottom: 0.5rem;" id="preview-title">Book Appointment</h2>
+                            <p style="color: var(--primary); margin-bottom: 1.5rem; font-weight: 800; font-size: 1rem;">10:00 AM on Oct 15</p>
+                            
+                            <!-- Static Base Fields (Usually required) -->
+                            <div class="form-group">
+                                <label style="text-transform: none; font-size:0.9rem;">Full Name *</label>
+                                <input type="text" placeholder="Jane Doe" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label style="text-transform: none; font-size:0.9rem;">Phone Number *</label>
+                                <input type="tel" placeholder="(555) 000-0000" disabled>
+                            </div>
+
+                            <!-- Dynamic Injected Fields -->
+                            <div id="preview-dynamic-fields">
+                                <!-- Populated by JS to match Custom Fields List -->
+                            </div>
+
+                            <button class="btn btn-primary" style="width: 100%; margin-top: 1rem; opacity: 0.7; cursor: not-allowed;">Confirm Appointment</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2: SUBSCRIPTION -->
+            <div id="tab-subscription" class="tab-content">
+                <div class="card pricing-tier">
+                    <div class="badge">Pro Plan</div>
+                    <h3 style="font-size: 1.5rem;">Unlimited Scheduling</h3>
+                    <div class="price">$9.99<span>/month</span></div>
+                    <p style="color: var(--text-muted); margin-bottom: 2rem;">Unlock your custom widget, unlimited bookings, and custom data forms.</p>
+                    
+                    <ul class="feature-list">
+                        <li>Embeddable Iframe Widget</li>
+                        <li>Unlimited custom form fields</li>
+                        <li>Automated gap rule generation</li>
+                        <li>Priority customer support</li>
+                    </ul>
+
+                    <button class="btn btn-primary" style="width: 100%; font-size: 1.1rem; padding: 1rem;" onclick="initiateStripeCheckout()">Continue to Payment</button>
+                    <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 1rem;">Secure billing provided by Stripe Sandbox.</p>
+                </div>
+            </div>
+
+            <!-- TAB 3: EMBED (BONUS FEATURE) -->
+            <div id="tab-embed" class="tab-content">
+                <div class="card" style="max-width: 800px; margin: 0 auto;">
+                    <h3 style="margin-bottom: 1rem;">Install on your Website</h3>
+                    <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Copy and paste this HTML snippet into your website builder (WordPress, Wix, custom HTML) exactly where you want the scheduler to appear.</p>
+                    
+                    <div class="code-block" id="iframe-code">
+                        &lt;iframe src="https://widget.schedulr.app/book/my-awesome-business" width="100%" height="800px" frameborder="0"&gt;&lt;/iframe&gt;
+                    </div>
+                    <button class="btn btn-outline" onclick="copyEmbedCode()">Copy to Clipboard</button>
+                </div>
+            </div>
+
+            <!-- TAB 4: APPOINTMENTS (BONUS FEATURE) -->
+            <div id="tab-calendar" class="tab-content">
+                <div class="card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                        <h3>Upcoming Appointments</h3>
+                        <button class="btn btn-outline">Export CSV</button>
+                    </div>
+                    
+                    <div class="empty-state">
+                        <img src="https://via.placeholder.com/150x150.png?text=Calendar" alt="No Data" style="border-radius: 16px; margin-bottom: 1rem; opacity: 0.5;">
+                        <h3>No bookings yet</h3>
+                        <p>Share your scheduling link or embed the widget to get your first appointment!</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // --- Mock State ---
+        let customFieldsArray = ["Vehicle Make", "Service Requested"];
+
+        // --- Init ---
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCustomFields();
+            updateLivePreview();
+        });
+
+        // --- Marketing Overlay Logic ---
+        function dismissMarketingOverlay() {
+            const overlay = document.getElementById('marketing-overlay');
+            overlay.style.opacity = '0';
+            overlay.style.transform = 'translateY(-20px) scale(0.98)';
+            
+            setTimeout(() => {
+                overlay.style.display = 'none';
+            }, 600); // Wait for transition to complete
+        }
+
+        // --- Auth & Navigation Logic ---
+        function simulateLogin() {
+            const email = document.getElementById('auth-email').value;
+            if(email) {
+                document.getElementById('profile-email').value = email;
+                document.getElementById('header-user-name').innerText = email.split('@')[0];
+            }
+            document.getElementById('landing-view').style.display = 'none';
+            document.getElementById('admin-view').style.display = 'block';
+        }
+
+        function simulateLogout() {
+            document.getElementById('admin-view').style.display = 'none';
+            document.getElementById('landing-view').style.display = 'flex';
+            document.getElementById('user-dropdown').classList.remove('active');
+        }
+
+        function toggleAuthMode() {
+            alert("This toggles between Sign In and Sign Up in the real Firebase implementation.");
+        }
+
+        function toggleUserMenu() {
+            document.getElementById('user-dropdown').classList.toggle('active');
+        }
+
+        // Close dropdown when clicking outside
+        window.addEventListener('click', function(e) {
+            const userMenu = document.querySelector('.user-menu-wrapper');
+            if (userMenu && !userMenu.contains(e.target)) {
+                const dropdown = document.getElementById('user-dropdown');
+                if (dropdown) dropdown.classList.remove('active');
+            }
+        });
+
+        function switchTab(tabId, btnElement) {
+            // Remove active class from all tabs and contents
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            // Add active class to clicked tab and target content
+            btnElement.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        // --- Custom Fields Logic ---
+        function addCustomField() {
+            const input = document.getElementById('new-field-input');
+            const val = input.value.trim();
+            if(val && !customFieldsArray.includes(val)) {
+                customFieldsArray.push(val);
+                input.value = '';
+                renderCustomFields();
+                updateLivePreview();
+            }
+        }
+
+        function removeField(index) {
+            customFieldsArray.splice(index, 1);
+            renderCustomFields();
+            updateLivePreview();
+        }
+
+        function renderCustomFields() {
+            const container = document.getElementById('custom-fields-list');
+            container.innerHTML = '';
+            customFieldsArray.forEach((field, index) => {
+                container.innerHTML += `
+                    <div class="custom-field-row">
+                        <span style="font-weight: 600;">${field}</span>
+                        <button class="remove-field" onclick="removeField(${index})">&times; Remove</button>
+                    </div>
+                `;
+            });
+        }
+
+        // --- Live Preview Engine ---
+        function updateLivePreview() {
+            // Update Title based on business name
+            const bizName = document.getElementById('profile-biz-name').value || "Your Business";
+            document.getElementById('preview-title').innerText = `Book with ${bizName}`;
+
+            // Rebuild dynamic form fields
+            const previewContainer = document.getElementById('preview-dynamic-fields');
+            previewContainer.innerHTML = '';
+            
+            customFieldsArray.forEach(field => {
+                previewContainer.innerHTML += `
+                    <div class="form-group" style="animation: fadeIn 0.3s ease;">
+                        <label style="text-transform: none; font-size:0.9rem;">${field} *</label>
+                        <input type="text" placeholder="Enter ${field}" disabled>
+                    </div>
+                `;
+            });
+        }
+
+        // --- Mock Actions ---
+        function saveConfiguration() {
+            alert("Configuration saved to Firebase Firestore successfully!");
+        }
+
+        function initiateStripeCheckout() {
+            alert("Redirecting to Stripe Checkout Sandbox environment...");
+        }
+
+        function copyEmbedCode() {
+            // Normally you would use navigator.clipboard.writeText here
+            alert("Embed code copied to clipboard!");
+        }
+    </script>
+</body>
+</html>
