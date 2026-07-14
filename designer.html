@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jaison | Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&family=Pacifico&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-red: #f03c3c;
+            --text-light: #ffffff;
+            --text-muted: #b0b0b0;
+            --bg-dark-glass: rgba(35, 35, 35, 0.85);
+            --bg-light-panel: #bfbfbf;
+            --bg-footer: #1a1a1a;
+            --font-main: 'Montserrat', sans-serif;
+            --font-accent: 'Pacifico', cursive;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-main);
+            color: var(--text-light);
+            /* Desk background placeholder */
+            background: url('https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&q=80') center top/cover fixed no-repeat;
+            background-color: #333;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 5%;
+        }
+
+        /* --- Navigation --- */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 20px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .nav-links li {
+            padding: 10px 15px;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        .nav-links li.active {
+            background-color: var(--primary-red);
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            font-size: 1rem;
+            font-weight: bold;
+            font-family: serif;
+            cursor: pointer;
+        }
+
+        /* --- Logo --- */
+        .logo-container {
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .logo-container h1 {
+            font-family: var(--font-accent);
+            font-size: 3.5rem;
+            font-weight: 400;
+            color: var(--text-light);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        /* --- Main Content Wrapper --- */
+        .main-wrapper {
+            max-width: 750px;
+            margin: 0 auto;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+
+        /* --- Dark Glass Panel (Hero & Split) --- */
+        .dark-panel {
+            background: var(--bg-dark-glass);
+            padding: 60px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-section {
+            margin-bottom: 60px;
+        }
+
+        .hero-section h2 {
+            font-size: 2rem;
+            font-weight: 300;
+            line-height: 1.1;
+        }
+
+        .hero-section h2 strong {
+            font-size: 3rem;
+            font-weight: 700;
+            display: block;
+        }
+
+        .hero-section .subtitle {
+            font-family: var(--font-accent);
+            font-size: 1.2rem;
+            margin: 10px 0 20px;
+        }
+
+        .hero-section p {
+            font-size: 0.8rem;
+            line-height: 1.6;
+            color: var(--text-muted);
+            max-width: 350px;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            background-color: var(--primary-red);
+            color: var(--text-light);
+            border: none;
+            padding: 10px 25px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #d03030;
+        }
+
+        /* --- Split Section (Creative & Team) --- */
+        .split-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .split-heading {
+            font-size: 1rem;
+            font-weight: 300;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            line-height: 1.2;
+            color: var(--text-muted);
+        }
+
+        .left-col p {
+            font-size: 0.7rem;
+            line-height: 1.6;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+        }
+
+        .team-member {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .team-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #555;
+            background-size: cover;
+            background-position: center;
+            flex-shrink: 0;
+        }
+
+        .team-info h4 {
+            font-size: 0.75rem;
+            font-weight: 400;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        .team-info .role {
+            font-size: 0.65rem;
+            color: #888;
+            margin-bottom: 3px;
+        }
+
+        .team-info p {
+            font-size: 0.6rem;
+            color: #777;
+            line-height: 1.4;
+        }
+
+        /* --- Light Panel (Selected Work) --- */
+        .light-panel {
+            background: var(--bg-light-panel);
+            padding: 50px 60px;
+            color: #333;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Dark Notch pointing into Light Panel */
+        .light-panel::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 40px;
+            background-color: #272727; /* Matches the dark glass visually */
+            border-radius: 50%;
+            z-index: 3;
+        }
+
+        /* Light Notch pointing into Footer */
+        .light-panel::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 40px;
+            background-color: var(--bg-light-panel);
+            border-radius: 50%;
+            z-index: 3;
+        }
+
+        .light-panel h3 {
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .filters {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .filter-btn {
+            background: transparent;
+            border: 1px solid #888;
+            padding: 5px 15px;
+            font-size: 0.6rem;
+            font-weight: 700;
+            color: #555;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background: #fff;
+        }
+
+        .portfolio-item {
+            height: 150px;
+            background-color: #ddd;
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* --- Footer (Contact) --- */
+        .footer-panel {
+            background: var(--bg-footer);
+            padding: 80px 0 60px;
+            text-align: center;
+            position: relative;
+            z-index: 0;
+            margin-top: -10px;
+        }
+
+        .footer-panel h3 {
+            font-size: 0.8rem;
+            font-weight: 400;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+            color: var(--text-muted);
+        }
+
+        .contact-form {
+            max-width: 500px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .form-left {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .form-control {
+            background-color: #666;
+            border: none;
+            padding: 12px 15px;
+            color: #fff;
+            font-size: 0.7rem;
+            font-family: var(--font-main);
+            outline: none;
+        }
+
+        .form-control::placeholder {
+            color: #ccc;
+            text-transform: uppercase;
+        }
+
+        textarea.form-control {
+            height: 100%;
+            resize: none;
+        }
+
+        .submit-wrapper {
+            grid-column: 1 / -1;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Navigation -->
+        <nav>
+            <ul class="nav-links">
+                <li class="active">HOME</li>
+                <li>ABOUT US</li>
+                <li>PROTFOLIO</li>
+                <li>SERVICES</li>
+                <li>CONTACT US</li>
+            </ul>
+            <div class="social-icons">
+                <span>P</span>
+                <span>e</span>
+                <span>Bē</span>
+                <span>g+</span>
+                <span>📞</span>
+            </div>
+        </nav>
+
+        <!-- Logo -->
+        <div class="logo-container">
+            <h1>Jaison</h1>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-wrapper">
+            
+            <!-- Dark Translucent Panel -->
+            <div class="dark-panel">
+                <div class="hero-section">
+                    <h2>I AM <strong>DESIGNER</strong></h2>
+                    <p class="subtitle">I Make Wonderful Things</p>
+                    <p>Lorem ipsum dolor sit amet consectetuer adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate.</p>
+                    <button class="btn">READ MORE</button>
+                </div>
+
+                <div class="split-section">
+                    <div class="left-col">
+                        <h3 class="split-heading">CREATIVE AND<br>PROFESSIONAL</h3>
+                        <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+                        <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est.</p>
+                        <button class="btn" style="margin-top: 10px;">READ MORE</button>
+                    </div>
+                    
+                    <div class="right-col">
+                        <h3 class="split-heading">OUR TEM</h3>
+                        
+                        <div class="team-member">
+                            <div class="team-avatar" style="background-image: url('https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=150');"></div>
+                            <div class="team-info">
+                                <h4>NAME SURNAME</h4>
+                                <div class="role">Manager</div>
+                                <p>Lorem ipsum dolor sit amet, consuer adipiscing elit</p>
+                            </div>
+                        </div>
+
+                        <div class="team-member">
+                            <div class="team-avatar" style="background-image: url('https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=150');"></div>
+                            <div class="team-info">
+                                <h4>NAME SURNAME</h4>
+                                <div class="role">Graphics Designer</div>
+                                <p>Lorem ipsum dolor sit amet, consuer adipiscing elit</p>
+                            </div>
+                        </div>
+
+                        <div class="team-member">
+                            <div class="team-avatar" style="background-image: url('https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=150');"></div>
+                            <div class="team-info">
+                                <h4>NAME SURNAME</h4>
+                                <div class="role">Web designer</div>
+                                <p>Lorem ipsum dolor sit amet, consuer adipiscing elit</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Light Grey Panel -->
+            <div class="light-panel">
+                <h3>SELECTED WORK</h3>
+                <div class="filters">
+                    <button class="filter-btn">ALL</button>
+                    <button class="filter-btn">WEB DESIGN</button>
+                    <button class="filter-btn">LOGO DESIGN</button>
+                    <button class="filter-btn">BRANDING</button>
+                </div>
+
+                <div class="portfolio-grid">
+                    <div class="portfolio-item" style="background-image: url('https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&q=80&w=400');"></div>
+                    <div class="portfolio-item" style="background-image: url('https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&q=80&w=400');"></div>
+                    <div class="portfolio-item" style="background-image: url('https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&q=80&w=400');"></div>
+                    <div class="portfolio-item" style="background-image: url('https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?auto=format&fit=crop&q=80&w=400');"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Dark Footer Panel -->
+    <div class="footer-panel">
+        <h3>GET IN TOUCH</h3>
+        <div class="contact-form">
+            <div class="form-left">
+                <input type="text" class="form-control" placeholder="NAME">
+                <input type="email" class="form-control" placeholder="EMAIL">
+            </div>
+            <div class="form-right">
+                <textarea class="form-control" placeholder="MASSAGE"></textarea>
+            </div>
+            <div class="submit-wrapper">
+                <button class="btn">SUBMIT</button>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

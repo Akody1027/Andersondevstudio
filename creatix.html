@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creatix | Creative Solutions</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0f0f0f;
+            --bg-surface: #1a1a1a;
+            --accent: #c4ff00;
+            --text-light: #ffffff;
+            --text-dark: #000000;
+            --text-muted: #888888;
+            --font-display: 'Outfit', sans-serif;
+            --font-body: 'Inter', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            font-family: var(--font-body);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        img { max-width: 100%; height: auto; display: block; }
+        
+        .container { max-width: 1280px; margin: 0 auto; padding: 0 5%; }
+
+        /* --- Header & Hero Section (White Rounded Background) --- */
+        .hero-wrapper {
+            background-color: #ffffff;
+            color: var(--text-dark);
+            border-bottom-left-radius: 60px;
+            border-bottom-right-radius: 60px;
+            padding-top: 20px;
+            padding-bottom: 80px;
+            position: relative;
+        }
+
+        .navbar {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            border-radius: 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            margin: 0 auto 60px;
+            max-width: 1100px;
+        }
+
+        .navbar .logo {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .navbar .logo-icon { color: var(--accent); font-size: 1.8rem; }
+        .nav-links { display: flex; gap: 30px; font-size: 0.9rem; font-weight: 500; }
+        .nav-links a { color: var(--text-light); text-decoration: none; transition: color 0.3s; }
+        .nav-links a:hover { color: var(--accent); }
+
+        .hero-content {
+            text-align: center;
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .hero-content h1 {
+            font-family: var(--font-display);
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 40px;
+            letter-spacing: -1px;
+        }
+
+        .hero-layout {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-align: left;
+            position: relative;
+        }
+
+        .hero-text-left { max-width: 250px; font-size: 0.9rem; color: #555; }
+        .btn-outline-dark {
+            border: 1px solid #ddd;
+            background: transparent;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-top: 15px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .hero-center-img {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            margin: 0 auto;
+            border-radius: 50% 50% 0 0;
+            background: url('https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80') center/cover;
+        }
+
+        .hero-badge-right {
+            text-align: right;
+            max-width: 150px;
+        }
+        
+        .stars { color: var(--accent); font-size: 1.2rem; margin-bottom: 5px; }
+        
+        .hero-ctas {
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            background: rgba(255,255,255,0.9);
+            padding: 10px;
+            border-radius: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .btn-primary {
+            background-color: var(--accent);
+            color: var(--text-dark);
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            font-family: var(--font-body);
+        }
+        
+        .btn-dark {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* --- Stats Section --- */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            padding: 60px 5%;
+            border-bottom: 1px solid #222;
+        }
+        
+        .stat-item { text-align: center; }
+        .stat-item h3 { font-family: var(--font-display); font-size: 2.5rem; font-weight: 700; margin-bottom: 5px; }
+        .stat-item p { color: var(--text-muted); font-size: 0.9rem; }
+
+        /* --- Masterpieces Section --- */
+        .masterpieces { padding: 80px 5%; }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 50px;
+        }
+        .section-header h2 { font-family: var(--font-display); font-size: 3rem; max-width: 400px; line-height: 1.1; }
+        .section-header p { max-width: 400px; color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; }
+
+        .gallery-grid { display: flex; gap: 20px; height: 400px; }
+        .gallery-item { border-radius: 20px; overflow: hidden; position: relative; }
+        .gallery-left { flex: 2; background: url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80') center/cover; }
+        .gallery-right { flex: 1; background: url('https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80') center/cover; filter: grayscale(100%); }
+        
+        .gallery-tag {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: var(--accent);
+            color: var(--text-dark);
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        /* --- Services Block --- */
+        .services-wrapper { padding: 0 5% 80px; }
+        .services-card {
+            background-color: var(--bg-surface);
+            border-radius: 40px;
+            padding: 60px;
+            display: flex;
+            gap: 40px;
+            position: relative;
+        }
+
+        .services-left { flex: 1; }
+        .services-left h2 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 20px; }
+        .services-left h2 span { background: var(--accent); color: var(--text-dark); padding: 0 10px; border-radius: 8px; }
+        .services-left p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 40px; max-width: 300px; line-height: 1.6; }
+
+        .service-list { display: flex; flex-direction: column; gap: 15px; }
+        .service-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border: 1px solid #333;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .service-row:hover, .service-row.active { border-color: var(--accent); }
+        .service-row.active { color: var(--accent); }
+        .service-num { font-weight: 700; margin-right: 15px; opacity: 0.5; }
+
+        .services-center {
+            flex: 1.2;
+            border-radius: 20px;
+            background: url('https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&q=80') center/cover;
+            min-height: 400px;
+        }
+
+        .services-right { flex: 0.8; display: flex; flex-direction: column; gap: 20px; justify-content: space-between; }
+        .box-dark { background: #111; padding: 30px; border-radius: 20px; text-align: center; }
+        .box-accent { background: var(--accent); color: var(--text-dark); padding: 30px; border-radius: 20px; height: 100%; display: flex; flex-direction: column; justify-content: center; }
+        .box-accent h4 { font-family: var(--font-display); font-size: 1.5rem; margin-bottom: 15px; }
+        .circle-arrow { width: 40px; height: 40px; background: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-top: auto; }
+
+        /* --- Banner Separator --- */
+        .banner {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            text-align: center;
+            padding: 40px 0;
+            border-top: 1px solid #333;
+            border-bottom: 1px solid #333;
+            margin-bottom: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+        .banner span { color: var(--accent); }
+
+        /* --- Meet The Team --- */
+        .team-section { padding: 0 5% 80px; }
+        .team-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
+        .team-header h2 { font-family: var(--font-display); font-size: 2.5rem; }
+        .team-header h2 span { background: var(--accent); color: var(--text-dark); padding: 0 10px; border-radius: 8px; }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        .team-card {
+            background: #ffffff;
+            color: var(--text-dark);
+            padding: 30px;
+            border-radius: 20px;
+        }
+        .team-card-header { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
+        .team-avatar { width: 50px; height: 50px; background: var(--accent); border-radius: 12px; }
+        .team-info h4 { font-family: var(--font-display); font-weight: 700; }
+        .team-info p { font-size: 0.8rem; color: #666; }
+        .team-card p.desc { font-size: 0.85rem; color: #444; line-height: 1.5; }
+
+        /* --- Footer CTA --- */
+        .footer-cta {
+            background-color: var(--bg-surface);
+            border-top-left-radius: 60px;
+            border-top-right-radius: 60px;
+            padding: 80px 5% 0;
+            margin-top: 50px;
+        }
+        .cta-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 60px;
+        }
+        .cta-content h2 { font-family: var(--font-display); font-size: 3rem; margin-bottom: 20px; }
+        .cta-input-group {
+            display: flex;
+            background: #111;
+            border-radius: 30px;
+            padding: 5px;
+            max-width: 400px;
+        }
+        .cta-input-group input {
+            background: transparent;
+            border: none;
+            color: #fff;
+            padding: 15px 20px;
+            outline: none;
+            width: 100%;
+        }
+        
+        .footer-bottom {
+            background: var(--accent);
+            color: var(--text-dark);
+            border-top-left-radius: 40px;
+            border-top-right-radius: 40px;
+            padding: 60px 5%;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+        
+        .footer-links-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+        }
+        .footer-logo { font-family: var(--font-display); font-size: 2rem; font-weight: 700; margin-bottom: 20px; }
+        .footer-col h5 { font-weight: 700; margin-bottom: 20px; font-size: 1.1rem; }
+        .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+        .footer-col a { color: #222; text-decoration: none; font-size: 0.9rem; }
+
+        /* --- Responsive --- */
+        @media (max-width: 1024px) {
+            .hero-layout { flex-direction: column; text-align: center; gap: 40px; }
+            .hero-text-left, .hero-badge-right { text-align: center; max-width: 100%; }
+            .services-card { flex-direction: column; }
+            .team-grid { grid-template-columns: repeat(2, 1fr); }
+            .section-header { flex-direction: column; align-items: flex-start; gap: 20px; }
+            .cta-content { flex-direction: column; text-align: center; gap: 40px; }
+        }
+        
+        @media (max-width: 768px) {
+            .navbar { flex-direction: column; border-radius: 20px; padding: 20px; gap: 20px; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .gallery-grid { flex-direction: column; height: auto; }
+            .gallery-left, .gallery-right { height: 300px; }
+            .team-grid { grid-template-columns: 1fr; }
+            .footer-links-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="hero-wrapper">
+        <nav class="navbar">
+            <div class="logo"><span class="logo-icon">✹</span> Creatix</div>
+            <div class="nav-links">
+                <a href="#">About Us</a>
+                <a href="#">Services</a>
+                <a href="#">Projects</a>
+                <a href="#">Reviews</a>
+            </div>
+            <button class="btn-primary" style="padding: 10px 20px; font-size: 0.8rem;">Contact Us</button>
+        </nav>
+
+        <div class="hero-content container">
+            <h1>Empowering Brands<br>Through Creative Solutions</h1>
+            
+            <div class="hero-layout">
+                <div class="hero-text-left">
+                    <p>From web development to branding, we deliver innovative strategies that elevate your brand and drive growth. Let's create something exceptional together.</p>
+                    <button class="btn-outline-dark">Innovate Your Brand</button>
+                </div>
+                
+                <div class="hero-center-img">
+                    <div class="hero-ctas">
+                        <button class="btn-primary">Start Your Project</button>
+                        <button class="btn-dark">Let's Collaborate</button>
+                    </div>
+                </div>
+                
+                <div class="hero-badge-right">
+                    <div class="stars">★★★★★</div>
+                    <h3 style="font-family: var(--font-display); font-size: 1.5rem;">10 Years</h3>
+                    <p style="font-size: 0.8rem; color: #666;">Experience</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <h3>2000+</h3>
+                <p>Company</p>
+            </div>
+            <div class="stat-item">
+                <h3>10+</h3>
+                <p>Years Exp.</p>
+            </div>
+            <div class="stat-item">
+                <h3>800+</h3>
+                <p>Hours of Digital</p>
+            </div>
+            <div class="stat-item">
+                <h3>150M+</h3>
+                <p>In Tracked Revenue</p>
+            </div>
+        </div>
+
+        <div class="masterpieces">
+            <div class="section-header">
+                <h2>Turning Ideas Into Masterpieces</h2>
+                <p>We may be a compact team, but our creativity knows no bounds. By staying agile and working hand-in-hand with our clients, we transform ideas into cutting-edge designs that make a lasting impression.</p>
+            </div>
+            <div class="gallery-grid">
+                <div class="gallery-item gallery-left">
+                    <div class="gallery-tag">A Creative Design Agency</div>
+                </div>
+                <div class="gallery-item gallery-right"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="services-wrapper container">
+        <div class="services-card">
+            <div class="services-left">
+                <h2>Our <span>Services</span></h2>
+                <p>We offer a range of creative and digital services designed to help your brand stand out.</p>
+                <div class="service-list">
+                    <div class="service-row active">
+                        <div><span class="service-num">01</span> UI/UX Design</div>
+                        <span>&rarr;</span>
+                    </div>
+                    <div class="service-row">
+                        <div><span class="service-num">02</span> Web Development</div>
+                        <span>&rarr;</span>
+                    </div>
+                    <div class="service-row">
+                        <div><span class="service-num">03</span> 3D Designs</div>
+                        <span>&rarr;</span>
+                    </div>
+                    <div class="service-row">
+                        <div><span class="service-num">04</span> Motion Graphics</div>
+                        <span>&rarr;</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="services-center"></div>
+            
+            <div class="services-right">
+                <div class="box-dark">
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Ever wondered how design magic happens?</p>
+                </div>
+                <div class="box-dark" style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-weight: 600;">See how we work</span>
+                    <span style="color: var(--text-muted);">&nearr;</span>
+                </div>
+                <div class="box-accent">
+                    <h4>Looking for design experts who can bring your vision to life?</h4>
+                    <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                        <span style="font-weight: 700; font-size: 1.2rem;">Meet our<br>expert</span>
+                        <div class="circle-arrow">&nearr;</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="banner">
+        Innovate <span>✦</span> Inspire <span>✦</span> Create
+    </div>
+
+    <div class="team-section container">
+        <div class="team-header">
+            <h2>Meet <span>The Team</span></h2>
+            <div style="display: flex; gap: 10px; background: #222; padding: 5px; border-radius: 30px;">
+                <button class="btn-primary" style="padding: 10px 20px; font-size: 0.8rem;">Let's Talk</button>
+                <button class="btn-dark" style="padding: 10px 20px; font-size: 0.8rem;">View All</button>
+            </div>
+        </div>
+        
+        <div class="team-grid">
+            <!-- Team Card 1 -->
+            <div class="team-card">
+                <div class="team-card-header">
+                    <div class="team-avatar"></div>
+                    <div class="team-info">
+                        <h4>Jane Doe</h4>
+                        <p>CEO & Founder</p>
+                    </div>
+                </div>
+                <p class="desc">A vision to redefine digital experiences. With a focus on strategy and innovation.</p>
+            </div>
+            <!-- Team Card 2 -->
+            <div class="team-card">
+                <div class="team-card-header">
+                    <div class="team-avatar"></div>
+                    <div class="team-info">
+                        <h4>John Smith</h4>
+                        <p>Head of Design</p>
+                    </div>
+                </div>
+                <p class="desc">Expert in crafting intuitive user interfaces and compelling brand identities.</p>
+            </div>
+            <!-- Team Card 3 -->
+            <div class="team-card">
+                <div class="team-card-header">
+                    <div class="team-avatar"></div>
+                    <div class="team-info">
+                        <h4>Sarah Lee</h4>
+                        <p>Lead Developer</p>
+                    </div>
+                </div>
+                <p class="desc">Turning complex problems into elegant, scalable technical solutions.</p>
+            </div>
+            <!-- Team Card 4 -->
+            <div class="team-card">
+                <div class="team-card-header">
+                    <div class="team-avatar"></div>
+                    <div class="team-info">
+                        <h4>Mike Johnson</h4>
+                        <p>UX Researcher</p>
+                    </div>
+                </div>
+                <p class="desc">Deep dives into user behavior to ensure every product hits the mark perfectly.</p>
+            </div>
+            <!-- Team Card 5 -->
+            <div class="team-card">
+                <div class="team-card-header">
+                    <div class="team-avatar"></div>
+                    <div class="team-info">
+                        <h4>Emily Chen</h4>
+                        <p>Project Manager</p>
+                    </div>
+                </div>
+                <p class="desc">Keeping teams aligned and delivering exceptional results on time, every time.</p>
+            </div>
+            <!-- Team Card 6 -->
+            <div class="team-card">
+                <div class="team-card-header">
+                    <div class="team-avatar"></div>
+                    <div class="team-info">
+                        <h4>David Kim</h4>
+                        <p>Motion Designer</p>
+                    </div>
+                </div>
+                <p class="desc">Bringing static designs to life with fluid animations and interactive elements.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-cta">
+        <div class="cta-content container">
+            <div>
+                <h2>Get in Touch Today!</h2>
+                <p style="color: var(--text-muted); max-width: 400px; font-size: 0.9rem;">Let's transform your ideas into exceptional digital experiences. Whether you're looking for a complete rebrand or a stunning new website.</p>
+            </div>
+            <div>
+                <div class="cta-input-group">
+                    <input type="email" placeholder="Enter your email">
+                    <button class="btn-primary" style="padding: 10px 20px;">Subscribe</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <div class="container footer-links-grid">
+                <div>
+                    <div class="footer-logo"><span style="color: #fff;">✹</span> Creatix</div>
+                    <p style="font-size: 0.9rem; margin-top: 20px; max-width: 250px;">Creating digital experiences that matter.</p>
+                </div>
+                <div class="footer-col">
+                    <h5>Company</h5>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">News</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h5>Services</h5>
+                    <ul>
+                        <li><a href="#">UI/UX Design</a></li>
+                        <li><a href="#">Web Development</a></li>
+                        <li><a href="#">Branding</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h5>Connect</h5>
+                    <ul>
+                        <li><a href="#">Twitter</a></li>
+                        <li><a href="#">LinkedIn</a></li>
+                        <li><a href="#">Instagram</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="container" style="border-top: 1px solid rgba(0,0,0,0.1); padding-top: 20px; font-size: 0.8rem; text-align: center;">
+                &copy; 2026 Creatix Agency. All rights reserved.
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

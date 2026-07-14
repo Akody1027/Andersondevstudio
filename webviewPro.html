@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AndersonDev Studio - Client Presentation</title>
+    <style>
+        :root {
+            --bg-color: #050505;
+            --text-main: #ffffff;
+            --accent: #a855f7;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+        }
+        
+        * { 
+            margin: 0; padding: 0; box-sizing: border-box; 
+            font-family: 'Inter', -apple-system, sans-serif; 
+        }
+        
+        body { 
+            background-color: var(--bg-color); 
+            color: var(--text-main); 
+            overflow: hidden; /* Prevents double scrollbars */
+            height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+        }
+        
+        /* Header Area */
+        header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 15px 4vw; 
+            background: rgba(5, 5, 5, 0.8); 
+            backdrop-filter: blur(10px); 
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--glass-border); 
+            z-index: 100; 
+        }
+        
+        .logo { 
+            font-size: 1.5rem; 
+            font-weight: 900; 
+            letter-spacing: -1px; 
+            text-decoration: none; 
+            color: #fff; 
+        }
+        
+        .text-accent { color: var(--accent); }
+        
+        .btn-contact { 
+            padding: 10px 24px; 
+            background: transparent; 
+            color: #fff; 
+            text-decoration: none; 
+            font-weight: 600; 
+            border-radius: 50px; 
+            border: 1px solid var(--accent); 
+            transition: all 0.3s ease; 
+        }
+        
+        .btn-contact:hover { 
+            background: var(--accent); 
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.4); 
+        }
+
+        /* Viewing Container */
+        main { 
+            flex-grow: 1; 
+            position: relative; 
+            width: 100%; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+        }
+        
+        /* Loading Spinner */
+        .spinner-container { 
+            position: absolute; 
+            z-index: 10; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            gap: 15px; 
+            transition: opacity 0.3s ease; 
+            pointer-events: none; 
+        }
+        
+        .spinner { 
+            width: 50px; 
+            height: 50px; 
+            border: 4px solid rgba(168, 85, 247, 0.2); 
+            border-top: 4px solid var(--accent); 
+            border-radius: 50%; 
+            animation: spin 1s linear infinite; 
+        }
+        
+        @keyframes spin { 
+            0% { transform: rotate(0deg); } 
+            100% { transform: rotate(360deg); } 
+        }
+        
+        /* The Sandbox */
+        iframe { 
+            width: 100%; 
+            height: 100%; 
+            border: none; 
+            z-index: 20; 
+            opacity: 0; 
+            transition: opacity 0.5s ease; 
+            background-color: #fff; /* Default web background to prevent transparency bleed */
+        }
+        
+        iframe.loaded { opacity: 1; }
+
+        /* Floating Navigation Controls */
+        .nav-controls { 
+            position: absolute; 
+            bottom: 30px; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            z-index: 30; 
+            display: flex; 
+            gap: 20px; 
+            background: var(--glass-bg); 
+            backdrop-filter: blur(15px); 
+            -webkit-backdrop-filter: blur(15px);
+            padding: 10px 20px; 
+            border-radius: 50px; 
+            border: 1px solid var(--glass-border); 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+            align-items: center;
+        }
+        
+        .nav-btn { 
+            background: transparent; 
+            border: none; 
+            color: #fff; 
+            font-size: 1.5rem; 
+            cursor: pointer; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            width: 40px; 
+            height: 40px; 
+            border-radius: 50%; 
+            transition: all 0.3s; 
+        }
+        
+        .nav-btn:hover { 
+            background: rgba(168, 85, 247, 0.2); 
+            color: var(--accent); 
+        }
+        
+        .nav-btn:disabled { 
+            opacity: 0.3; 
+            cursor: not-allowed; 
+        }
+        
+        .site-counter { 
+            font-size: 0.9rem; 
+            font-weight: 600; 
+            color: var(--text-main); 
+            min-width: 60px; 
+            text-align: center; 
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header>
+        <a href="https://www.andersondev.studio" class="logo">Anderson<span class="text-accent">Dev</span>.studio</a>
+        <a href="https://www.andersondev.studio" class="btn-contact">Back to Main Site</a>
+    </header>
+
+    <main>
+        <!-- The purple accent spinner, hidden via JS once the iframe fully loads -->
+        <div class="spinner-container" id="loadingSpinner">
+            <div class="spinner"></div>
+            <div style="color: var(--accent); font-weight: 600; letter-spacing: 1px; font-size: 0.85rem;">LOADING ARCHITECTURE...</div>
+        </div>
+        
+        <!-- Sandboxed iframe protects the parent shell from the embedded site's scripts breaking layout -->
+        <iframe id="presentationFrame" sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
+
+        <div class="nav-controls">
+            <button class="nav-btn" id="btnPrev" aria-label="Previous Site">&#8592;</button>
+            <div class="site-counter" id="siteCounter">1 / 1</div>
+            <button class="nav-btn" id="btnNext" aria-label="Next Site">&#8594;</button>
+        </div>
+    </main>
+
+    <script>
+        /**
+         * ========================================================
+         * PLAYLIST CONFIGURATION
+         * ========================================================
+         * Instructions:
+         * 1. Add the URLs or local file names of the HTML files you want to present below.
+         * 2. Since your client HTML files are hosted in the exact same repository, 
+         *    you only need to provide the file names (e.g., 'real-estate-demo.html').
+         * 3. To add more sites to the rotation, simply remove the double slashes (//) 
+         *    to uncomment the grayed-out lines, or copy the format to create new ones.
+         * 4. Ensure the last item in the active array does NOT have a comma after it.
+         */
+        const clientPlaylist = [
+            'demo1.html',
+            'demo2.html',
+            'demo3.html'
+            // 'demo4.html',
+            // 'demo5.html',
+            // 'demo6.html',
+            // 'demo7.html',
+            // 'demo8.html',
+            // 'demo9.html',
+            // 'demo10.html'
+        ];
+
+        // Central Application State
+        let currentIndex = 0;
+        const iframe = document.getElementById('presentationFrame');
+        const spinner = document.getElementById('loadingSpinner');
+        const btnPrev = document.getElementById('btnPrev');
+        const btnNext = document.getElementById('btnNext');
+        const counterText = document.getElementById('siteCounter');
+
+        // Logic to swap the iframe source and handle visual transitions
+        function loadSite(index) {
+            // Failsafe bounds checking
+            if (index < 0 || index >= clientPlaylist.length) return;
+            
+            currentIndex = index;
+            
+            // Re-engage the loading state UI
+            iframe.classList.remove('loaded');
+            spinner.style.opacity = '1';
+            
+            // Swap the iframe file source
+            iframe.src = clientPlaylist[currentIndex];
+            
+            // Update the navigation control UI
+            counterText.innerText = `${currentIndex + 1} / ${clientPlaylist.length}`;
+            btnPrev.disabled = currentIndex === 0;
+            btnNext.disabled = currentIndex === clientPlaylist.length - 1;
+        }
+
+        // Listener that detects when the embedded HTML file has finished rendering
+        iframe.addEventListener('load', () => {
+            spinner.style.opacity = '0';
+            iframe.classList.add('loaded');
+        });
+
+        // Navigation Bindings
+        btnPrev.addEventListener('click', () => {
+            if (currentIndex > 0) loadSite(currentIndex - 1);
+        });
+
+        btnNext.addEventListener('click', () => {
+            if (currentIndex < clientPlaylist.length - 1) loadSite(currentIndex + 1);
+        });
+
+        // Initialization Boot Sequence
+        if (clientPlaylist.length > 0) {
+            loadSite(0);
+        } else {
+            spinner.innerHTML = "<div style='color: white;'>Playlist Configuration is empty.</div>";
+        }
+    </script>
+</body>
+</html>

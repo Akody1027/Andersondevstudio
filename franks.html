@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frank's Tree Service</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-blue: #009bdb;
+            --brand-yellow: #ffd400;
+            --brand-dark: #121212;
+            --text-light: #ffffff;
+            --text-dark: #333333;
+            --font-main: 'Montserrat', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: var(--font-main);
+        }
+
+        body {
+            background-color: var(--brand-blue);
+            color: var(--text-dark);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        img { max-width: 100%; display: block; }
+        
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 5%; }
+
+        /* --- Buttons --- */
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            transition: opacity 0.3s ease;
+        }
+        .btn:hover { opacity: 0.8; }
+        .btn-yellow { background-color: var(--brand-yellow); color: var(--brand-dark); }
+        .btn-blue { background-color: var(--brand-blue); color: var(--text-light); }
+        
+        /* --- Top Bar & Navigation --- */
+        .top-bar {
+            background-color: var(--brand-blue);
+            padding: 10px 0;
+            text-align: center;
+        }
+        
+        .navbar {
+            position: absolute;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 1200px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 155, 219, 0.9);
+            padding: 10px 30px;
+            border-radius: 50px;
+            z-index: 100;
+        }
+        
+        .nav-brand {
+            font-weight: 800;
+            color: var(--brand-yellow);
+            font-size: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            position: relative;
+            height: 85vh;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1585244583161-007f354f6bb9?auto=format&fit=crop&q=80') center/cover;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            clip-path: ellipse(150% 100% at 50% 0%);
+            z-index: 2;
+            margin-top:25%;
+        }
+
+        .hero h1 {
+            color: var(--text-light);
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+        
+        .hero h1 span { color: var(--brand-yellow); }
+        .hero p { color: var(--brand-yellow); font-weight: 700; letter-spacing: 2px; margin-bottom: 30px; }
+
+        /* --- Why Frank Section (Dark Curve) --- */
+        .why-us {
+            background-color: var(--brand-dark);
+            color: var(--text-light);
+            padding: 120px 5% 150px;
+            margin-top: -100px; /* Pull up under hero curve */
+            position: relative;
+            z-index: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 50px;
+            clip-path: ellipse(200% 100% at 50% 100%);
+        }
+
+        .why-us-img {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            border: 10px solid var(--brand-blue);
+            background: url('https://images.unsplash.com/photo-1542037104857-ffbb0b9155fb?auto=format&fit=crop&q=80') center/cover;
+        }
+
+        .why-us-text { max-width: 500px; }
+        .why-us-text h2 { color: var(--brand-yellow); font-size: 2rem; margin-bottom: 20px; text-transform: uppercase; }
+        .why-us-text p { font-size: 0.9rem; line-height: 1.6; color: #aaa; margin-bottom: 15px; }
+
+        /* --- Services Section --- */
+        .services {
+            background-color: var(--text-light);
+            padding: 120px 5% 150px;
+            margin-top: -100px;
+            text-align: center;
+            position: relative;
+            z-index: 0;
+            background-image: radial-gradient(circle at center, #f5f5f5 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        .section-title { font-size: 2.5rem; font-weight: 800; margin-bottom: 15px; text-transform: uppercase; color: var(--brand-dark); }
+        .section-subtitle { color: #666; font-size: 0.9rem; margin-bottom: 60px; max-width: 600px; margin-left: auto; margin-right: auto; }
+
+        .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; max-width: 1000px; margin: 0 auto; }
+        .service-card { text-align: center; }
+        .service-card-img {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            background-size: cover;
+            background-position: center;
+            border: 5px solid #fff;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .service-card h3 { margin-bottom: 15px; font-size: 1.2rem; }
+        .service-card p { font-size: 0.8rem; color: #666; line-height: 1.5; margin-bottom: 20px; }
+
+        /* --- Tree Removal Section (Blue Curve) --- */
+        .tree-removal {
+            background-color: var(--brand-blue);
+            color: var(--text-light);
+            padding: 150px 5% 100px;
+            margin-top: -80px;
+            position: relative;
+            z-index: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 50px;
+            clip-path: ellipse(150% 100% at 50% 100%);
+        }
+
+        .tree-removal-img {
+            flex: 1;
+            height: 400px;
+            background: url('https://images.unsplash.com/photo-1596706938927-2c9e74cebd73?auto=format&fit=crop&q=80') center/cover;
+            border-radius: 20px;
+            max-width: 400px;
+        }
+
+        .tree-removal-text { flex: 1; max-width: 500px; }
+        .tree-removal-text h2 { font-size: 2.5rem; margin-bottom: 20px; text-transform: uppercase; font-weight: 800; }
+        .tree-removal-text p { font-size: 0.9rem; line-height: 1.6; margin-bottom: 15px; }
+
+        /* --- Our Team Section (Yellow Curve) --- */
+        .our-team {
+            background-color: var(--brand-yellow);
+            padding: 150px 5% 100px;
+            margin-top: -80px;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            clip-path: ellipse(150% 100% at 50% 100%);
+        }
+
+        .our-team .section-title { color: var(--brand-blue); }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            max-width: 1100px;
+            margin: 40px auto 0;
+        }
+
+        .team-card {
+            background: var(--text-light);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+
+        .team-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: -60px auto 15px;
+            background-size: cover;
+            background-position: center;
+            border: 5px solid var(--text-light);
+            background-color: #ddd;
+        }
+
+        .team-card h4 { font-size: 1rem; color: var(--brand-blue); margin-bottom: 5px; }
+        .team-card p { font-size: 0.75rem; color: #666; line-height: 1.4; }
+
+        /* --- Gallery Section --- */
+        .gallery { background-color: var(--brand-yellow); padding-bottom: 20px; }
+        .gallery-title { text-align: center; font-size: 2rem; font-weight: 800; color: var(--text-light); padding: 20px 0; }
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            width: 100%;
+        }
+        .gallery-img { height: 250px; background-size: cover; background-position: center; }
+
+        /* --- Testimonials --- */
+        .testimonials {
+            background-color: var(--brand-blue);
+            color: var(--text-light);
+            text-align: center;
+            padding: 80px 5% 200px; /* Extra bottom padding for floating contact card */
+        }
+        
+        .quote-icon { font-size: 4rem; color: var(--text-light); opacity: 0.5; line-height: 1; }
+        .testimonial-text { max-width: 700px; margin: 20px auto; font-size: 1.1rem; line-height: 1.6; font-style: italic; }
+
+        /* --- Contact / Footer --- */
+        .footer-section {
+            background-color: var(--brand-blue);
+            position: relative;
+            padding-bottom: 40px;
+        }
+
+        .contact-card-wrapper {
+            max-width: 1000px;
+            margin: -150px auto 40px;
+            position: relative;
+            z-index: 10;
+            display: flex;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .contact-form {
+            flex: 1.2;
+            background-color: #222222;
+            padding: 50px;
+            color: var(--text-light);
+        }
+
+        .contact-form h2 { color: var(--brand-blue); font-size: 2rem; margin-bottom: 10px; font-weight: 300; }
+        .contact-form p { font-size: 0.8rem; color: #888; margin-bottom: 30px; }
+        
+        .form-group { margin-bottom: 15px; display: flex; gap: 15px; }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: none;
+            border-radius: 5px;
+            background: #ffffff;
+            font-size: 0.85rem;
+            outline: none;
+        }
+        .form-group textarea { resize: none; height: 100px; }
+
+        .contact-info {
+            flex: 0.8;
+            background-color: var(--brand-yellow);
+            padding: 50px;
+            color: var(--brand-dark);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .contact-info-logo { font-size: 2rem; font-weight: 800; color: var(--brand-blue); margin-bottom: 20px; }
+        .contact-details { font-size: 0.9rem; font-weight: 600; line-height: 1.8; }
+
+        .footer-bottom { text-align: center; color: var(--text-light); font-size: 0.8rem; font-weight: 600; padding: 20px; }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .services-grid, .team-grid { grid-template-columns: repeat(2, 1fr); }
+            .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+            .why-us, .tree-removal { flex-direction: column; text-align: center; clip-path: none; margin-top: 0; padding: 80px 5%; }
+            .why-us-img, .tree-removal-img { max-width: 100%; height: 300px; width: 100%; border-radius: 20px; }
+            .hero { clip-path: none; height: 60vh; }
+            .our-team { clip-path: none; margin-top: 0; }
+        }
+
+        @media (max-width: 768px) {
+            .navbar { flex-direction: column; gap: 15px; padding: 15px; border-radius: 15px; top: 10px; }
+            .nav-links { flex-wrap: wrap; justify-content: center; }
+            .contact-card-wrapper { flex-direction: column; margin-top: -50px; }
+            .services-grid, .team-grid, .gallery-grid { grid-template-columns: 1fr; }
+            .team-avatar { margin-top: 0; }
+            .form-group { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+  
+
+    <nav class="navbar">
+        <div class="nav-brand">FRANK'S<br><span style="font-size: 0.8rem; color: #fff;">TREE SERVICE</span></div>
+        <ul class="nav-links">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Services</a></li>
+            <li><a href="#">Gallery</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+        <a href="#" class="btn btn-yellow">Contact Us</a>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="container">
+            <h1><span>No Job</span> is too<br>big or too small</h1>
+            <p>OPEN ALL YEAR ROUND</p>
+            <a href="#" class="btn btn-yellow">Free Estimate</a>
+        </div>
+    </section>
+
+    <!-- Why Us -->
+    <section class="why-us">
+        <div class="why-us-img"></div>
+        <div class="why-us-text">
+            <h2>Why Frank?</h2>
+            <p>Frank's Tree Service is a locally owned and operated business serving the community for over 20 years. All of our employees are highly trained, licensed, bonded, and insured.</p>
+            <p>We pride ourselves on providing the highest quality tree care services at competitive prices. Safety and customer satisfaction are our top priorities.</p>
+            <p style="font-weight: 700; color: #fff; margin-top: 20px;">WHAT MAKES FRANK DIFFERENT THAN THE OTHER COMPANIES IN TOWN?</p>
+        </div>
+    </section>
+
+    <!-- Services -->
+    <section class="services">
+        <h2 class="section-title">Services</h2>
+        <p class="section-subtitle">Professionally training and skilled team members evaluate the overall health of your trees and formulate a strategic plan to ensure they thrive year-round.</p>
+        
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-card-img" style="background-image: url('https://images.unsplash.com/photo-1620668067417-1f6b5b565780?auto=format&fit=crop&q=80');"></div>
+                <h3>Storm Damage</h3>
+                <p>When severe storms rip through your area, we are here to quickly handle fallen trees and debris. 24/7 emergency response available.</p>
+                <a href="#" class="btn btn-blue">Contact Us Online</a>
+            </div>
+            <div class="service-card">
+                <div class="service-card-img" style="background-image: url('https://images.unsplash.com/photo-1588612502693-511ec711a30a?auto=format&fit=crop&q=80');"></div>
+                <h3>Topping Trees</h3>
+                <p>Proper pruning and topping ensures the long-term health and structural integrity of your property's valuable natural assets.</p>
+                <a href="#" class="btn btn-blue">Contact Us Online</a>
+            </div>
+            <div class="service-card">
+                <div class="service-card-img" style="background-image: url('https://images.unsplash.com/photo-1596706938927-2c9e74cebd73?auto=format&fit=crop&q=80');"></div>
+                <h3>Lot Clearing</h3>
+                <p>Preparing a site for new construction? Our heavy machinery and experienced operators will clear your lot efficiently and safely.</p>
+                <a href="#" class="btn btn-blue">Contact Us Online</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tree Removal -->
+    <section class="tree-removal">
+        <div class="tree-removal-img"></div>
+        <div class="tree-removal-text">
+            <h2>Tree Removal</h2>
+            <p>Removing a tree is a hazardous operation that requires specialized equipment and deep expertise. Our arborists carefully assess each situation to dismantle trees safely without damaging surrounding property.</p>
+            <p>From massive oaks to precarious pines hanging over your roof, we have the cranes, climbers, and rigging gear to handle the most complex removals with precision.</p>
+            <p style="font-weight: 700; color: var(--brand-yellow); margin-top: 20px;">SAFE, EFFICIENT, AND FULLY INSURED.</p>
+        </div>
+    </section>
+
+    <!-- Our Team -->
+    <section class="our-team">
+        <h2 class="section-title">Our Team</h2>
+        
+        <div class="team-grid">
+            <div class="team-card">
+                <div class="team-avatar" style="background-image: url('https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80');"></div>
+                <h4>Leonard Gardner</h4>
+                <p style="font-weight: bold; margin-bottom: 10px;">Master Arborist</p>
+                <p>Over 15 years of experience diagnosing tree health and leading complex climbing operations.</p>
+            </div>
+            <div class="team-card">
+                <div class="team-avatar" style="background-image: url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80');"></div>
+                <h4>Wade Sackbower</h4>
+                <p style="font-weight: bold; margin-bottom: 10px;">Equipment Operator</p>
+                <p>Specializes in precision crane operations and heavy machinery for safe removals.</p>
+            </div>
+            <div class="team-card">
+                <div class="team-avatar" style="background-image: url('https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80');"></div>
+                <h4>Rides Foot-brandy</h4>
+                <p style="font-weight: bold; margin-bottom: 10px;">Ground Crew Lead</p>
+                <p>Ensures the drop zone is secure and processes debris with maximum efficiency.</p>
+            </div>
+            <div class="team-card">
+                <div class="team-avatar" style="background-image: url('https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80');"></div>
+                <h4>Driscoll Sandyhay</h4>
+                <p style="font-weight: bold; margin-bottom: 10px;">Safety Inspector</p>
+                <p>Oversees rigging protocols and ensures OSHA compliance on every single job site.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery -->
+    <section class="gallery">
+        <h2 class="gallery-title">GALLERY</h2>
+        <div class="gallery-grid">
+            <div class="gallery-img" style="background-image: url('https://images.unsplash.com/photo-1588612502693-511ec711a30a?auto=format&fit=crop&q=80');"></div>
+            <div class="gallery-img" style="background-image: url('https://images.unsplash.com/photo-1596706938927-2c9e74cebd73?auto=format&fit=crop&q=80');"></div>
+            <div class="gallery-img" style="background-image: url('https://images.unsplash.com/photo-1620668067417-1f6b5b565780?auto=format&fit=crop&q=80');"></div>
+            <div class="gallery-img" style="background-image: url('https://images.unsplash.com/photo-1542037104857-ffbb0b9155fb?auto=format&fit=crop&q=80');"></div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <h2 class="section-title" style="color: var(--text-light);">TESTIMONIALS</h2>
+        <div class="quote-icon">“</div>
+        <p class="testimonial-text">"Frank's crew was incredible. A massive storm dropped a 60-foot oak tree right onto our driveway. They were out within hours, had the tree chopped up, the stump ground down, and the entire area cleaned spotless. Professional, fast, and fair pricing."</p>
+    </section>
+
+    <!-- Footer / Contact -->
+    <footer class="footer-section">
+        <div class="contact-card-wrapper">
+            <div class="contact-form">
+                <h2>Contact</h2>
+                <p>Tel: 703-555-0197<br>Email: frankstreeservice@outlook.com</p>
+                
+                <form>
+                    <div class="form-group">
+                        <input type="text" placeholder="Name">
+                        <input type="email" placeholder="Email">
+                    </div>
+                    <div class="form-group">
+                        <textarea placeholder="Message"></textarea>
+                    </div>
+                    <button type="button" class="btn btn-blue" style="border-radius: 5px; padding: 12px 40px;">Send</button>
+                </form>
+            </div>
+            
+            <div class="contact-info">
+                <div class="contact-info-logo">FRANK'S<br><span style="font-size: 1rem; color: var(--brand-dark);">TREE SERVICE</span></div>
+                <div class="contact-details">
+                    <p>📍 123 Main Street<br>Anytown, USA 12345</p>
+                    <p style="margin-top: 20px;">Open 24/7 for Emergencies</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            FREE ESTIMATES. CALL FRANK TODAY!
+        </div>
+    </footer>
+
+</body>
+</html>

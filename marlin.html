@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    
+    <title>Marlin Booking | Cheap & Trusted Taxi Company</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-yellow: #ffcc00;
+            --brand-dark: #1a1a1a;
+            --brand-grey: #f8f9fa;
+            --text-dark: #333333;
+            --text-light: #ffffff;
+            --text-muted: #888888;
+            --font-headings: 'Montserrat', sans-serif;
+            --font-body: 'Open Sans', sans-serif;
+            --border-radius: 8px;
+            --container-width: 1200px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--text-dark);
+            line-height: 1.6;
+            background-color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        .container {
+            max-width: var(--container-width);
+            margin: 0 auto;
+            padding: 0 5%;
+        }
+
+        /* Reusable Components */
+        .btn {
+            display: inline-block;
+            padding: 12px 32px;
+            font-family: var(--font-headings);
+            font-weight: 600;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 30px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-yellow { background-color: var(--brand-yellow); color: var(--brand-dark); }
+        .btn-yellow:hover { background-color: #e6b800; }
+        
+        .btn-dark { background-color: var(--brand-dark); color: var(--text-light); }
+        .btn-dark:hover { background-color: #333333; }
+
+        .checkerboard {
+            height: 16px;
+            background-image: linear-gradient(45deg, #000 25%, transparent 25%, transparent 75%, #000 75%, #000), linear-gradient(45deg, #000 25%, transparent 25%, transparent 75%, #000 75%, #000);
+            background-color: var(--brand-yellow);
+            background-size: 24px 24px;
+            background-position: 0 0, 12px 12px;
+            width: 100%;
+        }
+
+        .section-title {
+            font-family: var(--font-headings);
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .text-center { text-align: center; }
+
+        /* Header */
+        header {
+            padding: 1.5rem 0;
+            background: #ffffff;
+            position: relative;
+            z-index: 100;
+        }
+
+        .nav-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: var(--font-headings);
+            font-weight: 800;
+            font-size: 1.5rem;
+            letter-spacing: 1px;
+        }
+        
+        .logo-icon { color: var(--brand-yellow); font-size: 1.8rem; }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover { color: var(--brand-yellow); }
+
+        .contact-pill {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--brand-dark);
+            color: var(--brand-yellow);
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: 700;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 4rem 0 0 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-layout {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .hero-content { flex: 1; max-width: 500px; padding-bottom: 4rem; }
+        
+        .hero h1 {
+            font-family: var(--font-headings);
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+        
+        .hero h1::before {
+            content: '';
+            position: absolute;
+            left: -20px;
+            top: 10px;
+            bottom: 10px;
+            width: 5px;
+            background: var(--brand-yellow);
+        }
+
+        .app-buttons { display: flex; gap: 15px; margin-top: 2rem; }
+        .app-btn { background: #111; border-radius: 8px; padding: 10px; width: 140px; }
+
+        .hero-image {
+            flex: 1.2;
+            position: relative;
+            right: -5%;
+        }
+
+        /* Booking Form Area */
+        .booking-section {
+            background-color: var(--brand-dark);
+            color: var(--text-light);
+            padding: 4rem 0;
+            position: relative;
+        }
+
+        .booking-grid {
+            display: flex;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .booking-text { flex: 1; }
+        .booking-text h2 { font-family: var(--font-headings); font-size: 2.5rem; margin-bottom: 1rem; }
+        .booking-text p { color: var(--text-muted); font-size: 0.9rem; }
+
+        .booking-form {
+            flex: 2;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .form-control {
+            width: 100%;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 15px 20px;
+            border-radius: 30px;
+            color: #fff;
+            outline: none;
+            font-family: var(--font-body);
+        }
+
+        .form-control::placeholder { color: #888; }
+        
+        .form-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffcc00' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1em;
+        }
+
+        /* About Section */
+        .about-section { padding: 6rem 0; }
+        .about-grid { display: flex; gap: 4rem; align-items: center; }
+        .about-image { flex: 1; border-radius: var(--border-radius); overflow: hidden; }
+        .about-image img { width: 100%; height: 350px; object-fit: cover; }
+        .about-text { flex: 1; }
+        .about-text p { margin-bottom: 1.5rem; color: #555; font-size: 0.95rem; }
+
+        /* Yellow CTA */
+        .cta-yellow {
+            background-color: var(--brand-yellow);
+            padding: 3rem 0;
+        }
+        .cta-flex { display: flex; justify-content: space-between; align-items: center; }
+        .cta-yellow h3 { font-family: var(--font-headings); font-size: 2rem; font-weight: 700; color: var(--brand-dark); }
+
+        /* Numbers Section */
+        .numbers-section { padding: 6rem 0; background-color: var(--brand-grey); }
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; margin-top: 3rem; }
+        .stat-card { background: #fff; padding: 2.5rem 1rem; text-align: center; border-radius: var(--border-radius); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .stat-card h4 { font-family: var(--font-headings); font-size: 2.5rem; font-weight: 800; color: var(--brand-dark); margin-bottom: 0.5rem; }
+        .stat-card p { color: var(--text-muted); font-size: 0.85rem; font-weight: 600; text-transform: uppercase; }
+
+        /* Choose Taxi */
+        .choose-taxi { padding: 6rem 0; }
+        .taxi-tabs { display: flex; justify-content: center; gap: 3rem; margin: 2rem 0 3rem; border-bottom: 1px solid #eee; padding-bottom: 1rem; }
+        .taxi-tabs span { font-weight: 700; font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; cursor: pointer; }
+        .taxi-tabs span.active { color: var(--brand-dark); position: relative; }
+        .taxi-tabs span.active::after { content: ''; position: absolute; bottom: -17px; left: 0; width: 100%; height: 2px; background: var(--brand-yellow); }
+
+        .cars-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3rem; }
+        .car-card { text-align: center; }
+        .car-card img { height: 160px; object-fit: contain; margin: 0 auto 1.5rem; }
+        .car-brand { display: flex; justify-content: center; align-items: center; width: 40px; height: 40px; background: #111; color: #fff; border-radius: 50%; margin: 0 auto 1rem; }
+        .car-card h5 { font-family: var(--font-headings); font-size: 1.1rem; margin-bottom: 1.5rem; }
+        .car-specs { border-top: 1px solid #eee; border-bottom: 1px solid #eee; padding: 1.5rem 0; margin-bottom: 1.5rem; text-align: left; }
+        .spec-row { display: flex; justify-content: space-between; margin-bottom: 0.8rem; font-size: 0.9rem; }
+        .spec-row span:last-child { font-weight: 700; }
+        .car-card .btn { width: 100%; border: 1px solid #ddd; background: transparent; color: var(--brand-dark); }
+        .car-card .btn:hover { background: var(--brand-yellow); border-color: var(--brand-yellow); }
+
+        /* Fares */
+        .fares-section { padding: 4rem 0 6rem; }
+        .fares-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 3rem; }
+        .fare-card { background: var(--brand-yellow); border-radius: var(--border-radius); padding: 3rem; }
+        .fare-header { display: flex; align-items: center; gap: 15px; margin-bottom: 2rem; }
+        .fare-icon { font-size: 2rem; }
+        .fare-header h4 { font-family: var(--font-headings); font-size: 1.3rem; }
+        .fare-table { width: 100%; margin-bottom: 2rem; font-size: 0.9rem; font-weight: 600; }
+        .fare-table td { padding: 0.8rem 0; border-bottom: 1px solid rgba(0,0,0,0.1); }
+        .fare-table td:last-child { text-align: right; }
+
+        /* Why Choose Us & Testimonials (Dark Block) */
+        .dark-block { background: var(--brand-dark); color: var(--text-light); }
+        .features-section { padding: 6rem 0; }
+        .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3rem; margin-top: 4rem; text-align: center; }
+        .feature-icon { width: 70px; height: 70px; border: 2px solid var(--brand-yellow); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; color: var(--brand-yellow); font-size: 1.5rem; }
+        .feature-item h5 { font-family: var(--font-headings); font-size: 1.1rem; margin-bottom: 1rem; }
+        .feature-item p { font-size: 0.85rem; color: var(--text-muted); }
+
+        .testimonials { padding: 6rem 0; text-align: center; position: relative; }
+        .testimonials::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&q=80') center/cover opacity(0.1); pointer-events: none; }
+        .testimonial-content { position: relative; z-index: 10; max-width: 800px; margin: 0 auto; }
+        .stars { color: var(--brand-yellow); font-size: 1.5rem; margin: 2rem 0 1rem; }
+        .quote { font-size: 1.5rem; font-style: italic; line-height: 1.6; margin-bottom: 2rem; font-family: var(--font-headings); }
+        .client-name { color: var(--brand-yellow); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; font-size: 0.9rem; }
+
+        /* App Download */
+        .app-section { background: var(--brand-yellow); padding: 5rem 0; overflow: hidden; }
+        .app-grid { display: flex; align-items: center; gap: 4rem; }
+        .app-image { flex: 1; text-align: center; }
+        .app-image img { max-height: 400px; margin: 0 auto; margin-bottom: -5rem; }
+        .app-text { flex: 1; }
+        .app-text h2 { font-family: var(--font-headings); font-size: 2.5rem; margin-bottom: 1rem; color: var(--brand-dark); }
+        .app-text p { font-weight: 600; margin-bottom: 2rem; }
+
+        /* News Section */
+        .news-section { padding: 6rem 0; background: var(--brand-grey); }
+        .news-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; margin-top: 3rem; }
+        .news-main .news-img { height: 350px; border-radius: var(--border-radius); background: url('https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&q=80') center/cover; margin-bottom: 1.5rem; }
+        .news-date { color: var(--brand-yellow); font-weight: 700; font-size: 0.8rem; text-transform: uppercase; margin-bottom: 0.5rem; display: block; }
+        .news-main h4 { font-family: var(--font-headings); font-size: 1.5rem; margin-bottom: 1rem; }
+        .news-side { display: flex; flex-direction: column; gap: 2rem; }
+        .news-small { display: flex; gap: 1rem; }
+        .news-small .news-img { width: 120px; height: 100px; border-radius: var(--border-radius); background-size: cover; background-position: center; flex-shrink: 0; }
+
+        /* Driver Section */
+        .driver-section { padding: 6rem 0; }
+        .driver-grid { display: flex; gap: 4rem; align-items: stretch; }
+        .driver-image { flex: 1; border-radius: var(--border-radius); background: url('https://images.unsplash.com/photo-1512356526180-2a548235559d?auto=format&fit=crop&q=80') center/cover; min-height: 400px; }
+        .driver-form-container { flex: 1; background: var(--brand-grey); padding: 3rem; border-radius: var(--border-radius); }
+        .driver-form-container h3 { font-family: var(--font-headings); font-size: 1.8rem; margin-bottom: 1rem; }
+        .driver-form-container p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 2rem; }
+        .driver-form { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .driver-form .form-control { background: #fff; border: 1px solid #ddd; color: var(--text-dark); border-radius: 4px; padding: 12px 15px; }
+
+        /* Footer */
+        .footer-cta { background: var(--brand-yellow); text-align: center; padding: 4rem 0; }
+        .footer-cta h2 { font-family: var(--font-headings); font-size: 2.5rem; color: var(--brand-dark); margin-bottom: 2rem; }
+
+        footer { background: var(--brand-dark); color: #fff; padding: 5rem 0 2rem; }
+        .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 3rem; margin-bottom: 4rem; }
+        .footer-col h5 { font-family: var(--font-headings); font-size: 1.1rem; margin-bottom: 1.5rem; position: relative; padding-bottom: 10px; }
+        .footer-col h5::after { content: ''; position: absolute; left: 0; bottom: 0; width: 30px; height: 2px; background: var(--brand-yellow); }
+        .footer-col p { color: #888; font-size: 0.9rem; }
+        .footer-links { list-style: none; }
+        .footer-links li { margin-bottom: 0.8rem; }
+        .footer-links a { color: #888; text-decoration: none; font-size: 0.9rem; transition: color 0.3s; }
+        .footer-links a:hover { color: var(--brand-yellow); }
+        
+        .newsletter-form { display: flex; margin-top: 1rem; }
+        .newsletter-form input { flex: 1; background: rgba(255,255,255,0.05); border: none; padding: 12px 15px; border-radius: 4px 0 0 4px; color: #fff; outline: none; }
+        .newsletter-form button { background: var(--brand-yellow); border: none; padding: 0 20px; border-radius: 0 4px 4px 0; font-weight: 700; cursor: pointer; }
+
+        .copyright { text-align: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem; color: #666; font-size: 0.85rem; display: flex; justify-content: space-between; align-items: center; }
+
+        /* Responsive Design */
+        @media (max-width: 400px) {
+            .hero-layout, .booking-grid, .about-grid, .cta-flex, .app-grid, .news-grid, .driver-grid { flex-direction: column; text-align: center; gap: 2rem; }
+            .hero-content { margin: 0 auto; }
+            .hero-image { right: 0; margin-top: 2rem; }
+            .app-buttons, .taxi-tabs { justify-content: center; }
+            .stats-grid, .cars-grid, .fares-grid, .features-grid, .footer-grid { grid-template-columns: repeat(2, 1fr); }
+            .booking-form { grid-template-columns: 1fr; }
+            .driver-image { min-height: 300px; width: 100%; }
+        }
+
+        @media (max-width: 600px) {
+            .nav-links { display: none; }
+            .stats-grid, .cars-grid, .fares-grid, .features-grid, .footer-grid { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 2.5rem; }
+            .section-title { font-size: 1.8rem; }
+            .news-small { flex-direction: column; }
+            .news-small .news-img { width: 100%; height: 200px; }
+            .driver-form { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container nav-wrapper">
+            <div class="logo">
+                <span class="logo-icon">📍</span> MARLIN
+            </div>
+            <ul class="nav-links">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Services</a></li>
+                <li><a href="#">Pricing</a></li>
+                <li><a href="#">Feedback</a></li>
+                <li><a href="#">News</a></li>
+                <li><a href="#">Book A Ride</a></li>
+            </ul>
+            <div class="contact-pill">
+                📞 +8000 134 124
+            </div>
+        </div>
+    </header>
+
+    <section class="hero container">
+        <div class="hero-layout">
+            <div class="hero-content">
+                <p style="font-weight: 600; text-transform: uppercase; color: var(--text-muted); font-size: 0.8rem; margin-bottom: 1rem; letter-spacing: 1px;">Looking for taxi?</p>
+                <h1>Cheap & Trusted<br>Taxi Company</h1>
+                <p style="color: var(--text-muted);">Enjoy your comfortable trip with Marlin Booking</p>
+                <div class="app-buttons">
+                    <div class="app-btn" style="background: url('https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg') center/contain no-repeat; height: 40px;"></div>
+                    <div class="app-btn" style="background: url('https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg') center/contain no-repeat; height: 40px;"></div>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&q=80&w=1000" alt="Yellow Taxi" style="border-radius: 10px; box-shadow: 0 20px 40px rgba(0,0,0,0.1);">
+            </div>
+        </div>
+    </section>
+
+    <section class="booking-section">
+        <div class="container booking-grid">
+            <div class="booking-text">
+                <p style="color: var(--brand-yellow); font-weight: 700; font-size: 0.8rem; text-transform: uppercase;">Looking for taxi?</p>
+                <h2>Make your<br>booking</h2>
+                <p>Our taxis commit to make your trips unique by fast answering your needs.</p>
+            </div>
+            <div class="booking-form">
+                <input type="text" class="form-control" placeholder="Your name">
+                <input type="email" class="form-control" placeholder="Email address">
+                <select class="form-control form-select">
+                    <option>No. of Passengers</option>
+                    <option>1-2</option>
+                    <option>3-4</option>
+                    <option>5+</option>
+                </select>
+                <input type="text" class="form-control" placeholder="Pick up address">
+                <input type="text" class="form-control" placeholder="Drop off Address">
+                <input type="date" class="form-control" style="color: #888;">
+                <select class="form-control form-select" style="grid-column: 1 / -1;">
+                    <option>Select a Car Model</option>
+                    <option>Standard Taxi</option>
+                    <option>Premium SUV</option>
+                </select>
+                <button class="btn btn-yellow" style="grid-column: 1 / -1; padding: 15px; font-size: 1.1rem; border-radius: 30px;">Book Now</button>
+            </div>
+        </div>
+    </section>
+    
+    <div class="checkerboard"></div>
+
+    <section class="about-section container">
+        <div class="about-grid">
+            <div class="about-image">
+                <img src="https://images.unsplash.com/photo-1600320254374-ce2d293c324e?auto=format&fit=crop&q=80" alt="Fleet of Taxis">
+            </div>
+            <div class="about-text">
+                <h2 class="section-title">ABOUT US</h2>
+                <p>At Marlin Booking, we make getting around easy, fast, and reliable. Whether you're heading to the airport, a business meeting, or a night out, our platform connects you with trusted drivers for a smooth and secure ride anytime, anywhere.</p>
+                <p>We're redefining taxi booking with simplicity and speed. At Marlin Booking, our mission is to get you where you need to go comfortably and on time, with just a few taps. Reliable rides, transparent pricing, and excellent service - that's the Marlin way.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-yellow">
+        <div class="container cta-flex">
+            <div>
+                <p style="font-weight: 600; font-size: 0.9rem;">Make a call or fill form</p>
+                <h3>Call our agent to get a quote.</h3>
+            </div>
+            <button class="btn btn-dark">Book Taxi Now</button>
+        </div>
+    </section>
+    
+    <div class="checkerboard"></div>
+
+    <section class="numbers-section">
+        <div class="container">
+            <div class="text-center">
+                <p style="color: var(--brand-yellow); font-weight: 700; font-size: 0.8rem; text-transform: uppercase;">Our Fun Facts</p>
+                <h2 class="section-title">Numbers speak</h2>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h4>8700</h4>
+                    <p>KM Driven</p>
+                </div>
+                <div class="stat-card">
+                    <h4>4978</h4>
+                    <p>People Dropped</p>
+                </div>
+                <div class="stat-card">
+                    <h4>800</h4>
+                    <p>Taxis & Drivers</p>
+                </div>
+                <div class="stat-card">
+                    <h4>2480</h4>
+                    <p>Happy People</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="choose-taxi container">
+        <div class="text-center">
+            <p style="color: var(--brand-yellow); font-weight: 700; font-size: 0.8rem; text-transform: uppercase;">Our Best Cars</p>
+            <h2 class="section-title">Choose taxi</h2>
+        </div>
+        
+        <div class="taxi-tabs">
+            <span class="active">HYBRID TAXI</span>
+            <span>TOWN TAXI</span>
+            <span>LIMOUSINE TAXI</span>
+            <span>SUV TAXI</span>
+        </div>
+
+        <div class="cars-grid">
+            <!-- Car 1 -->
+            <div class="car-card">
+                <img src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&q=80&w=400" alt="Car Model">
+                <div class="car-brand">M</div>
+                <h5>M5 2008 Model</h5>
+                <div class="car-specs">
+                    <div class="spec-row"><span>Base Rate:</span><span>$4.30</span></div>
+                    <div class="spec-row"><span>Per Km/Mile:</span><span>$2.00</span></div>
+                    <div class="spec-row"><span>Passengers:</span><span>4</span></div>
+                </div>
+                <button class="btn">Book Taxi</button>
+            </div>
+            <!-- Car 2 -->
+            <div class="car-card">
+                <img src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&q=80&w=400" alt="Car Model">
+                <div class="car-brand">E</div>
+                <h5>E Class 2010 Model</h5>
+                <div class="car-specs">
+                    <div class="spec-row"><span>Base Rate:</span><span>$4.30</span></div>
+                    <div class="spec-row"><span>Per Km/Mile:</span><span>$2.00</span></div>
+                    <div class="spec-row"><span>Passengers:</span><span>4</span></div>
+                </div>
+                <button class="btn">Book Taxi</button>
+            </div>
+            <!-- Car 3 -->
+            <div class="car-card">
+                <img src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&q=80&w=400" alt="Car Model">
+                <div class="car-brand">Y</div>
+                <h5>Yaris 2014 Model</h5>
+                <div class="car-specs">
+                    <div class="spec-row"><span>Base Rate:</span><span>$4.30</span></div>
+                    <div class="spec-row"><span>Per Km/Mile:</span><span>$2.00</span></div>
+                    <div class="spec-row"><span>Passengers:</span><span>4</span></div>
+                </div>
+                <button class="btn">Book Taxi</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="fares-section container">
+        <div class="text-center">
+            <h2 class="section-title">Check taxi fares</h2>
+        </div>
+        
+        <div class="fares-grid">
+            <!-- Fare 1 -->
+            <div class="fare-card">
+                <div class="fare-header">
+                    <div class="fare-icon">🚕</div>
+                    <h4>All taxi fares</h4>
+                </div>
+                <table class="fare-table">
+                    <tr><td>Initial Charge</td><td>$2.50</td></tr>
+                    <tr><td>Mileage (Per km)</td><td>$1.50</td></tr>
+                    <tr><td>Waiting or Stopped (Per min)</td><td>$0.50</td></tr>
+                </table>
+                <button class="btn btn-dark">Order Taxi Now</button>
+            </div>
+            <!-- Fare 2 -->
+            <div class="fare-card">
+                <div class="fare-header">
+                    <div class="fare-icon">🚖</div>
+                    <h4>Additional fares</h4>
+                </div>
+                <table class="fare-table">
+                    <tr><td>Night Surcharge (8pm - 6am)</td><td>$1.00</td></tr>
+                    <tr><td>Peak Hour Surcharge</td><td>$2.00</td></tr>
+                    <tr><td>Airport Surcharge</td><td>$3.00</td></tr>
+                </table>
+                <button class="btn btn-dark">Order Taxi Now</button>
+            </div>
+        </div>
+    </section>
+
+    <div class="dark-block">
+        <section class="features-section container">
+            <div class="text-center">
+                <h2 class="section-title">Why choose us</h2>
+            </div>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">🛡️</div>
+                    <h5>Safety Guarantee</h5>
+                    <p>Your safety is our top priority. All our vehicles undergo regular maintenance and our drivers are thoroughly vetted and trained to ensure a secure and comfortable journey.</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">👨‍✈️</div>
+                    <h5>DBS Cleared Drivers</h5>
+                    <p>Travel with peace of mind. Every driver in our fleet has passed comprehensive background checks and holds full DBS clearance for your complete security.</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🏷️</div>
+                    <h5>Free Quotation</h5>
+                    <p>No hidden fees or surprise charges. We provide transparent, upfront pricing with free quotes for all journeys before you confirm your booking.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="checkerboard"></div>
+
+        <section class="testimonials">
+            <div class="container testimonial-content">
+                <h2 class="section-title">What our Clients<br>have to Say</h2>
+                <div style="display: flex; justify-content: center; gap: 10px; margin-top: 2rem;">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=60" alt="Avatar" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;">
+                    <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=60" alt="Avatar" style="width: 60px; height: 60px; border-radius: 50%; border: 2px solid var(--brand-yellow); object-fit: cover; transform: translateY(-5px);">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=60" alt="Avatar" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;">
+                </div>
+                <div class="stars">★★★★★</div>
+                <p class="quote">"Marlin Booking made my trip so smooth! The driver arrived right on time, the car was spotless, and the app made everything effortless. I'll definitely be using it again!"</p>
+                <p class="client-name">Vincent McNamara</p>
+            </div>
+        </section>
+    </div>
+
+    <section class="app-section">
+        <div class="container app-grid">
+            <div class="app-image">
+                <img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&q=80&w=400" alt="Mobile App on Phone" style="border-radius: 20px; box-shadow: 0 30px 60px rgba(0,0,0,0.2);">
+            </div>
+            <div class="app-text">
+                <h2>Ride Anytime, Anywhere<br>With The Marlin App</h2>
+                <p>Download our app for the fastest booking experience, real-time tracking, and exclusive discounts right at your fingertips.</p>
+                <div class="app-buttons">
+                    <div class="app-btn" style="background: url('https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg') center/contain no-repeat; height: 40px; background-color: #111;"></div>
+                    <div class="app-btn" style="background: url('https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg') center/contain no-repeat; height: 40px; background-color: #111;"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="news-section">
+        <div class="container">
+            <div class="text-center">
+                <h2 class="section-title">News & updates</h2>
+            </div>
+            
+            <div class="news-grid">
+                <div class="news-main">
+                    <div class="news-img"></div>
+                    <span class="news-date">July 10, 2026</span>
+                    <h4>Marlin Booking Launches a Faster, Smarter Mobile App</h4>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">We are thrilled to announce the rollout of our completely redesigned mobile application, bringing enhanced features and faster booking times to all our users...</p>
+                </div>
+                <div class="news-side">
+                    <div class="news-small">
+                        <div class="news-img" style="background-image: url('https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&q=80');"></div>
+                        <div>
+                            <span class="news-date">July 05, 2026</span>
+                            <h5 style="font-family: var(--font-headings); font-size: 1.1rem; margin-bottom: 0.5rem;">Marlin Booking Expands Services to New Cities Across the Region</h5>
+                        </div>
+                    </div>
+                    <div class="news-small">
+                        <div class="news-img" style="background-image: url('https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&q=80');"></div>
+                        <div>
+                            <span class="news-date">June 28, 2026</span>
+                            <h5 style="font-family: var(--font-headings); font-size: 1.1rem; margin-bottom: 0.5rem;">Safety First — Our Commitment to Secure and Reliable Rides</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="driver-section container">
+        <div class="driver-grid">
+            <div class="driver-image"></div>
+            <div class="driver-form-container">
+                <p style="color: var(--brand-yellow); font-weight: 700; font-size: 0.8rem; text-transform: uppercase;">Join our team</p>
+                <h3>BECOME A DRIVER</h3>
+                <p>Are you a professional driver looking for flexible hours and great earnings? Join the Marlin Booking fleet today and drive on your own schedule.</p>
+                
+                <form class="driver-form">
+                    <input type="text" class="form-control" placeholder="First Name" style="grid-column: 1 / -1;">
+                    <input type="text" class="form-control" placeholder="Phone Number">
+                    <input type="email" class="form-control" placeholder="Email Address">
+                    <button type="button" class="btn btn-yellow" style="grid-column: 1 / -1; margin-top: 1rem;">Submit Application</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <div class="footer-cta">
+        <div class="container">
+            <p style="font-weight: 600; font-size: 0.9rem; text-transform: uppercase;">Call 24 hour service available</p>
+            <h2>Call now and book<br>our taxi for your next ride</h2>
+            <button class="btn btn-dark">Choose Your Taxi</button>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h5>About Us</h5>
+                    <p>Marlin Booking is a leading transportation service provider committed to delivering safe, reliable, and comfortable journeys. With our modern fleet and professional drivers, we ensure your complete satisfaction on every ride.</p>
+                </div>
+                <div class="footer-col">
+                    <h5>Links</h5>
+                    <ul class="footer-links">
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Services</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h5>Pages</h5>
+                    <ul class="footer-links">
+                        <li><a href="#">Pricing</a></li>
+                        <li><a href="#">Feedback</a></li>
+                        <li><a href="#">News</a></li>
+                        <li><a href="#">Drivers</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h5>Newsletter</h5>
+                    <p>Subscribe to our newsletter to receive the latest news and exclusive offers directly in your inbox.</p>
+                    <div class="newsletter-form">
+                        <input type="email" placeholder="Email address">
+                        <button>→</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <div class="logo" style="font-size: 1.2rem;">
+                    <span class="logo-icon">📍</span> MARLIN
+                </div>
+                <p>© 2026 Marlin Booking. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

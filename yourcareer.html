@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    
+    <title>Design a Career You Love</title>
+    <style>
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #f4f4f4;
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
+            overflow-wrap: break-word;
+        }
+        img {
+            max-width: 100%;
+            display: block;
+            object-fit: cover;
+        }
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            background-color: #ffffff;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .orange-border-box {
+            border: 6px solid #f26522;
+            padding: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            flex-direction: column;
+        }
+        .btn-black {
+            display: inline-block;
+            background-color: #222;
+            color: #fff;
+            padding: 10px 25px;
+            text-decoration: none;
+            font-size: 0.8rem;
+            text-transform: lowercase;
+            margin-top: 20px;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            height: 500px;
+            background: url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
+            display: flex;
+            align-items: center;
+        }
+        .hero-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.4);
+        }
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            padding-left: 10%;
+            padding-right: 10%;
+            color: #fff;
+        }
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 600;
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+        .hero-line {
+            width: 80px;
+            height: 4px;
+            background-color: #f26522;
+        }
+
+        /* About Company Section */
+        .about-company {
+            background-color: #26292b;
+            color: #fff;
+            padding: 80px 10%;
+            display: grid;
+            grid-template-columns: minmax(200px, 250px) 1fr;
+            gap: 50px;
+            align-items: start;
+        }
+        .about-company .orange-border-box {
+            height: 250px;
+        }
+        .about-company h2 {
+            font-size: 1.8rem;
+            font-weight: 500;
+        }
+        .about-text-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            font-size: 0.85rem;
+            color: #ccc;
+        }
+        .about-text-grid p {
+            margin-bottom: 15px;
+        }
+        .read-more-link {
+            color: #fff;
+            text-decoration: none;
+            font-size: 0.8rem;
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        /* Designers Section */
+        .designers {
+            padding: 80px 10%;
+            background-color: #fff;
+        }
+        .designers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .designers-grid img {
+            width: 100%;
+            aspect-ratio: 1/1;
+            filter: grayscale(100%);
+        }
+        .designers .orange-border-box h2 {
+            font-size: 1.5rem;
+            color: #333;
+        }
+        .designers-bottom {
+            display: grid;
+            grid-template-columns: 3fr 1fr;
+            gap: 40px;
+            align-items: end;
+        }
+        .designers-bottom p {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        /* Projects Section */
+        .projects {
+            padding: 0 10% 80px;
+            background-color: #fff;
+        }
+        .projects-layout {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .projects-layout .main-img {
+            height: 300px;
+            width: 100%;
+        }
+        .project-text-box {
+            align-items: flex-start;
+            text-align: left;
+            padding: 40px;
+        }
+        .project-text-box h2 {
+            font-size: 1.6rem;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        .project-text-box p {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        .mini-gallery {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 20px;
+        }
+        .mini-gallery img {
+            height: 100%;
+            width: 100%;
+        }
+
+        /* Testimonials Section */
+        .testimonials {
+            background-color: #26292b;
+            padding: 80px 10%;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 60px;
+            color: #fff;
+            text-align: center;
+        }
+        .testimonial-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-bottom: 25px;
+            filter: grayscale(100%);
+        }
+        .testimonial-item p {
+            font-size: 0.85rem;
+            font-style: italic;
+            color: #ccc;
+            margin-bottom: 20px;
+        }
+        .testimonial-item h4 {
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+        .accent-line {
+            width: 40px;
+            height: 3px;
+            background-color: #f26522;
+        }
+
+        /* Footer Section */
+        .footer-banner {
+            height: 250px;
+            background: url('https://images.unsplash.com/photo-1554995207-c18c203602cb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
+        }
+        .footer-content {
+            background-color: #fff;
+            padding: 60px 10%;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+        .contact-info {
+            font-size: 0.85rem;
+            color: #666;
+        }
+        .contact-info h3 {
+            font-size: 1rem;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        .contact-info p {
+            margin-bottom: 5px;
+        }
+        .follow-box {
+            align-items: flex-start;
+            text-align: left;
+            padding: 30px;
+        }
+        .follow-box h2 {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+        }
+        .follow-box p {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 600px) {
+            .about-company {
+                grid-template-columns: 1fr;
+            }
+            .designers-bottom {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    
+    <header class="hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1>Design a Career<br>You Love</h1>
+            <div class="hero-line"></div>
+        </div>
+    </header>
+
+    <section class="about-company">
+        <div class="orange-border-box">
+            <h2>About Our<br>Company</h2>
+        </div>
+        <div>
+            <div class="about-text-grid">
+                <div>
+                    <p><strong>We are proud of our history, our esteemed faculty, and our dedicated professionals, who, year after year, provide the environment and support to help our students realize their dreams.</strong></p>
+                </div>
+                <div>
+                    <p>New York School of Interior Design is a private, not-for-profit college devoted to the design of the interior environment. Our guiding principle is that the successful design of an interior space improves human welfare, and</p>
+                </div>
+                <div>
+                    <p>that the interior design profession assumes an important role in ensuring that spaces are beautiful, functional, healthy, safe, and built in a socially and environmentally conscientious way.</p>
+                </div>
+            </div>
+            <a href="#" class="read-more-link">read more</a>
+        </div>
+    </section>
+
+    <section class="designers">
+        <div class="designers-grid">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Designer 1">
+            <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Designer 2">
+            <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Designer 3">
+            <div class="orange-border-box">
+                <h2>About<br>Our<br>Designers</h2>
+            </div>
+        </div>
+        <div class="designers-bottom">
+            <p>Chartered by the Board of Regents of the University of the State of New York in 1924, NYSID is authorized by the Board of Regents to confer the Basic Interior Design certificate (on-site and online), the degrees of Associate in Applied Science in Interior Design (on-site and online), Bachelor of Fine Arts in Interior Design, Master of Fine Arts in Interior Design, Master of Professional Studies in Lighting Design, and Master of Professional Studies in Sustainable Interior Environments.</p>
+            <div>
+                <a href="#" class="btn-black">read more</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="projects">
+        <div class="projects-layout">
+            <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Living Room" class="main-img">
+            <img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Bedroom Office" class="main-img">
+            
+            <div class="orange-border-box project-text-box">
+                <h2>Our Latest Projects</h2>
+                <p>We celebrated our 100th anniversary with series of events and initiatives that paid tribute to our rich history, our role in the development of the field, and the great opportunities for the future. But we're only just beginning. NYSID's future is exciting, and we're looking forward to the next 100 years.</p>
+                <a href="#" class="btn-black">read more</a>
+            </div>
+            
+            <div class="mini-gallery">
+                <img src="https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Gallery Image 1">
+                <img src="https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Gallery Image 2">
+                <img src="https://images.unsplash.com/photo-1600607686527-6fb886090705?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Gallery Image 3" style="grid-column: 1 / span 2; height: 140px;">
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials">
+        <div class="testimonial-item">
+            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="Avatar 1" class="avatar">
+            <p>"Aenean pulvinar dui ornare, feugiat lorem non, ultrices justo. Mauris efficitur, mauris in auctor euismod, quam elit ultrices urna, eget eleifend arcu risus id metus. Maecenas ex enim, mattis eu velit vitae, blandit mattis sapien. Sed aliquam leo ac semper vestibulum."</p>
+            <h4>Bertie Norton</h4>
+            <div class="accent-line"></div>
+        </div>
+        <div class="testimonial-item">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="Avatar 2" class="avatar">
+            <p>"Aenean pulvinar dui ornare, feugiat lorem non, ultrices justo. Mauris efficitur, mauris in auctor euismod, quam elit ultrices urna, eget eleifend arcu risus id metus. Maecenas ex enim, mattis eu velit vitae, blandit mattis sapien. Sed aliquam leo ac semper vestibulum."</p>
+            <h4>Mike Perry</h4>
+            <div class="accent-line"></div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-banner"></div>
+        <div class="footer-content">
+            <div class="contact-info">
+                <h3>New York School of Interior Design</h3>
+                <p>170 East 70 Street</p>
+                <p>(between Lexington and 3rd Avenues)</p>
+                <p>New York, NY 10021</p>
+                <br>
+                <p>Telephone: 212-472-1500</p>
+                <p>Toll-free: 800-33-NYSID</p>
+                <p>Fax: 212-472-3800</p>
+                <p>Email: info@nysid.edu</p>
+            </div>
+            <div>
+                <div class="orange-border-box follow-box">
+                    <h2>Follow Us!</h2>
+                    <p>Please fill out the form below with any questions you may have and someone will respond to you shortly. Thank You.</p>
+                    <a href="#" class="btn-black">Follow</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Team Recharge</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #121212;
+            --bg-card: #1e1e1e;
+            --green: #22c55e;
+            --text-light: #ffffff;
+            --text-muted: #a3a3a3;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        img, input, textarea, button {
+            max-width: 100%;
+        }
+
+        /* Navigation */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+            background: rgba(18, 18, 18, 0.95);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .navbar .logo { font-weight: 700; font-size: 1.2rem; display: flex; align-items: center; gap: 0.5rem; }
+        .navbar .logo span { color: var(--green); font-size: 1.5rem; }
+        
+        .nav-links { display: flex; gap: 1.5rem; font-size: 0.8rem; text-transform: uppercase; font-weight: 600; flex-wrap: wrap; justify-content: center; }
+        .nav-links a { color: var(--text-light); text-decoration: none; transition: color 0.3s; }
+        .nav-links a:hover { color: var(--green); }
+        
+        .contact-info { display: flex; gap: 1.5rem; font-size: 0.85rem; align-items: center; }
+
+        /* General Buttons */
+        .btn {
+            background-color: var(--green);
+            color: var(--bg-dark);
+            padding: 0.75rem 2rem;
+            border-radius: 2rem;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            transition: opacity 0.3s;
+            display: inline-block;
+            text-align: center;
+        }
+        .btn:hover { opacity: 0.8; }
+        .btn-outline { background: transparent; color: var(--text-light); border: 2px solid var(--text-light); }
+
+        /* Hero Section */
+        .hero {
+            display: flex;
+            align-items: center;
+            padding: 8rem 5% 4rem;
+            min-height: 85vh;
+            position: relative;
+        }
+        .hero-content { flex: 1; max-width: 50%; z-index: 2; }
+        .hero h1 { font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.1; margin-bottom: 0.5rem; font-weight: 300; }
+        .hero h1 strong { font-weight: 700; color: var(--green); display: block; }
+        .hero p { color: var(--text-muted); margin-bottom: 2rem; max-width: 400px; line-height: 1.6; font-size: clamp(0.9rem, 2vw, 1rem); }
+        
+        .hero-image {
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 55%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80') center/cover;
+            clip-path: polygon(15% 0, 100% 0, 100% 100%, 0 100%, 10% 40%);
+            border-bottom-left-radius: 40%;
+            z-index: 1;
+        }
+
+        /* Container & Spacing */
+        .container { padding: 4rem 5%; }
+        .section-title { font-size: clamp(1.5rem, 4vw, 2rem); margin-bottom: 1rem; text-transform: uppercase; }
+        .section-title span { color: var(--green); }
+
+        /* About Section */
+        .about-text { max-width: 600px; color: var(--text-muted); line-height: 1.6; font-size: 0.9rem; margin-bottom: 1rem; }
+        .read-more { color: var(--green); text-decoration: none; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; }
+
+        /* Email Signup */
+        .email-signup { text-align: center; padding: 3rem 5%; }
+        .signup-form { display: flex; justify-content: center; gap: 1rem; margin-top: 1.5rem; flex-wrap: wrap; }
+        .signup-form input {
+            padding: 1rem 1.5rem;
+            border-radius: 2rem;
+            border: none;
+            width: 100%;
+            max-width: 250px;
+            background: var(--text-light);
+            outline: none;
+        }
+
+        /* Services Section */
+        .services { display: flex; align-items: center; gap: 4rem; padding: 4rem 5%; position: relative; }
+        .services-image {
+            flex: 1;
+            height: 500px;
+            background: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80') center/cover;
+            border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+        }
+        .services-content { flex: 1; width: 100%; }
+        .service-tabs { display: flex; flex-wrap: wrap; gap: 1rem; margin: 2rem 0; font-size: 0.8rem; color: var(--text-muted); }
+        .service-tabs span.active { color: var(--green); border-bottom: 2px solid var(--green); padding-bottom: 0.5rem; }
+        .service-thumbnails { display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
+        .service-thumbnails div { width: 80px; height: 60px; background: #333; border-radius: 8px; }
+
+        /* Wave Background Sections */
+        .wave-wrapper {
+            background-color: var(--green);
+            color: var(--bg-dark);
+            padding: 8rem 5%;
+            clip-path: polygon(0 5%, 100% 0, 100% 95%, 0 100%);
+            margin: 2rem 0;
+        }
+        
+        .wave-wrapper .section-title { color: var(--bg-dark); text-align: right; }
+        .wave-wrapper .section-title span { color: #fff; }
+
+        /* Grid Cards */
+        .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        
+        .event-card, .blog-card {
+            background: var(--text-light);
+            color: var(--bg-dark);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .card-img { height: 120px; background: #ccc; }
+        .card-content { padding: 1.5rem; text-align: center; }
+        .card-content h4 { font-size: 0.9rem; margin-bottom: 0.5rem; }
+        .card-content p { font-size: 0.8rem; color: #666; margin-bottom: 1rem; }
+        
+        .blog-card { background: transparent; color: var(--bg-dark); box-shadow: none; border-radius: 0; }
+        .blog-card .card-img { height: 180px; border-radius: 12px; margin-bottom: 1rem; }
+        .blog-card .card-content { padding: 0; text-align: left; }
+
+        /* Footer / Contact */
+        .footer { padding: 6rem 5% 2rem; display: flex; justify-content: space-between; background: #1a1a1a; flex-wrap: wrap; gap: 2rem; }
+        .contact-form { flex: 1; min-width: 300px; max-width: 500px; }
+        .contact-form input, .contact-form textarea {
+            width: 100%;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            border: none;
+            background: #2a2a2a;
+            color: #fff;
+        }
+        .contact-form textarea { height: 100px; resize: none; }
+        .contact-form .form-row { display: flex; gap: 1rem; flex-wrap: wrap; }
+        .form-row input { flex: 1; min-width: 140px; }
+        .footer-info { flex: 1; min-width: 300px; display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-end; }
+
+        /* Mobile Adjustments */
+        @media (max-width: 850px) {
+            .navbar { flex-direction: column; padding: 1rem 5%; gap: 1rem; text-align: center; }
+            .nav-links { font-size: 0.7rem; gap: 1rem; }
+            .contact-info { width: 100%; justify-content: center; }
+            
+            .hero { flex-direction: column; padding-top: 10rem; text-align: center; min-height: auto; }
+            .hero-content { max-width: 100%; margin-bottom: 3rem; }
+            .hero p { margin: 1rem auto 2rem; }
+            .hero .btn { margin: 0.5rem; }
+            .hero-image { position: relative; width: 100%; height: 350px; clip-path: none; border-radius: 20px; }
+            
+            .services { flex-direction: column; padding: 2rem 5%; gap: 2rem; }
+            .services-image { width: 100%; height: 350px; border-radius: 20px; }
+            
+            .signup-form input { max-width: 100%; }
+            .signup-form .btn { width: 100%; }
+            
+            .wave-wrapper { padding: 6rem 5%; clip-path: polygon(0 2%, 100% 0, 100% 98%, 0 100%); }
+            .wave-wrapper .section-title { text-align: center; }
+            .wave-wrapper p { text-align: center !important; }
+            
+            .footer { flex-direction: column; text-align: center; }
+            .footer-info { align-items: center; text-align: center; margin-top: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo"><span>☤</span> TEAM RECHARGE</div>
+        <div class="nav-links">
+            <a href="#">Home</a>
+            <a href="#">About</a>
+            <a href="#">Services</a>
+            <a href="#">Events</a>
+            <a href="#">Blog</a>
+            <a href="#">Contact</a>
+        </div>
+     
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>RECHARGE YOUR HEART<strong>TRANSFORM YOUR MIND</strong></h1>
+            <p>Gain lasting freedom in your health and wellness from the inside out.</p>
+            <button class="btn">Learn More</button>
+            <button class="btn btn-outline">Contact Us</button>
+        </div>
+        <div class="hero-image"></div>
+    </section>
+
+    <section class="container">
+        <h2 class="section-title">About <span>Us</span></h2>
+        <p class="about-text">The Elephant came to teach us about true strength. Elephants are gentle in nature and do not use their power to harm man. Elephants have an advanced sense of empathy and kindness. They teach us that strength isn't always physical.</p>
+        <a href="#" class="read-more">Read More</a>
+    </section>
+
+    <section class="email-signup">
+        <h3 style="font-size: 1.2rem; text-transform: uppercase;">Email <span>Sign Up</span></h3>
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">Stay up to date on events, fitness classes, and more.</p>
+        <div class="signup-form">
+            <input type="text" placeholder="FULL NAME">
+            <input type="email" placeholder="E-MAIL">
+            <button class="btn">Submit</button>
+        </div>
+    </section>
+
+    <section class="services">
+        <div class="services-image"></div>
+        <div class="services-content">
+            <h2 class="section-title">Services</h2>
+            <p class="about-text">Come join us for a high-intensity interval training workout that is suitable for all ages and fitness levels.</p>
+            
+            <div class="service-tabs">
+                <span class="active">12 Week Nutrition Program</span>
+                <span>Tuesday & Thursday Fitness Class</span>
+                <span>Drop In Fitness Class</span>
+                <span>Your Plan, Your Schedule</span>
+            </div>
+            
+            <div class="service-thumbnails">
+                <div style="background: url('https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&q=80') center/cover;"></div>
+                <div style="background: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80') center/cover;"></div>
+                <div style="background: url('https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80') center/cover;"></div>
+                <div style="background: url('https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&q=80') center/cover;"></div>
+            </div>
+
+            <h3 style="margin-bottom: 1rem;">12 Week Nutrition Program & Bible Study <br><span style="color: var(--green); font-size: 0.9rem; font-weight: 400;">In person & virtual</span></h3>
+            <p class="about-text" style="font-size: 0.8rem;">Continually strategize cross-functional customer service with distinctive markets. Conveniently deliver interactive platforms via enabled niches. Assertively communicate performance based products with synergistic innovation.</p>
+            <button class="btn" style="margin-top: 1rem;">Learn More</button>
+        </div>
+    </section>
+
+    <div class="wave-wrapper">
+        <h2 class="section-title">Events</h2>
+        <p style="text-align: right; font-size: 0.8rem; margin-bottom: 2rem;">Credibly integrate backward-compatible synergy with<br>magnetic customer service.</p>
+        
+        <div class="grid-4">
+            <div class="event-card">
+                <div class="card-img" style="background: url('https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&q=80') center/cover;"></div>
+                <div class="card-content">
+                    <h4>Finding Strength & Creating New Habits</h4>
+                    <p>June 30th 2026<br>7:00PM - 8:30PM<br>Cedar Rapids, IA</p>
+                    <a href="#" class="read-more">RSVP</a>
+                </div>
+            </div>
+            <div class="event-card">
+                <div class="card-img" style="background: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80') center/cover;"></div>
+                <div class="card-content">
+                    <h4>Finding Strength & Creating New Habits</h4>
+                    <p>June 30th 2026<br>7:00PM - 8:30PM<br>Cedar Rapids, IA</p>
+                    <a href="#" class="read-more">RSVP</a>
+                </div>
+            </div>
+            <div class="event-card">
+                <div class="card-img" style="background: url('https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80') center/cover;"></div>
+                <div class="card-content">
+                    <h4>Finding Strength & Creating New Habits</h4>
+                    <p>June 30th 2026<br>7:00PM - 8:30PM<br>Cedar Rapids, IA</p>
+                    <a href="#" class="read-more">RSVP</a>
+                </div>
+            </div>
+            <div class="event-card">
+                <div class="card-img" style="background: url('https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&q=80') center/cover;"></div>
+                <div class="card-content">
+                    <h4>Finding Strength & Creating New Habits</h4>
+                    <p>June 30th 2026<br>7:00PM - 8:30PM<br>Cedar Rapids, IA</p>
+                    <a href="#" class="read-more">RSVP</a>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="section-title" style="text-align: left; margin-top: 5rem; color: var(--bg-dark);">Recent <span>Blog Posts</span></h2>
+        
+        <div class="grid-3">
+            <div class="blog-card">
+                <div class="card-img" style="background: url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80') center/cover;"></div>
+                <div class="card-content">
+                    <h4 style="font-size: 1.1rem; margin-bottom: 1rem;">Strengthen your relationship with Jesus</h4>
+                    <p style="color: #222;">Lose what weighs you down so you can find God, yourself and others.</p>
+                    <a href="#" class="read-more" style="color: var(--bg-dark);">Read More</a>
+                </div>
+            </div>
+            <div class="blog-card">
+                <div class="card-img" style="background: url('https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&q=80') center/cover;"></div>
+                <div class="card-content">
+                    <h4 style="font-size: 1.1rem; margin-bottom: 1rem;">Strengthen your relationship with Jesus</h4>
+                    <p style="color: #222;">Lose what weighs you down so you can find God, yourself and others.</p>
+                    <a href="#" class="read-more" style="color: var(--bg-dark);">Read More</a>
+                </div>
+            </div>
+            <div class="blog-card">
+                <div class="card-img" style="background: url('https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?auto=format&fit=crop&q=80') center/cover;"></div>
+                <div class="card-content">
+                    <h4 style="font-size: 1.1rem; margin-bottom: 1rem;">Strengthen your relationship with Jesus</h4>
+                    <p style="color: #222;">Lose what weighs you down so you can find God, yourself and others.</p>
+                    <a href="#" class="read-more" style="color: var(--bg-dark);">Read More</a>
+                </div>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 3rem;">
+            <button class="btn" style="background: var(--bg-dark); color: #fff;">See More</button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="contact-form">
+            <h2 class="section-title">Contact <span>Us</span></h2>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 2rem;">For more information on our Faith Based Health Coaching programs or our Faith Based Fitness Class, please send us a note.</p>
+            <input type="text" placeholder="Full Name*">
+            <div class="form-row">
+                <input type="email" placeholder="Email Address*">
+                <input type="tel" placeholder="Phone">
+            </div>
+            <input type="text" placeholder="Subject*">
+            <textarea placeholder="Message*"></textarea>
+            <button class="btn">Submit</button>
+        </div>
+        <div class="footer-info">
+            <div class="logo" style="margin-bottom: 1rem; font-weight: 700; font-size: 1.5rem;"><span style="color: var(--green);">☤</span> TEAM RECHARGE</div>
+            <p style="margin-bottom: 0.5rem; font-size: 0.9rem;">📞 319.555.5555</p>
+            <p style="margin-bottom: 2rem; font-size: 0.9rem; color: var(--green);">✉️ info@teamrecharge.com</p>
+            <p style="font-size: 0.7rem; color: #666;">© 2026 BY TEAM RECHARGE</p>
+        </div>
+    </footer>
+
+</body>
+</html>
