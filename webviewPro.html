@@ -38,7 +38,13 @@
             -webkit-backdrop-filter: blur(10px);
             border-bottom: 1px solid var(--glass-border); 
             z-index: 100; 
+            transition: margin-top 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
+        
+        header.hidden {
+            margin-top: -100px;
+        }
+           
         
         .logo { 
             font-size: 1.5rem; 
@@ -248,11 +254,37 @@
         }
 
         // Listener that detects when the embedded HTML file has finished rendering
+        
         iframe.addEventListener('load', () => {
             spinner.style.opacity = '0';
             iframe.classList.add('loaded');
-        });
 
+            try {
+                const embeddedWindow = iframe.contentWindow;
+                let lastScrollY = embeddedWindow.scrollY;
+
+                embeddedWindow.addEventListener('scroll', () => {
+                    const currentScrollY = embeddedWindow.scrollY;
+                    const header = document.querySelector('header');
+
+                    if (currentScrollY > lastScrollY && currentScrollY > 50) {
+                        header.classList.add('hidden');
+                    } else {
+                        header.classList.remove('hidden');
+                    }
+                    lastScrollY = currentScrollY;
+                });
+            } catch (e) {
+                console.warn("Cross-origin restriction: Cannot track scrolling inside this external URL.");
+            }
+        });
+        
+
+
+
+
+
+        
         // Navigation Bindings
         btnPrev.addEventListener('click', () => {
             if (currentIndex > 0) loadSite(currentIndex - 1);
