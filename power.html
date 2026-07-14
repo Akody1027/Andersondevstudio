@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paving Company</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        heading: ['Oswald', 'sans-serif'],
+                        body: ['Roboto', 'sans-serif'],
+                    },
+                    colors: {
+                        'brand-yellow': '#ffcc00',
+                        'brand-dark': '#111111',
+                        'brand-gray': '#1a1a1a',
+                        'brand-light-gray': '#f4f4f4'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Roboto', sans-serif; background-color: #111111; overflow-x: hidden; }
+        h1, h2, h3, h4, h5, h6 { font-family: 'Oswald', sans-serif; text-transform: uppercase; }
+        
+        .clip-hero { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 85%); }
+        .clip-about { clip-path: polygon(0 0, 100% 15%, 100% 100%, 0 85%); margin-top: -10vw; padding-top: 15vw; padding-bottom: 15vw; }
+        .clip-services { margin-top: -10vw; padding-top: 15vw; padding-bottom: 10vw; }
+        .clip-gallery { clip-path: polygon(0 15%, 100% 0, 100% 85%, 0 100%); margin-top: -10vw; padding-top: 15vw; padding-bottom: 15vw; }
+        .clip-faq { margin-top: -10vw; padding-top: 15vw; padding-bottom: 10vw; }
+        
+        .skew-box { transform: skewX(-15deg); }
+        .unskew-content { transform: skewX(15deg); }
+        
+        .nav-item:hover { color: #ffcc00; transition: color 0.3s ease; }
+    </style>
+</head>
+<body class="text-gray-300 antialiased">
+
+    <!-- HEADER -->
+    <header class="absolute top-0 left-0 w-full z-50 flex items-center justify-between px-8 py-4 bg-transparent">
+        <div class="flex items-center gap-4">
+            <div class="w-16 h-16 bg-brand-yellow rounded-full flex items-center justify-center font-heading font-bold text-brand-dark text-center leading-tight shadow-lg">
+                PAVING<br>CO.
+            </div>
+        </div>
+        <nav class="hidden md:flex bg-white rounded-full px-8 py-3 shadow-lg gap-8 text-sm font-bold text-gray-800">
+            <a href="#" class="nav-item">HOME</a>
+            <a href="#" class="nav-item">ABOUT US</a>
+            <a href="#" class="nav-item">SERVICES</a>
+            <a href="#" class="nav-item">BLOG</a>
+            <a href="#" class="nav-item">TESTIMONIALS</a>
+            <a href="#" class="nav-item">FAQ</a>
+            <a href="#" class="nav-item">CONTACT</a>
+        </nav>
+        <div class="flex">
+            <div class="bg-brand-yellow px-6 py-3 font-heading font-bold text-brand-dark flex items-center skew-box -mr-4 z-10">
+                <span class="unskew-content">GET A QUOTE</span>
+            </div>
+            <div class="bg-brand-dark px-8 py-3 font-heading font-bold text-white flex items-center skew-box">
+                <span class="unskew-content">(555) 123-4567</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="relative w-full h-[80vh] min-h-[600px] bg-brand-dark clip-hero flex items-center z-40">
+        <div class="absolute inset-0 w-full h-full">
+            <div class="absolute right-0 top-0 w-2/3 h-full bg-[url('https://images.unsplash.com/photo-1541888086425-d81bb19240f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80')] bg-cover bg-center" style="clip-path: polygon(25% 0, 100% 0, 100% 100%, 0 100%);"></div>
+            <div class="absolute inset-0 bg-gradient-to-r from-brand-dark via-brand-dark/90 to-transparent w-2/3"></div>
+        </div>
+        
+        <div class="container mx-auto px-12 relative z-10 pt-20">
+            <div class="max-w-xl">
+                <h1 class="text-5xl md:text-7xl text-white leading-tight mb-6">
+                    OUT OF THE DUST AND<br>
+                    MUD, ON TO A DRIVEWAY<br>
+                    <span class="text-brand-yellow">YOU'LL LOVE!</span>
+                </h1>
+                <p class="text-gray-400 mb-8 max-w-md text-sm leading-relaxed border-l-2 border-brand-yellow pl-4">
+                    A leader in driveway paving quality and affordability locally.
+                </p>
+                <button class="bg-brand-yellow text-brand-dark font-heading font-bold px-8 py-4 uppercase tracking-wider hover:bg-white transition flex items-center gap-3">
+                    Learn More About Us
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Left Slider Nav -->
+        <div class="absolute left-0 top-1/2 -translate-y-1/2 flex flex-col gap-2 p-4">
+            <button class="w-10 h-10 bg-white/10 hover:bg-brand-yellow flex items-center justify-center text-white hover:text-brand-dark transition">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+            </button>
+            <button class="w-10 h-10 bg-white/10 hover:bg-brand-yellow flex items-center justify-center text-white hover:text-brand-dark transition">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+            </button>
+        </div>
+    </section>
+
+    <!-- ABOUT US SECTION -->
+    <section class="w-full bg-white clip-about relative z-30 flex items-center">
+        <div class="container mx-auto px-12 grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+            <div class="pr-8">
+                <div class="flex items-center gap-2 mb-4">
+                    <div class="w-4 h-4 bg-brand-yellow skew-box"></div>
+                    <h2 class="text-brand-dark text-xl tracking-widest">ABOUT US</h2>
+                </div>
+                <h3 class="text-brand-dark text-3xl mb-6">WE ARE THE LEADERS IN ASPHALT PAVING SOLUTIONS</h3>
+                <p class="text-gray-600 text-sm leading-relaxed mb-6">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                </p>
+                <p class="text-gray-600 text-sm leading-relaxed mb-8">
+                    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia.
+                </p>
+                <div class="flex gap-4">
+                    <button class="bg-brand-yellow text-brand-dark font-heading font-bold px-6 py-3 uppercase tracking-wider skew-box hover:bg-brand-dark hover:text-white transition">
+                        <span class="unskew-content block">READ ABOUT US</span>
+                    </button>
+                    <button class="bg-brand-dark text-white font-heading font-bold px-6 py-3 uppercase tracking-wider skew-box hover:bg-brand-yellow hover:text-brand-dark transition">
+                        <span class="unskew-content block">OUR TEAM</span>
+                    </button>
+                </div>
+            </div>
+            <div class="relative">
+                <div class="absolute -inset-4 bg-brand-yellow skew-box transform -rotate-3 z-0"></div>
+                <img src="https://images.unsplash.com/photo-1572981779307-38b8cabb2407?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Paving Equipment" class="relative z-10 w-full h-[500px] object-cover shadow-2xl">
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVICES SECTION -->
+    <section class="w-full bg-brand-gray clip-services relative z-20">
+        <div class="container mx-auto px-12">
+            <div class="flex items-center gap-2 mb-12">
+                <div class="w-4 h-4 bg-brand-yellow skew-box"></div>
+                <h2 class="text-white text-xl tracking-widest">OUR SERVICES</h2>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 mb-20">
+                <div>
+                    <h3 class="text-white text-2xl mb-4">RELIABLE ASPHALT PAVING SERVICES</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    </p>
+                    <button class="text-brand-yellow font-bold text-sm uppercase tracking-wider hover:text-white transition flex items-center gap-2">
+                        View All Services <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </button>
+                </div>
+                
+                <div class="bg-brand-light-gray p-8 flex shadow-xl">
+                    <div class="flex-1 pr-4">
+                        <h4 class="text-brand-dark text-lg mb-4 border-b border-gray-300 pb-2">RESIDENTIAL ASPHALT SERVICES</h4>
+                        <ul class="text-gray-600 text-sm space-y-3">
+                            <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-brand-yellow rounded-full"></div> Driveways</li>
+                            <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-brand-yellow rounded-full"></div> Walkways</li>
+                            <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-brand-yellow rounded-full"></div> Crack Filling</li>
+                            <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-brand-yellow rounded-full"></div> Sealcoating</li>
+                        </ul>
+                    </div>
+                    <div class="w-1/3 bg-brand-yellow flex items-center justify-center p-4 skew-box -mr-4">
+                        <div class="w-12 h-12 border-2 border-brand-dark transform rotate-45 unskew-content"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Darker callout box -->
+            <div class="bg-[#151515] p-8 border-l-4 border-brand-yellow flex flex-col md:flex-row gap-8 items-center max-w-4xl mx-auto mb-16">
+                <div class="flex-1">
+                    <h4 class="text-white text-lg mb-2">DEDICATED CUSTOMER SERVICE</h4>
+                    <p class="text-gray-400 text-xs leading-relaxed">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                    </p>
+                </div>
+                <div class="w-32 h-32 bg-brand-dark border border-gray-800 flex items-center justify-center text-center p-4">
+                    <span class="text-brand-yellow text-xs font-bold">100% QUALITY GUARANTEE</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Yellow/Dark Banner Overlap -->
+        <div class="w-full relative h-32 mt-12 flex justify-center z-30" style="margin-bottom: -10vw;">
+            <div class="bg-brand-yellow w-full max-w-5xl h-full flex items-center px-12 skew-box shadow-2xl relative">
+                <div class="unskew-content flex w-full items-center justify-between">
+                    <div>
+                        <h3 class="text-brand-dark text-xl font-bold">NEED AN ESTIMATE? CONTACT US TODAY</h3>
+                        <p class="text-brand-dark/80 text-sm font-bold mt-1">
+                            <span class="mr-4">📍 123 Paving Street, City</span>
+                            <span>📞 (555) 123-4567</span>
+                        </p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button class="bg-brand-dark text-white font-heading font-bold px-6 py-2 uppercase text-sm hover:bg-white hover:text-brand-dark transition">LET'S TALK</button>
+                    </div>
+                </div>
+                <!-- Image cut into the banner -->
+                <div class="absolute right-0 top-0 h-full w-1/3 bg-[url('https://images.unsplash.com/photo-1504307651254-35680f356f12?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80')] bg-cover bg-center" style="clip-path: polygon(20% 0, 100% 0, 100% 100%, 0 100%);"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PHOTO GALLERY SECTION -->
+    <section class="w-full bg-white clip-gallery relative z-10">
+        <div class="container mx-auto px-12 text-center pt-16">
+            <div class="flex items-center justify-center gap-2 mb-8">
+                <div class="w-4 h-4 bg-brand-yellow skew-box"></div>
+                <h2 class="text-brand-dark text-xl tracking-widest">PHOTO GALLERY</h2>
+            </div>
+            
+            <div class="flex justify-center gap-4 mb-12">
+                <button class="bg-brand-dark text-white text-xs font-bold px-6 py-2 skew-box"><span class="unskew-content block">ALL PROJECTS</span></button>
+                <button class="bg-gray-200 text-brand-dark text-xs font-bold px-6 py-2 skew-box hover:bg-brand-yellow transition"><span class="unskew-content block">RESIDENTIAL</span></button>
+                <button class="bg-gray-200 text-brand-dark text-xs font-bold px-6 py-2 skew-box hover:bg-brand-yellow transition"><span class="unskew-content block">COMMERCIAL</span></button>
+            </div>
+
+            <!-- Gallery Grid with skewed images -->
+            <div class="flex flex-wrap justify-center gap-2 max-w-5xl mx-auto">
+                <div class="w-1/4 h-32 overflow-hidden skew-box">
+                    <img src="https://images.unsplash.com/photo-1584466977773-e625c37cdd50?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover unskew-content scale-125" alt="Gallery">
+                </div>
+                <div class="w-1/4 h-32 overflow-hidden skew-box">
+                    <img src="https://images.unsplash.com/photo-1517581177682-a085bb7ffb15?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover unskew-content scale-125" alt="Gallery">
+                </div>
+                <div class="w-1/4 h-32 bg-brand-yellow flex items-center justify-center skew-box">
+                    <div class="w-8 h-8 border-2 border-brand-dark transform rotate-45 unskew-content"></div>
+                </div>
+                <div class="w-1/4 h-32 overflow-hidden skew-box">
+                    <img src="https://images.unsplash.com/photo-1590486803833-1c5dc8ddd4c8?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover unskew-content scale-125" alt="Gallery">
+                </div>
+                <div class="w-1/4 h-32 overflow-hidden skew-box mt-2">
+                    <img src="https://images.unsplash.com/photo-1541888086425-d81bb19240f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover unskew-content scale-125" alt="Gallery">
+                </div>
+                <div class="w-1/4 h-32 overflow-hidden skew-box mt-2">
+                    <img src="https://images.unsplash.com/photo-1504307651254-35680f356f12?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover unskew-content scale-125" alt="Gallery">
+                </div>
+                <div class="w-1/4 h-32 overflow-hidden skew-box mt-2">
+                    <img src="https://images.unsplash.com/photo-1572981779307-38b8cabb2407?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover unskew-content scale-125" alt="Gallery">
+                </div>
+                <div class="w-1/4 h-32 overflow-hidden skew-box mt-2">
+                    <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover unskew-content scale-125" alt="Gallery">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ SECTION -->
+    <section class="w-full bg-[#111] clip-faq relative z-0">
+        <div class="container mx-auto px-12 pt-20 max-w-4xl">
+            <div class="flex items-center gap-2 mb-8">
+                <div class="w-4 h-4 bg-brand-yellow skew-box"></div>
+                <h2 class="text-white text-xl tracking-widest">FAQ</h2>
+            </div>
+
+            <div class="space-y-4">
+                <!-- Active FAQ Item -->
+                <div class="border border-gray-800 bg-[#1a1a1a]">
+                    <div class="w-full bg-brand-yellow px-6 py-4 flex justify-between items-center cursor-pointer relative overflow-hidden">
+                        <div class="absolute right-0 top-0 h-full w-8 bg-black/10 skew-box"></div>
+                        <h4 class="text-brand-dark font-bold text-sm">WHAT IS ASPHALT PAVING AND WHY IS IT IMPORTANT?</h4>
+                        <span class="text-brand-dark font-bold">-</span>
+                    </div>
+                    <div class="p-6 text-gray-400 text-sm leading-relaxed">
+                        <p class="mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                        <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                    </div>
+                </div>
+
+                <!-- Inactive FAQ Items -->
+                <div class="border border-gray-800 bg-[#151515] hover:bg-[#1a1a1a] transition cursor-pointer">
+                    <div class="px-6 py-4 flex justify-between items-center">
+                        <h4 class="text-gray-300 font-bold text-sm">HOW LONG DOES A NEW DRIVEWAY INSTALLATION TAKE?</h4>
+                        <span class="text-brand-yellow font-bold">+</span>
+                    </div>
+                </div>
+                <div class="border border-gray-800 bg-[#151515] hover:bg-[#1a1a1a] transition cursor-pointer">
+                    <div class="px-6 py-4 flex justify-between items-center">
+                        <h4 class="text-gray-300 font-bold text-sm">DO YOU PROVIDE FREE ESTIMATES FOR COMMERCIAL PROJECTS?</h4>
+                        <span class="text-brand-yellow font-bold">+</span>
+                    </div>
+                </div>
+                <div class="border border-gray-800 bg-[#151515] hover:bg-[#1a1a1a] transition cursor-pointer">
+                    <div class="px-6 py-4 flex justify-between items-center">
+                        <h4 class="text-gray-300 font-bold text-sm">WHAT MAINTENANCE IS REQUIRED FOR A NEW ASPHALT SURFACE?</h4>
+                        <span class="text-brand-yellow font-bold">+</span>
+                    </div>
+                </div>
+                <div class="border border-gray-800 bg-[#151515] hover:bg-[#1a1a1a] transition cursor-pointer">
+                    <div class="px-6 py-4 flex justify-between items-center">
+                        <h4 class="text-gray-300 font-bold text-sm">CAN YOU REPAIR CRACKS IN MY EXISTING DRIVEWAY?</h4>
+                        <span class="text-brand-yellow font-bold">+</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- LOCATION MAP SECTION -->
+    <section class="w-full relative h-[600px] bg-[#111] overflow-hidden">
+        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1524661135-423995f22d0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80')] bg-cover bg-center opacity-30 mix-blend-luminosity filter grayscale"></div>
+        <div class="absolute inset-0 bg-brand-dark/80"></div>
+        
+        <div class="container mx-auto px-12 pt-16 relative z-10 text-center">
+            <div class="flex items-center justify-center gap-2 mb-12">
+                <div class="w-4 h-4 bg-brand-yellow skew-box"></div>
+                <h2 class="text-white text-xl tracking-widest">WHERE WE ARE LOCATED</h2>
+            </div>
+            
+            <!-- Map Pins Mockup -->
+            <div class="relative w-full max-w-4xl mx-auto h-[300px]">
+                <!-- Yellow circular markers distributed -->
+                <div class="absolute top-[20%] left-[10%] w-8 h-8 rounded-full bg-brand-yellow flex items-center justify-center shadow-[0_0_15px_rgba(255,204,0,0.5)]"><div class="w-3 h-3 bg-brand-dark rounded-full"></div></div>
+                <div class="absolute top-[50%] left-[25%] w-8 h-8 rounded-full bg-brand-yellow flex items-center justify-center shadow-[0_0_15px_rgba(255,204,0,0.5)]"><div class="w-3 h-3 bg-brand-dark rounded-full"></div></div>
+                <div class="absolute top-[30%] left-[45%] w-8 h-8 rounded-full bg-brand-yellow flex items-center justify-center shadow-[0_0_15px_rgba(255,204,0,0.5)]"><div class="w-3 h-3 bg-brand-dark rounded-full"></div></div>
+                <div class="absolute top-[70%] left-[60%] w-8 h-8 rounded-full bg-brand-yellow flex items-center justify-center shadow-[0_0_15px_rgba(255,204,0,0.5)]"><div class="w-3 h-3 bg-brand-dark rounded-full"></div></div>
+                <div class="absolute top-[40%] left-[80%] w-8 h-8 rounded-full bg-brand-yellow flex items-center justify-center shadow-[0_0_15px_rgba(255,204,0,0.5)]"><div class="w-3 h-3 bg-brand-dark rounded-full"></div></div>
+                <div class="absolute top-[80%] left-[30%] w-8 h-8 rounded-full bg-brand-yellow flex items-center justify-center shadow-[0_0_15px_rgba(255,204,0,0.5)]"><div class="w-3 h-3 bg-brand-dark rounded-full"></div></div>
+                <div class="absolute top-[60%] left-[85%] w-8 h-8 rounded-full bg-brand-yellow flex items-center justify-center shadow-[0_0_15px_rgba(255,204,0,0.5)]"><div class="w-3 h-3 bg-brand-dark rounded-full"></div></div>
+                
+                <!-- Connecting lines mockup -->
+                <svg class="absolute inset-0 w-full h-full pointer-events-none opacity-20" viewBox="0 0 1000 300">
+                    <path d="M 100 60 Q 200 100 250 150 T 450 90 T 600 210 T 800 120 T 850 180" fill="none" stroke="#fff" stroke-width="2" stroke-dasharray="5,5"/>
+                </svg>
+            </div>
+        </div>
+        
+        <!-- Yellow bottom border -->
+        <div class="absolute bottom-0 left-0 w-full h-2 bg-brand-yellow"></div>
+    </section>
+
+    <!-- FOOTER / CONTACT SECTION -->
+    <footer class="w-full bg-[#0a0a0a] relative pt-20 pb-8">
+        <div class="container mx-auto px-12 grid grid-cols-1 md:grid-cols-2 gap-16 mb-16 relative z-10">
+            <!-- Left Info -->
+            <div class="bg-[#111] p-10 border border-gray-800">
+                <h3 class="text-brand-yellow text-2xl mb-2">CONTACT US FOR A</h3>
+                <h3 class="text-white text-2xl mb-6">FREE PROJECT ESTIMATE</h3>
+                <p class="text-gray-500 text-sm leading-relaxed mb-6">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.
+                </p>
+                <div class="space-y-4">
+                    <div class="flex items-center gap-4 text-gray-400 text-sm">
+                        <div class="w-8 h-8 bg-[#1a1a1a] flex items-center justify-center rounded">📍</div>
+                        <span>123 Paving Street, City Name, ST 12345</span>
+                    </div>
+                    <div class="flex items-center gap-4 text-gray-400 text-sm">
+                        <div class="w-8 h-8 bg-[#1a1a1a] flex items-center justify-center rounded">📞</div>
+                        <span>(555) 123-4567</span>
+                    </div>
+                    <div class="flex items-center gap-4 text-gray-400 text-sm">
+                        <div class="w-8 h-8 bg-[#1a1a1a] flex items-center justify-center rounded">✉️</div>
+                        <span>info@pavingco.com</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right Form -->
+            <div class="bg-[#111] p-10 border border-gray-800">
+                <form class="space-y-4">
+                    <div class="grid grid-cols-2 gap-4">
+                        <input type="text" placeholder="First Name" class="w-full bg-[#1a1a1a] border border-gray-800 px-4 py-3 text-white text-sm focus:outline-none focus:border-brand-yellow transition">
+                        <input type="text" placeholder="Last Name" class="w-full bg-[#1a1a1a] border border-gray-800 px-4 py-3 text-white text-sm focus:outline-none focus:border-brand-yellow transition">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <input type="email" placeholder="Email Address" class="w-full bg-[#1a1a1a] border border-gray-800 px-4 py-3 text-white text-sm focus:outline-none focus:border-brand-yellow transition">
+                        <input type="tel" placeholder="Phone Number" class="w-full bg-[#1a1a1a] border border-gray-800 px-4 py-3 text-white text-sm focus:outline-none focus:border-brand-yellow transition">
+                    </div>
+                    <select class="w-full bg-[#1a1a1a] border border-gray-800 px-4 py-3 text-gray-400 text-sm focus:outline-none focus:border-brand-yellow transition appearance-none">
+                        <option>Select Service Needed</option>
+                        <option>Residential Paving</option>
+                        <option>Commercial Paving</option>
+                        <option>Repair & Maintenance</option>
+                    </select>
+                    <textarea placeholder="Tell us about your project..." rows="4" class="w-full bg-[#1a1a1a] border border-gray-800 px-4 py-3 text-white text-sm focus:outline-none focus:border-brand-yellow transition"></textarea>
+                    <div class="flex items-start gap-2 mb-4">
+                        <input type="checkbox" id="consent" class="mt-1">
+                        <label for="consent" class="text-xs text-gray-600">I agree to receive communications regarding my project estimate and acknowledge the privacy policy.</label>
+                    </div>
+                    <button type="submit" class="bg-brand-yellow text-brand-dark font-heading font-bold px-8 py-3 uppercase tracking-wider skew-box hover:bg-white transition mt-2">
+                        <span class="unskew-content block">SEND MESSAGE</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Bottom Footer -->
+        <div class="container mx-auto px-12 border-t border-gray-800 pt-8 flex flex-col items-center text-center">
+            <div class="w-12 h-12 bg-brand-yellow rounded-full flex items-center justify-center font-heading font-bold text-brand-dark text-[10px] leading-tight mb-4">
+                PAVING<br>CO.
+            </div>
+            <div class="flex gap-4 mb-6">
+                <a href="#" class="w-8 h-8 bg-[#1a1a1a] rounded-full flex items-center justify-center text-gray-400 hover:text-brand-yellow hover:bg-gray-800 transition">fb</a>
+                <a href="#" class="w-8 h-8 bg-[#1a1a1a] rounded-full flex items-center justify-center text-gray-400 hover:text-brand-yellow hover:bg-gray-800 transition">tw</a>
+                <a href="#" class="w-8 h-8 bg-[#1a1a1a] rounded-full flex items-center justify-center text-gray-400 hover:text-brand-yellow hover:bg-gray-800 transition">in</a>
+            </div>
+            <p class="text-gray-600 text-xs">
+                © Copyright 2026 Paving Co. All Rights Reserved.<br>
+                Designed for Quality & Durability. <a href="#" class="text-brand-yellow hover:underline">Privacy Policy</a>
+            </p>
+        </div>
+    </footer>
+</body>
+</html>

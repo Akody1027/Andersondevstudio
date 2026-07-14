@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strategic Design & Branding Agency</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap');
+
+        :root {
+            --bg-dark: #0a0b0d;
+            --bg-section: #111317;
+            --text-main: #ffffff;
+            --text-muted: #888888;
+            --accent-green: #2ecc71; /* Vibrant green matching the design */
+            --font-main: 'Inter', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Reusable Classes */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .accent-text {
+            color: var(--accent-green);
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            position: relative;
+            height: 100vh;
+            min-height: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: linear-gradient(to bottom, rgba(10, 11, 13, 0.4), rgba(10, 11, 13, 0.9)), 
+                        url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop') center/cover no-repeat;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            z-index: 10;
+        }
+
+        .hero-subtitle {
+            font-size: 0.8rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: #ccc;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 2rem;
+        }
+
+        .hero-line {
+            width: 80px;
+            height: 4px;
+            background-color: var(--accent-green);
+            margin: 0 auto;
+        }
+
+        /* --- Project Divider Strips --- */
+        .project-strip {
+            background: linear-gradient(to right, #1a1c22, #0d0f12);
+            padding: 1rem 0;
+            display: flex;
+            align-items: center;
+            position: relative;
+            border-top: 1px solid #2a2a2a;
+            border-bottom: 1px solid #2a2a2a;
+            height: 140px;
+            overflow: hidden;
+        }
+
+        .project-strip.right-aligned {
+            justify-content: flex-end;
+            background: linear-gradient(to left, #1a1c22, #0d0f12);
+        }
+
+        .project-number {
+            font-size: 12rem;
+            font-weight: 900;
+            color: #ffffff;
+            line-height: 1;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            letter-spacing: -5px;
+        }
+
+        .strip-left .project-number { left: 10%; }
+        .strip-right .project-number { right: 10%; }
+
+        .project-info {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .strip-left .project-info { margin-left: 40%; }
+        .strip-right .project-info { margin-right: 40%; text-align: right; }
+
+        .project-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--accent-green);
+            margin-bottom: 0.2rem;
+        }
+
+        .project-category {
+            font-size: 0.85rem;
+            color: #aaa;
+        }
+
+        /* --- Content Sections --- */
+        .content-section {
+            padding: 8rem 2rem;
+            background-color: var(--bg-dark);
+            position: relative;
+        }
+
+        .grid-2-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            max-width: 1000px;
+            margin: 0 auto;
+            align-items: center;
+        }
+
+        /* Section 01: Why Serious Business */
+        .why-serious .left-col {
+            position: relative;
+        }
+
+        .green-box-outline {
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            width: 150px;
+            height: 180px;
+            border: 3px solid var(--accent-green);
+            z-index: 0;
+        }
+
+        .why-serious h2 {
+            font-size: 3rem;
+            font-weight: 700;
+            line-height: 1.1;
+            position: relative;
+            z-index: 1;
+            margin-bottom: 1.5rem;
+        }
+
+        .why-serious .small-text {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            position: relative;
+            z-index: 1;
+            max-width: 80%;
+        }
+
+        .why-serious .right-col p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            line-height: 1.8;
+        }
+
+        /* Section 02: Our Services */
+        .services-section {
+            padding: 8rem 2rem;
+            background: linear-gradient(to bottom, rgba(17, 19, 23, 0.9), rgba(17, 19, 23, 0.95)), 
+                        url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=2070&auto=format&fit=crop') center/cover fixed;
+            text-align: center;
+        }
+
+        .services-section h2 {
+            font-size: 2.5rem;
+            color: var(--accent-green);
+            margin-bottom: 4rem;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 3rem 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: left;
+        }
+
+        .service-item h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .service-item p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Section 03: How do we do it */
+        .process-section {
+            padding: 8rem 2rem;
+            background: linear-gradient(to right, rgba(10, 11, 13, 0.95) 40%, rgba(10, 11, 13, 0.6)), 
+                        url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=2070&auto=format&fit=crop') center/cover;
+        }
+
+        .process-section h2 {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--accent-green);
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            max-width: 300px;
+        }
+
+        .process-section .left-col p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            max-width: 80%;
+        }
+        
+        .process-section .right-col {
+            position: relative;
+        }
+
+        .process-section .right-col p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.8;
+            position: relative;
+            z-index: 2;
+        }
+
+        .process-box-outline {
+            position: absolute;
+            bottom: -30px;
+            right: 20%;
+            width: 120px;
+            height: 80px;
+            border: 2px solid var(--accent-green);
+            z-index: 1;
+        }
+
+        /* --- Footer Section --- */
+        .footer {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background-color: #050608;
+            border-top: 1px solid #2a2a2a;
+        }
+
+        .footer-image {
+            background: url('https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=2070&auto=format&fit=crop') center/cover;
+            min-height: 400px;
+        }
+
+        .footer-content {
+            padding: 4rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+
+        .footer-content h3 {
+            font-size: 1.8rem;
+            color: var(--accent-green);
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-content p {
+            font-size: 0.85rem;
+            color: #ccc;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-content .email {
+            margin-top: 1.5rem;
+            color: var(--accent-green);
+            text-decoration: none;
+            font-size: 0.85rem;
+        }
+        
+        .footer-decor {
+            position: absolute;
+            right: 4rem;
+            bottom: 0;
+            width: 100px;
+            height: 250px;
+            background: linear-gradient(135deg, #2a2a2a 0%, #050608 100%);
+            clip-path: polygon(0 0, 100% 20%, 100% 100%, 20% 100%);
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 900px) {
+            .hero-title { font-size: 2.5rem; }
+            .grid-2-col { grid-template-columns: 1fr; gap: 2rem; }
+            .services-grid { grid-template-columns: repeat(2, 1fr); }
+            .strip-left .project-info, .strip-right .project-info { margin: 0 2rem; text-align: left; }
+            .project-strip { justify-content: flex-start !important; }
+            .strip-right .project-number { right: -20px; opacity: 0.3; }
+            .footer { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 600px) {
+            .services-grid { grid-template-columns: 1fr; }
+            .project-number { font-size: 8rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="hero-content container">
+            <h4 class="hero-subtitle">A Strategic Design & Branding Agency</h4>
+            <h1 class="hero-title">We create digital first<br>solutions that make fall<br>in love with your brand.</h1>
+            <div class="hero-line"></div>
+        </div>
+    </header>
+
+    <!-- Project 01 Divider -->
+    <div class="project-strip strip-left">
+        <div class="project-number">01</div>
+        <div class="project-info">
+            <div class="project-title">Reykjavik Fashion Festival —</div>
+            <div class="project-category">Branding, E-commerce</div>
+        </div>
+    </div>
+
+    <!-- Section 01: Why Serious Business -->
+    <section class="content-section why-serious">
+        <div class="grid-2-col">
+            <div class="left-col">
+                <div class="green-box-outline"></div>
+                <h2>Why Serious<br>Business?</h2>
+                <p class="small-text">We believe in a new way of branding. A world of digital environments where businesses brand themselves not only by the way they look or communicate but by the user experiences they provide and the actual products they deliver. We call it branding by doing.</p>
+            </div>
+            <div class="right-col">
+                <p>It is not without reason that mixed reality applications rank among the most widely discussed future technologies in industry. Take the example of a specialized employee who is in visual contact with an engineer via his special glasses and can thus remedy malfunctions of a machine on the spot by himself. Just think of video conferences which have the same effect as real meetings although the participants are thousands of kilometers apart, or the complete implementation of product design and evaluation before one's very eyes without the need for prototypes. These examples make the future of work come alive and become something tangible. Innovations "Made in Austria" ensure that the digital revolution will actually also transform the production halls and embed Work 4.0 in our lives.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Project 02 Divider -->
+    <div class="project-strip strip-right right-aligned">
+        <div class="project-number">02</div>
+        <div class="project-info">
+            <div class="project-title">B&O Play —</div>
+            <div class="project-category">User Experience, User Interface</div>
+        </div>
+    </div>
+
+    <!-- Section 02: Our Services -->
+    <section class="services-section">
+        <div class="container">
+            <h2>Our Services</h2>
+            <div class="services-grid">
+                <div class="service-item">
+                    <h3>Collaborative<br>Workshops</h3>
+                    <p>Sample text. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                </div>
+                <div class="service-item">
+                    <h3>Stakeholder<br>Interviews</h3>
+                    <p>Sample text. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                </div>
+                <div class="service-item">
+                    <h3>User & Field<br>Research</h3>
+                    <p>Sample text. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                </div>
+                <div class="service-item">
+                    <h3>Market<br>Research</h3>
+                    <p>Sample text. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                </div>
+                <div class="service-item">
+                    <h3>Insight<br>Presentation</h3>
+                    <p>Sample text. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                </div>
+                <div class="service-item">
+                    <h3>Idea<br>Sketching</h3>
+                    <p>Sample text. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                </div>
+                <div class="service-item">
+                    <h3>Idea<br>Evaluation</h3>
+                    <p>Sample text. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                </div>
+                <div class="service-item">
+                    <h3>Concept<br>development</h3>
+                    <p>Sample text. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Project 03 Divider -->
+    <div class="project-strip strip-left">
+        <div class="project-number">03</div>
+        <div class="project-info">
+            <div class="project-title">Girls Globe —</div>
+            <div class="project-category">Brand Strategy, Visual Identity</div>
+        </div>
+    </div>
+
+    <!-- Section 03: How do we do it -->
+    <section class="content-section process-section">
+        <div class="grid-2-col">
+            <div class="left-col">
+                <h2>How do we<br>do it?</h2>
+                <p>To enable a valuable outcome with the least amount of friction we work in a 4-step process which creates value from day one. Step by step taking you closer to realizing your full digital potential.</p>
+            </div>
+            <div class="right-col">
+                <p>For example, the young Tyrolean company Holo-Light is constructing mixed reality devices which eliminate the boundaries between the virtual and analogue worlds and enable new paths of communication. This can accelerate work processes and facilitate know-how transfer. Ultimately the cost effect will be clearly perceptible. I consider this to be a fantastic development and I am not the only one who is so thrilled. Recently the German energy giant innogy with its "Innovation Hub" acquired a stake in Holo-Light, which was not the only notable occurrence.</p>
+                <div class="process-box-outline"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Project 04 Divider -->
+    <div class="project-strip strip-right right-aligned">
+        <div class="project-number">04</div>
+        <div class="project-info">
+            <div class="project-title">Catapult —</div>
+            <div class="project-category">Brand Strategy, Visual Identity</div>
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+        <div class="footer-image"></div>
+        <div class="footer-content">
+            <h3>Empire State<br>Building</h3>
+            <p>350 5th Ave, New York, NY 10118</p>
+            <p>1 212-736-3100</p>
+            <a href="mailto:contacts@webnyt.com" class="email">contacts@webnyt.com</a>
+            <div class="footer-decor"></div>
+        </div>
+    </footer>
+
+</body>
+</html>
