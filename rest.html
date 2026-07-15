@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    
+    <title>Hush Modern Restaurant</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #121418;
+            --bg-darker: #0a0b0d;
+            --bg-light: #ffffff;
+            --accent: #ff5722;
+            --text-light: #ffffff;
+            --text-dark: #1a1a1a;
+            --text-muted: #888888;
+            --font-main: 'Poppins', sans-serif;
+            --radius-md: 12px;
+            --radius-lg: 24px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            background-color: var(--accent);
+            color: var(--text-light);
+            padding: 12px 28px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: opacity 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        /* Top Bar & Navbar */
+        .top-bar {
+            background-color: var(--bg-darker);
+            padding: 8px 0;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-align: center;
+        }
+
+        header {
+            padding: 24px 0;
+            position: absolute;
+            width: 100%;
+            z-index: 10;
+        }
+
+        .nav-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+            font-size: 0.85rem;
+            font-weight: 400;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 160px 0 120px 0;
+            position: relative;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            line-height: 1.2;
+            margin-bottom: 24px;
+            font-weight: 700;
+        }
+
+        .hero-content p {
+            color: var(--text-muted);
+            margin-bottom: 32px;
+            font-size: 0.95rem;
+            max-width: 90%;
+        }
+
+        .hero-image {
+            position: relative;
+        }
+
+        .hero-image img {
+            border-radius: var(--radius-lg);
+            transform: rotate(5deg);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+
+        /* Torn Edge Divider */
+        .torn-edge {
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 1200 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><path d="M0,60 L1200,60 L1200,30 Q1150,50 1100,20 T1000,30 T900,10 T800,40 T700,20 T600,40 T500,10 T400,30 T300,10 T200,40 T100,20 T0,30 Z" fill="%23ffffff"/></svg>');
+            background-size: 100% 100%;
+            z-index: 2;
+        }
+
+        /* Light Section 1 */
+        .section-light {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            padding: 80px 0;
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .section-header h2 {
+            font-size: 2rem;
+            margin-bottom: 12px;
+        }
+
+        .section-header p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            border: 1px solid #f0f0f0;
+        }
+
+        .card-img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .card-text {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Dark Section */
+        .section-dark {
+            background-color: var(--bg-dark);
+            padding: 80px 0;
+        }
+
+        .section-dark .section-header h2 {
+            color: var(--text-light);
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+        }
+
+        .menu-card {
+            background: #1a1c23;
+            border-radius: var(--radius-md);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .menu-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 87, 34, 0.1);
+            color: var(--accent);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .menu-card h3 {
+            font-size: 1.1rem;
+        }
+
+        .menu-card p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            flex-grow: 1;
+        }
+
+        .menu-card-img {
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .menu-card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Split Section */
+        .split-section {
+            padding: 80px 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .split-image {
+            position: relative;
+        }
+
+        .split-image img {
+            border-radius: 50%;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        /* Tab Bar */
+        .tab-bar {
+            background-color: var(--bg-light);
+            padding: 24px 0;
+            border-bottom: 1px solid #eeeeee;
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            padding: 8px 24px;
+            font-family: var(--font-main);
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-radius: 20px;
+        }
+
+        .tab-btn.active {
+            background: var(--accent);
+            color: var(--text-light);
+        }
+
+        /* Contact/Menu Section */
+        .contact-section {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            padding: 80px 0;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 40px;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+        }
+
+        .contact-img {
+            border-radius: var(--radius-md);
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            min-height: 300px;
+        }
+
+        .menu-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            padding: 24px 0;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 16px;
+            border-bottom: 1px dashed #e0e0e0;
+        }
+
+        .menu-item-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .menu-item-icon {
+            width: 32px;
+            height: 32px;
+            background: #f5f5f5;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+            font-size: 0.8rem;
+        }
+
+        .menu-item-title {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .menu-item-price {
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .hero-grid, .split-section, .contact-grid {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .nav-links {
+                display: none; /* Hide for simplicity on mobile */
+            }
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+            .hero-content p {
+                margin: 0 auto 32px auto;
+            }
+            .feature-grid, .menu-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .feature-grid, .menu-grid {
+                grid-template-columns: 1fr;
+            }
+            .contact-grid {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        Free delivery on all orders over $50. Order now!
+    </div>
+
+    <header>
+        <div class="container nav-wrapper">
+            <div class="logo">
+                <span>●</span> ustri
+            </div>
+            <ul class="nav-links">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Menu</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Services</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+            <button class="btn">Reservation</button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container hero-grid">
+            <div class="hero-content">
+                <h1>Hush Modern<br>Restaurant</h1>
+                <p>Savor the artistry of authentic sushi, crafted with the freshest ingredients and modern flair. Experience a culinary journey like no other.</p>
+                <button class="btn">Order Now</button>
+            </div>
+            <div class="hero-image">
+                <img src="https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=800&q=80" alt="Sushi Platter">
+            </div>
+        </div>
+        <div class="torn-edge"></div>
+    </section>
+
+    <!-- Light Section 1 -->
+    <section class="section-light">
+        <div class="container">
+            <div class="section-header">
+                <h2>Cular Name</h2>
+                <p>Discover our signature dishes prepared by master chefs.</p>
+            </div>
+            
+            <div class="feature-grid">
+                <!-- Card 1 -->
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1553621042-f6e147245754?auto=format&fit=crop&w=400&q=80" alt="Sushi Nigiri" class="card-img">
+                </div>
+                <!-- Card 2 -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-title">Fresh Nigiri</div>
+                        <p class="card-text">Premium slices of fresh fish over perfectly seasoned rice. A true classic.</p>
+                        <div style="margin-top: 16px; display: flex; gap: 8px;">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px; font-size: 0.7rem;">Salmon</span>
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px; font-size: 0.7rem;">Tuna</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 3 -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-title">Special Rolls</div>
+                        <p class="card-text">Innovative flavor combinations wrapped in nori and rice, topped with signature sauces.</p>
+                    </div>
+                </div>
+                <!-- Card 4 -->
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1583623025817-d180a2221d0a?auto=format&fit=crop&w=400&q=80" alt="Maki Roll" class="card-img">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dark Section (Our Cae May Susia) -->
+    <section class="section-dark">
+        <div class="container">
+            <div class="section-header">
+                <h2>Our Cae May Susia</h2>
+            </div>
+            
+            <div class="menu-grid">
+                <div class="menu-card">
+                    <div class="menu-icon">🍱</div>
+                    <h3>Classic Bento</h3>
+                    <p>A perfect combination of our finest rolls, sashimi, and tempura served in a traditional box.</p>
+                </div>
+                <div class="menu-card">
+                    <div class="menu-icon">🥢</div>
+                    <h3>Chef's Choice</h3>
+                    <p>Trust the master. A daily selection of the freshest seasonal catches prepared flawlessly.</p>
+                </div>
+                <div class="menu-card menu-card-img">
+                    <img src="https://images.unsplash.com/photo-1611143669185-af224c5e3252?auto=format&fit=crop&w=400&q=80" alt="Sashimi">
+                </div>
+                <div class="menu-card">
+                    <div class="menu-icon">🍣</div>
+                    <h3>Premium Sashimi</h3>
+                    <p>Thick, exquisite slices of premium fish, served delicate and pure for the ultimate taste.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Split Section (Make to Yosik ling) -->
+    <section class="section-dark split-section">
+        <div class="container split-section" style="padding: 0;">
+            <div class="hero-content">
+                <h2>Make to Yosik ling<br>your Sushi Cooatcs</h2>
+                <p>Experience the delicate balance of flavors in every bite. Our chefs pour their dedication into crafting edible masterpieces that delight both the eyes and the palate.</p>
+                <button class="btn">Read More</button>
+            </div>
+            <div class="split-image">
+                <img src="https://images.unsplash.com/photo-1558985250-27a406d64cb3?auto=format&fit=crop&w=600&q=80" alt="Round Sushi Plate">
+            </div>
+        </div>
+    </section>
+
+    <!-- Tab Bar -->
+    <div class="tab-bar">
+        <button class="tab-btn">All Dishes</button>
+        <button class="tab-btn active">Most Popular Selections</button>
+        <button class="tab-btn">Chef Specials</button>
+    </div>
+
+    <!-- Contact / List Section -->
+    <section class="contact-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Contact Sekils</h2>
+                <p>Explore our highly recommended items loved by our customers.</p>
+            </div>
+
+            <div class="contact-grid">
+                <div>
+                    <img src="https://images.unsplash.com/photo-1615361200141-f45040f367be?auto=format&fit=crop&w=500&q=80" alt="Sushi Platter" class="contact-img">
+                </div>
+                <div class="menu-list">
+                    <div class="menu-item">
+                        <div class="menu-item-info">
+                            <div class="menu-item-icon">1</div>
+                            <span class="menu-item-title">Spicy Tuna Roll</span>
+                        </div>
+                        <span class="menu-item-price">$14</span>
+                    </div>
+                    <div class="menu-item">
+                        <div class="menu-item-info">
+                            <div class="menu-item-icon">2</div>
+                            <span class="menu-item-title">Dragon Roll Special</span>
+                        </div>
+                        <span class="menu-item-price">$18</span>
+                    </div>
+                    <div class="menu-item">
+                        <div class="menu-item-info">
+                            <div class="menu-item-icon">3</div>
+                            <span class="menu-item-title">Rainbow Sashimi Platter</span>
+                        </div>
+                        <span class="menu-item-price">$24</span>
+                    </div>
+                    <div class="menu-item">
+                        <div class="menu-item-info">
+                            <div class="menu-item-icon">4</div>
+                            <span class="menu-item-title">Spider Maki</span>
+                        </div>
+                        <span class="menu-item-price">$16</span>
+                    </div>
+                    <div class="menu-item" style="border: none; padding-top: 16px;">
+                        <button class="btn">View Full Menu</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</body>
+</html>
