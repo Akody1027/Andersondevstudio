@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GreaterPhoto | Landscape Photography</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #141414;
+            --bg-sec: #1a1a1a;
+            --text-main: #f5f5f5;
+            --text-muted: #999999;
+            --accent: #d4a373;
+            --border: #333333;
+            --font-sans: 'Inter', sans-serif;
+            --font-serif: 'Playfair Display', serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: var(--accent);
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+            object-fit: cover;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header / Navbar */
+        header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 10;
+            padding: 24px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 48px;
+        }
+
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo-icon {
+            width: 24px;
+            height: 24px;
+            background: conic-gradient(from 90deg, #fff 0deg 90deg, #ccc 90deg 180deg, #fff 180deg 270deg, #ccc 270deg 360deg);
+            border-radius: 50%;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .btn-login {
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 8px 24px;
+            border-radius: 20px;
+        }
+
+        .btn-login:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: linear-gradient(to bottom, rgba(20, 20, 20, 0.3) 0%, rgba(20, 20, 20, 0.9) 100%), url('https://picsum.photos/id/29/1920/1080') center/cover no-repeat;
+            text-align: center;
+            padding-top: 80px;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .play-btn {
+            width: 64px;
+            height: 64px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .play-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .play-icon {
+            width: 0;
+            height: 0;
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
+            border-left: 12px solid #fff;
+            margin-left: 4px;
+        }
+
+        .hero-subtitle {
+            font-size: 0.75rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .hero-title {
+            font-family: var(--font-serif);
+            font-size: 4rem;
+            font-weight: 400;
+            margin-bottom: 32px;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 48px;
+            margin-bottom: 64px;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-value {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .stat-label {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .hero-features {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            max-width: 1200px;
+            margin: auto auto 48px auto;
+            padding: 0 24px;
+        }
+
+        .feature-card {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 24px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            text-align: left;
+        }
+
+        .feature-icon {
+            color: var(--accent);
+            font-size: 1.2rem;
+        }
+
+        .feature-text {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        /* Generic Section Styles */
+        section {
+            padding: 96px 0;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 48px;
+            text-align: center;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        .section-subtitle {
+            font-size: 0.65rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        .section-title {
+            font-family: var(--font-serif);
+            font-size: 2.5rem;
+            font-weight: 400;
+        }
+
+        .nav-arrow {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-muted);
+        }
+
+        .nav-arrow:hover {
+            border-color: var(--text-main);
+            color: var(--text-main);
+        }
+
+        /* Grid Layouts */
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 48px;
+        }
+
+        /* Card Styles */
+        .card {
+            position: relative;
+            border-radius: 4px;
+            overflow: hidden;
+            cursor: pointer;
+            group: hover;
+        }
+
+        .card img {
+            width: 100%;
+            height: 100%;
+            transition: transform 0.5s ease;
+        }
+
+        .card:hover img {
+            transform: scale(1.05);
+        }
+
+        .card-vertical {
+            aspect-ratio: 3/4;
+        }
+
+        .card-horizontal {
+            aspect-ratio: 16/9;
+        }
+
+        .card-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(20,20,20,0.9) 0%, rgba(20,20,20,0.1) 50%, rgba(20,20,20,0) 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .card-title {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+
+        .card-meta {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+        }
+
+        .card-desc {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 12px;
+            line-height: 1.5;
+        }
+
+        .badge {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: var(--accent);
+            color: var(--bg-main);
+            font-size: 0.6rem;
+            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 2px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Testimonials */
+        .testimonial-card {
+            text-align: center;
+        }
+
+        .quote-text {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            font-style: italic;
+            margin-bottom: 24px;
+        }
+
+        .author-name {
+            font-family: var(--font-serif);
+            font-size: 1rem;
+            margin-bottom: 4px;
+        }
+
+        .author-role {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            position: relative;
+            padding: 120px 0;
+            background: linear-gradient(rgba(20, 20, 20, 0.7), rgba(20, 20, 20, 0.9)), url('https://picsum.photos/id/212/1920/800') center/cover no-repeat;
+            text-align: center;
+            margin-top: 48px;
+        }
+
+        .cta-subtitle {
+            color: var(--accent);
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+
+        .cta-title {
+            font-family: var(--font-serif);
+            font-size: 3rem;
+            margin-bottom: 16px;
+        }
+
+        .cta-desc {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-bottom: 32px;
+        }
+
+        .btn-primary {
+            display: inline-block;
+            color: var(--accent);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+            border-bottom: 1px solid var(--accent);
+            padding-bottom: 4px;
+        }
+
+        .cta-stats {
+            display: flex;
+            justify-content: center;
+            gap: 64px;
+            margin-top: 80px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 48px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--bg-sec);
+            padding: 64px 0 32px;
+            text-align: center;
+        }
+
+        .footer-nav {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            margin-bottom: 48px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--border);
+            padding-top: 32px;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding-left: 24px;
+            padding-right: 24px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 16px;
+            color: var(--text-muted);
+        }
+
+        .copyright {
+            font-size: 0.65rem;
+            color: #666;
+            margin-top: 32px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .grid-4 { grid-template-columns: repeat(2, 1fr); }
+            .hero-features { grid-template-columns: repeat(2, 1fr); }
+            .nav-arrow { display: none; }
+        }
+
+        @media (max-width: 768px) {
+            .hero-title { font-size: 2.5rem; }
+            .grid-2, .grid-3 { grid-template-columns: 1fr; }
+            .nav-links { display: none; }
+            .hero-stats { gap: 24px; }
+            .cta-stats { flex-direction: column; gap: 32px; }
+            .footer-bottom { flex-direction: column; gap: 24px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <div class="logo">
+                <div class="logo-icon"></div>
+                GreaterPhoto
+            </div>
+            <nav class="nav-links">
+                <a href="#">Photographers</a>
+                <a href="#">Classes</a>
+                <a href="#">Workshops</a>
+                <a href="#" class="btn-login">Login</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="play-btn">
+                <div class="play-icon"></div>
+            </div>
+            <div class="hero-subtitle">- Daniel Kordan -</div>
+            <h1 class="hero-title">Landscape Photography</h1>
+            
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <span class="stat-value">148 C</span>
+                    <span class="stat-label">Classes</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">EXPERT</span>
+                    <span class="stat-label">Level</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">90h</span>
+                    <span class="stat-label">Duration</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="hero-features">
+            <div class="feature-card">
+                <div class="feature-icon">○</div>
+                <div class="feature-text">Be a professional landscape photography</div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">○</div>
+                <div class="feature-text">Explore the secrets of Astro Photography</div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">○</div>
+                <div class="feature-text">Improve your composition as professional</div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">○</div>
+                <div class="feature-text">Explore the secrets of Astro Photography</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="container">
+        <div class="section-header">
+            <div class="section-subtitle">Top Photo Classes</div>
+            <h2 class="section-title">Gain the new skills</h2>
+            <div class="nav-arrow">></div>
+        </div>
+
+        <div class="grid-4">
+            <div class="card card-vertical">
+                <img src="https://picsum.photos/id/122/400/600" alt="Architecture">
+                <div class="card-overlay">
+                    <h3 class="card-title">Architecture</h3>
+                    <span class="card-meta">- Ivan Sero -</span>
+                </div>
+            </div>
+            <div class="card card-vertical">
+                <img src="https://picsum.photos/id/10/400/600" alt="Landscape">
+                <div class="card-overlay">
+                    <h3 class="card-title">Landscape</h3>
+                    <span class="card-meta">- Daniel Kordan -</span>
+                </div>
+            </div>
+            <div class="card card-vertical">
+                <img src="https://picsum.photos/id/104/400/600" alt="Astro Photo">
+                <div class="card-overlay">
+                    <h3 class="card-title">Astro Photo</h3>
+                    <span class="card-meta">- Arlo Kettner -</span>
+                </div>
+            </div>
+            <div class="card card-vertical">
+                <img src="https://picsum.photos/id/342/400/600" alt="People">
+                <div class="card-overlay">
+                    <h3 class="card-title">People</h3>
+                    <span class="card-meta">- Yurii Serhiiv -</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="container" style="background-color: var(--bg-sec); border-radius: 8px; padding: 64px 32px; margin-top: 48px;">
+        <div class="section-header">
+            <div class="section-subtitle">Top Photographers</div>
+            <h2 class="section-title">Our editor choices</h2>
+            <div class="nav-arrow">></div>
+        </div>
+
+        <div class="grid-2">
+            <div class="card card-horizontal">
+                <img src="https://picsum.photos/id/1012/800/500" alt="Thomas Heaton">
+                <div class="card-overlay">
+                    <h3 class="card-title">Thomas Heaton</h3>
+                    <span class="card-meta">12 Classes &nbsp;·&nbsp; 3 Workshops</span>
+                    <p class="card-desc">Thomas Heaton is a travel and landscape photographer and creator of popular YouTube videos.</p>
+                </div>
+            </div>
+            <div class="card card-horizontal">
+                <img src="https://picsum.photos/id/1005/800/500" alt="Elia Locardi">
+                <div class="card-overlay">
+                    <h3 class="card-title">Elia Locardi</h3>
+                    <span class="card-meta">8 Classes &nbsp;·&nbsp; 2 Workshops</span>
+                    <p class="card-desc">Elia Locardi is an American photography professional specialized in travel photography, landscape photography.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="container">
+        <div class="section-header">
+            <div class="section-subtitle">Latest Workshops</div>
+            <h2 class="section-title">Get more with practise</h2>
+            <div class="nav-arrow">></div>
+        </div>
+
+        <div class="grid-4">
+            <div class="card card-vertical">
+                <div class="badge">New</div>
+                <img src="https://picsum.photos/id/142/400/600" alt="Beautiful Tuscany">
+                <div class="card-overlay">
+                    <span class="card-meta" style="margin-bottom: 8px; color: var(--accent);">4 Days</span>
+                    <h3 class="card-title" style="font-size: 1.25rem;">Beautiful Tuscany tour in May</h3>
+                    <span class="card-meta">- Thomas Heaton -</span>
+                </div>
+            </div>
+            <div class="card card-vertical">
+                <div class="badge">New</div>
+                <img src="https://picsum.photos/id/152/400/600" alt="Namibia deserts">
+                <div class="card-overlay">
+                    <span class="card-meta" style="margin-bottom: 8px; color: var(--accent);">6 Days</span>
+                    <h3 class="card-title" style="font-size: 1.25rem;">Namibia deserts tour in February</h3>
+                    <span class="card-meta">- Daniel Kordan -</span>
+                </div>
+            </div>
+            <div class="card card-vertical">
+                <img src="https://picsum.photos/id/177/400/600" alt="Portrait Photography">
+                <div class="card-overlay">
+                    <span class="card-meta" style="margin-bottom: 8px; color: var(--accent);">2 Days</span>
+                    <h3 class="card-title" style="font-size: 1.25rem;">Portrait Photography: The Complete Guide</h3>
+                    <span class="card-meta">- Heather Stevan -</span>
+                </div>
+            </div>
+            <div class="card card-vertical">
+                <img src="https://picsum.photos/id/192/400/600" alt="Black and White">
+                <div class="card-overlay">
+                    <span class="card-meta" style="margin-bottom: 8px; color: var(--accent);">10 Days</span>
+                    <h3 class="card-title" style="font-size: 1.25rem;">Black and white architecture in January</h3>
+                    <span class="card-meta">- Elia Locardi -</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="container">
+        <div class="section-header">
+            <div class="section-subtitle">What Our Students Saying</div>
+            <h2 class="section-title">Check their experiences</h2>
+        </div>
+
+        <div class="grid-3">
+            <div class="testimonial-card">
+                <p class="quote-text">"Thank you for this wonderful work. I high on Tuscany and Cinque Terre. My enthusiasm about your good organization, travel tips and help me many times."</p>
+                <h4 class="author-name">Gabriela Hekelmann</h4>
+                <span class="author-role">- Germany -</span>
+            </div>
+            <div class="testimonial-card">
+                <p class="quote-text">"My dear coach, thank you so much, we are so lucky to have such wonderful patient & relaxed trips with you , we love those amazing sunrise."</p>
+                <h4 class="author-name">Angela Chang</h4>
+                <span class="author-role">- United Kingdom -</span>
+            </div>
+            <div class="testimonial-card">
+                <p class="quote-text">"Thank you so much for putting together such a beautiful trip. I know it must take hours to plan and put together and you guys did a fantastic job."</p>
+                <h4 class="author-name">Jane Saville</h4>
+                <span class="author-role">- Slovakia -</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-subtitle">Learn from the best</div>
+            <h2 class="cta-title">Take Classes and Get Inspired</h2>
+            <p class="cta-desc">Various classes for a deeper dive into all things GreaterPhoto.</p>
+            <a href="#" class="btn-primary">Explore Classes &rarr;</a>
+
+            <div class="cta-stats">
+                <div class="stat-item">
+                    <span class="stat-value" style="font-size: 1.75rem;">1500+</span>
+                    <span class="stat-label">Curated Classes</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" style="font-size: 1.75rem;">650+</span>
+                    <span class="stat-label">Expert Instructors</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" style="font-size: 1.75rem;">7000+</span>
+                    <span class="stat-label">Students Strong</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <nav class="footer-nav">
+            <a href="#">Photographers</a>
+            <a href="#">Classes</a>
+            <a href="#">Workshops</a>
+            <a href="#">Become A Contributor</a>
+            <a href="#">Contact Us</a>
+        </nav>
+        
+        <div class="footer-bottom">
+            <div class="logo">
+                <div class="logo-icon" style="width: 20px; height: 20px;"></div>
+                GreaterPhoto
+            </div>
+            <div class="social-links">
+                <a href="#">f</a>
+                <a href="#">in</a>
+                <a href="#">v</a>
+                <a href="#">y</a>
+            </div>
+        </div>
+        <div class="copyright">
+            Copyright © 2026 GreaterPhoto - Made by Anderson Dev Studio
+        </div>
+    </footer>
+
+</body>
+</html>
