@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    
+    <title>Marco Good - The Best Burger</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Montserrat:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* CSS Reset & Variables */
+        :root {
+            --color-green: #0a3a2a;
+            --color-yellow: #dfba4f;
+            --color-orange: #ff5f1f;
+            --color-cream: #f4e8cf;
+            --color-white: #ffffff;
+            --color-dark: #222222;
+            --font-heading: 'Lilita One', sans-serif;
+            --font-body: 'Montserrat', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--color-green);
+            color: var(--color-white);
+            overflow-x: hidden;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        /* --- Header --- */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            background-color: transparent;
+            position: absolute;
+            width: 100%;
+            z-index: 10;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .logo {
+            font-family: var(--font-heading);
+            color: var(--color-orange);
+            font-size: 1.5rem;
+            letter-spacing: 1px;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .header-icons {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .header-icons svg {
+            width: 18px;
+            height: 18px;
+            fill: var(--color-white);
+            cursor: pointer;
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 100px 5% 50px;
+            overflow: hidden;
+            background-color: var(--color-green);
+        }
+
+        /* Yellow Curved Background */
+        .hero-bg-curve {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 85%;
+            height: 100%;
+            background-color: var(--color-yellow);
+            clip-path: ellipse(90% 80% at 100% 100%);
+            z-index: 1;
+        }
+
+        /* Watermark Text */
+        .watermark-container {
+            position: absolute;
+            top: 20%;
+            left: 10%;
+            width: 150%;
+            opacity: 0.1;
+            z-index: 1;
+            transform: rotate(-10deg);
+            pointer-events: none;
+        }
+
+        .watermark-text {
+            font-family: var(--font-heading);
+            font-size: 8rem;
+            color: var(--color-white);
+            line-height: 0.9;
+            white-space: nowrap;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .hero-text {
+            max-width: 500px;
+        }
+
+        .hero-burger-icon {
+            width: 60px;
+            margin-bottom: 20px;
+        }
+
+        .hero-title {
+            font-family: var(--font-heading);
+            font-size: 5.5rem;
+            line-height: 1;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .hero-desc {
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 30px;
+            max-width: 400px;
+        }
+
+        .btn-primary {
+            display: inline-block;
+            background-color: var(--color-orange);
+            color: var(--color-white);
+            font-family: var(--font-heading);
+            padding: 15px 40px;
+            border-radius: 30px;
+            text-transform: uppercase;
+            font-size: 1.1rem;
+            box-shadow: -5px 5px 0px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+        }
+
+        .btn-primary:hover {
+            transform: translate(2px, -2px);
+            box-shadow: -7px 7px 0px rgba(0,0,0,0.2);
+        }
+
+        .hero-image-container {
+            position: relative;
+            width: 55%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero-main-img {
+            width: 120%;
+            max-width: 800px;
+            transform: rotate(5deg) translateY(-50px);
+            filter: drop-shadow(0 20px 30px rgba(0,0,0,0.5));
+        }
+
+        .badge-yummy, .badge-passion {
+            position: absolute;
+            z-index: 3;
+        }
+
+        .badge-yummy {
+            top: -20px;
+            left: 50px;
+            background: var(--color-white);
+            color: var(--color-green);
+            font-family: var(--font-heading);
+            padding: 15px 25px;
+            border-radius: 50px 50px 50px 0;
+            font-size: 2rem;
+            border: 4px solid var(--color-yellow);
+            transform: rotate(-10deg);
+        }
+
+        .badge-passion {
+            bottom: 50px;
+            right: 0;
+            background: var(--color-green);
+            color: var(--color-white);
+            font-family: var(--font-heading);
+            padding: 20px;
+            border-radius: 10px;
+            border: 3px solid var(--color-white);
+            text-align: center;
+            transform: rotate(10deg);
+        }
+
+        .badge-passion span {
+            display: block;
+            color: var(--color-yellow);
+        }
+
+        .slider-nav {
+            position: absolute;
+            right: 5%;
+            bottom: 20%;
+            z-index: 5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--color-dark);
+            font-weight: 700;
+        }
+
+        /* --- Products Section --- */
+        .products {
+            background-color: var(--color-cream);
+            color: var(--color-dark);
+            padding: 80px 5%;
+            text-align: center;
+        }
+
+        .section-title {
+            color: var(--color-orange);
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            margin-bottom: 60px;
+            text-transform: uppercase;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .product-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .product-img {
+            width: 100%;
+            max-width: 300px;
+            filter: drop-shadow(0 15px 15px rgba(0,0,0,0.2));
+            margin-bottom: 20px;
+        }
+
+        .product-name {
+            font-family: var(--font-heading);
+            color: var(--color-orange);
+            font-size: 2rem;
+            line-height: 1.1;
+            text-transform: uppercase;
+        }
+
+        .product-sub {
+            font-family: 'Brush Script MT', cursive, sans-serif;
+            color: var(--color-orange);
+            font-size: 1.5rem;
+            margin-top: 5px;
+        }
+
+        /* --- Testimonials Section --- */
+        .testimonials {
+            background-color: var(--color-orange);
+            color: var(--color-white);
+            padding: 100px 5% 50px;
+            text-align: center;
+            position: relative;
+        }
+
+        /* Wavy SVG Divider */
+        .wave-divider {
+            position: absolute;
+            top: -1px;
+            left: 0;
+            width: 100%;
+            overflow: hidden;
+            line-height: 0;
+        }
+
+        .wave-divider svg {
+            display: block;
+            width: calc(133% + 1.3px);
+            height: 60px;
+        }
+
+        .wave-divider .shape-fill {
+            fill: var(--color-orange);
+        }
+
+        .test-header {
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            margin-bottom: 40px;
+            letter-spacing: 1px;
+        }
+
+        .carousel {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+            max-width: 800px;
+            margin: 0 auto 80px;
+        }
+
+        .arrow {
+            background: transparent;
+            border: 2px solid var(--color-white);
+            color: var(--color-white);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .testimonial-content {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            text-align: left;
+        }
+
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--color-white);
+        }
+
+        .quote {
+            font-size: 1.5rem;
+            font-weight: 400;
+            max-width: 400px;
+        }
+
+        .logos {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1000px;
+            margin: 0 auto;
+            opacity: 0.8;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .logos span {
+            font-family: 'Times New Roman', serif;
+            font-weight: bold;
+            font-size: 1.2rem;
+            text-transform: capitalize;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <ul class="nav-links">
+            <li><a href="#">Home ▾</a></li>
+            <li><a href="#">Shop ▾</a></li>
+            <li><a href="#">Pages ▾</a></li>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+        <div class="logo">MARCO GOOD</div>
+        <div class="header-icons">
+            <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1.003 1.003 0 0 0 20 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg-curve"></div>
+        <div class="watermark-container">
+            <div class="watermark-text">YUMMY YUMMY YUMMY</div>
+            <div class="watermark-text">YUMMY YUMMY YUMMY</div>
+            <div class="watermark-text">YUMMY YUMMY YUMMY</div>
+        </div>
+
+        <div class="hero-content">
+            <div class="hero-text">
+                <!-- SVG Hamburger Outline -->
+                <svg class="hero-burger-icon" viewBox="0 0 64 64" fill="none" stroke="var(--color-orange)" stroke-width="3">
+                    <path d="M10 25 Q32 5 54 25" stroke-linecap="round"/>
+                    <line x1="10" y1="25" x2="54" y2="25" stroke-linecap="round"/>
+                    <line x1="8" y1="35" x2="56" y2="35" stroke-linecap="round"/>
+                    <rect x="10" y="45" width="44" height="8" rx="4" stroke-linecap="round"/>
+                    <line x1="25" y1="12" x2="25" y2="15" stroke-linecap="round"/>
+                    <line x1="39" y1="12" x2="39" y2="15" stroke-linecap="round"/>
+                </svg>
+                
+                <h1 class="hero-title">THE BEST<br>BURGER</h1>
+                <p class="hero-desc">Chickpeas. Pizza. Together at last. Just like our pasta, each one of our new crispy, doughy...</p>
+                <a href="#" class="btn-primary">ORDER NOW!</a>
+            </div>
+
+            <div class="hero-image-container">
+                <div class="badge-yummy">YUMMY</div>
+                <!-- Placeholder for Hero Burger Image -->
+                <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&q=80&w=800&h=800&crop=entropy" alt="Delicious Burger" class="hero-main-img">
+                <div class="badge-passion">
+                    BURGER
+                    <span>- IS MY -</span>
+                    PASSION
+                </div>
+            </div>
+        </div>
+
+        <div class="slider-nav">
+            <span>01</span>
+            <span>|</span>
+            <span>04</span>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="products">
+        <h2 class="section-title">MARCO GOOD</h2>
+        <div class="product-grid">
+            <!-- Product 1 -->
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&q=80&w=400&h=400" alt="Beef Burger" class="product-img">
+                <h3 class="product-name">THE BEEF<br>BURGER</h3>
+                <div class="product-sub">Original</div>
+            </div>
+            <!-- Product 2 -->
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1615719413546-198b25453f85?auto=format&fit=crop&q=80&w=400&h=400" alt="Chicken Burger" class="product-img">
+                <h3 class="product-name">THE CHICKEN<br>BURGER</h3>
+                <div class="product-sub">Original</div>
+            </div>
+            <!-- Product 3 -->
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1594212202875-86ac1c6180fc?auto=format&fit=crop&q=80&w=400&h=400" alt="Supremo Burger" class="product-img">
+                <h3 class="product-name">TASTE OF MEXICO<br>EL SUPREMO</h3>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials">
+        <!-- SVG Wavy Border separating sections -->
+        <div class="wave-divider">
+            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V0C73.81,25.92,152.47,56.32,227.1,68.42,258.41,73.49,290.3,71.18,321.39,56.44Z" class="shape-fill"></path>
+            </svg>
+        </div>
+
+        <div class="test-header">
+            WHAT OUR FANS SAY
+            <div>〰〰〰〰〰</div>
+        </div>
+
+        <div class="carousel">
+            <button class="arrow">▶</button>
+            <div class="testimonial-content">
+                <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=200&h=200" alt="Fan" class="avatar">
+                <p class="quote">"I don't remember a single mouthful I didn't enjoy!"</p>
+            </div>
+            <button class="arrow">▶</button>
+        </div>
+
+        <div class="logos">
+            <span style="font-style: italic; font-family: sans-serif; font-weight: 800;">Chowhound</span>
+            <span style="color: var(--color-white); font-weight: 800; font-family: sans-serif;">BuzzFeed</span>
+            <span style="font-family: 'Times New Roman', serif;">Los Angeles<br>Times</span>
+            <span style="font-family: 'Times New Roman', serif; font-size: 1.5rem;">Forbes</span>
+            <span style="font-family: Impact, sans-serif; text-transform: uppercase;">Muscle<br>& Fitness</span>
+            <span style="font-family: sans-serif; text-transform: lowercase; font-weight: bold;">elite daily</span>
+        </div>
+    </section>
+
+</body>
+</html>
