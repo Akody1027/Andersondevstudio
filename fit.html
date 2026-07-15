@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    
+    <title>Winner Gym</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800;900&family=Open+Sans:wght@400;600&display=swap');
+
+        /* --- GLOBAL & RESETS --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #0b0b0b;
+            color: #ffffff;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+        }
+
+        .section-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 40px;
+            letter-spacing: 1px;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: #ffcc00;
+            color: #000;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            padding: 12px 24px;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #e6b800;
+        }
+
+        /* --- DECORATIONS --- */
+        .decor-square {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border: 2px solid #ffcc00;
+        }
+        
+        .decor-lines {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                #ffcc00 10px,
+                #ffcc00 12px
+            );
+            opacity: 0.5;
+            z-index: 0;
+        }
+
+        /* --- HEADER --- */
+        .header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px 0;
+            z-index: 100;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
+        }
+
+        .header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .logo-icon {
+            width: 24px;
+            height: 24px;
+            background-color: #ffcc00;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #000;
+            font-weight: 900;
+            font-size: 0.8rem;
+        }
+
+        .nav {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav a {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            font-weight: 600;
+            color: #ccc;
+            transition: color 0.3s;
+        }
+
+        .nav a:hover {
+            color: #ffcc00;
+        }
+
+        .header-btn {
+            background: transparent;
+            border: 1px solid #ffcc00;
+            color: #fff;
+            padding: 8px 16px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .header-btn:hover {
+            background-color: #ffcc00;
+            color: #000;
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            height: 100vh;
+            min-height: 700px;
+            background: url('https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(11, 11, 11, 0.6);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+        }
+
+        .hero-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 4.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            color: #ccc;
+            letter-spacing: 1px;
+        }
+
+        .hero .decor-lines {
+            left: 20%;
+            top: 20%;
+        }
+
+        /* --- PROGRAMS & CLASSES --- */
+        .programs {
+            padding: 100px 0;
+            background-color: #0b0b0b;
+        }
+
+        .programs-grid {
+            display: flex;
+            gap: 20px;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .program-card {
+            flex: 1;
+            height: 250px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 20px;
+            border: 1px solid #222;
+            transition: transform 0.3s;
+            overflow: hidden;
+        }
+
+        .program-card:hover {
+            transform: translateY(-10px);
+            border-color: #ffcc00;
+        }
+
+        .program-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 1;
+            transition: background 0.3s;
+        }
+
+        .program-card:hover::before {
+            background: rgba(0,0,0,0.5);
+        }
+
+        .program-title {
+            position: relative;
+            z-index: 2;
+            color: #ffcc00;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+
+        .program-icon {
+            position: relative;
+            z-index: 2;
+            width: 80px;
+            height: 80px;
+            margin: 0 auto;
+            border: 1px solid #ffcc00;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .carousel-arrow {
+            color: #ffcc00;
+            font-size: 2rem;
+            cursor: pointer;
+            padding-left: 10px;
+        }
+
+        /* --- ABOUT US --- */
+        .about {
+            padding: 80px 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .about .container {
+            display: flex;
+            align-items: center;
+            gap: 80px;
+        }
+
+        .about-content {
+            flex: 1;
+        }
+
+        .about-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .about-desc {
+            font-size: 0.9rem;
+            color: #aaa;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .about-hours {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .clock-icon {
+            width: 40px;
+            height: 40px;
+            background-color: #222;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #ffcc00;
+        }
+
+        .hours-text h4 {
+            font-size: 0.9rem;
+            margin-bottom: 2px;
+        }
+
+        .hours-text p {
+            font-size: 0.8rem;
+            color: #888;
+        }
+
+        .about-image {
+            flex: 1;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .about-frame {
+            width: 300px;
+            height: 300px;
+            border: 15px solid #ffcc00;
+            position: relative;
+            z-index: 2;
+        }
+
+        .about-img-inner {
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80') center/cover;
+            z-index: 3;
+        }
+
+        .about-image .decor-lines {
+            bottom: -30px;
+            right: 0;
+            z-index: 1;
+        }
+
+        /* --- FREE CONSULTATION --- */
+        .consultation {
+            position: relative;
+            background: url('https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover fixed;
+            padding: 100px 0;
+            margin: 80px 0;
+        }
+
+        .consultation::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(90deg, rgba(11,11,11,1) 0%, rgba(11,11,11,0.8) 50%, rgba(11,11,11,0.6) 100%);
+        }
+
+        .consultation .container {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .consult-image {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            position: relative;
+        }
+
+        .consult-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
+
+        .consult-content {
+            flex: 1;
+        }
+
+        .consult-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .consult-desc {
+            font-size: 0.95rem;
+            color: #ccc;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            max-width: 400px;
+        }
+
+        /* --- SPECIAL OFFER / FRIDAY --- */
+        .special-offer {
+            padding: 80px 0;
+            overflow: hidden;
+        }
+
+        .special-offer .container {
+            display: flex;
+            align-items: center;
+            background-color: #0b0b0b;
+        }
+
+        .special-text {
+            flex: 1;
+            padding-right: 40px;
+        }
+
+        .special-sub {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .special-main {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            line-height: 1;
+            margin-bottom: 15px;
+        }
+
+        .special-highlight {
+            color: #ffcc00;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 30px;
+        }
+
+        .special-image {
+            flex: 1;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+        }
+
+        .special-bg-shape {
+            position: absolute;
+            bottom: 0;
+            right: 10%;
+            width: 80%;
+            height: 70%;
+            background-color: #ffcc00;
+            clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%);
+            z-index: 1;
+        }
+
+        .special-image img {
+            position: relative;
+            z-index: 2;
+            max-width: 100%;
+            height: auto;
+            filter: drop-shadow(0 10px 10px rgba(0,0,0,0.5));
+        }
+
+        /* --- GALLERY --- */
+        .gallery {
+            padding: 80px 0;
+            position: relative;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        .gallery-item {
+            aspect-ratio: 1 / 1;
+            background-size: cover;
+            background-position: center;
+            transition: transform 0.3s, filter 0.3s;
+            filter: grayscale(40%);
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05);
+            filter: grayscale(0%);
+            z-index: 10;
+            position: relative;
+        }
+
+        /* --- NEWSLETTER --- */
+        .newsletter {
+            padding: 80px 0 40px;
+            text-align: center;
+            border-bottom: 1px solid #222;
+        }
+
+        .newsletter-form {
+            display: flex;
+            justify-content: center;
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+
+        .newsletter-input {
+            flex: 1;
+            padding: 15px 20px;
+            background-color: #eee;
+            border: none;
+            outline: none;
+            font-family: inherit;
+        }
+
+        .newsletter-btn {
+            background-color: #ffcc00;
+            color: #000;
+            border: none;
+            padding: 0 30px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .newsletter-btn:hover {
+            background-color: #e6b800;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .social-links a {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background-color: #222;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .social-links a:hover {
+            background-color: #ffcc00;
+            color: #000;
+        }
+
+        /* --- FOOTER --- */
+        .footer {
+            background-color: #ffcc00;
+            color: #000;
+            padding: 15px 0;
+            text-align: left;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 600px) {
+            .hero-title { font-size: 3rem; }
+            .programs-grid { flex-wrap: wrap; }
+            .program-card { flex: 1 1 45%; }
+            .carousel-arrow { display: none; }
+            .about .container, .consultation .container, .special-offer .container { flex-direction: column; text-align: center; }
+            .about-hours { justify-content: center; }
+            .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+            .nav { display: none; /* Mobile menu placeholder */ }
+        }
+
+        @media (max-width: 576px) {
+            .hero-title { font-size: 2.5rem; }
+            .program-card { flex: 1 1 100%; }
+            .special-main { font-size: 3rem; }
+            .gallery-grid { grid-template-columns: 1fr; }
+            .newsletter-form { flex-direction: column; }
+            .newsletter-btn { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <div class="logo-icon">W</div>
+                WINNER GYM
+            </div>
+            <nav class="nav">
+                <a href="#">Class Packs</a>
+                <a href="#">Team</a>
+                <a href="#">Location</a>
+                <a href="#">Contacts</a>
+            </nav>
+            <button class="header-btn">
+                <span>📞</span> Request a Callback
+            </button>
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="decor-square" style="top: 20%; left: 10%;"></div>
+        <div class="decor-square" style="bottom: 30%; left: 15%;"></div>
+        <div class="decor-square" style="top: 25%; right: 40%;"></div>
+        <div class="decor-square" style="bottom: 20%; right: 45%;"></div>
+        <div class="decor-square" style="top: 15%; right: 10%;"></div>
+        <div class="decor-lines"></div>
+
+        <div class="hero-content">
+            <h1 class="hero-title">BUILD YOUR BODY STRONG</h1>
+            <p class="hero-subtitle">Winning is easier than you think</p>
+        </div>
+    </section>
+
+    <!-- PROGRAMS -->
+    <section class="programs">
+        <div class="container">
+            <h2 class="section-title">PROGRAMS & CLASSES</h2>
+            <div class="programs-grid">
+                <!-- Card 1 -->
+                <div class="program-card" style="background-image: url('https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80');">
+                    <h3 class="program-title">Bodybuilding</h3>
+                    <div class="program-icon">
+                        <!-- SVG Placeholder for Bodybuilding -->
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ffcc00" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    </div>
+                </div>
+                <!-- Card 2 -->
+                <div class="program-card" style="background-image: url('https://images.unsplash.com/photo-1518611012118-696072aa579a?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80');">
+                    <h3 class="program-title">Stretching</h3>
+                    <div class="program-icon">
+                        <!-- SVG Placeholder for Stretching -->
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ffcc00" stroke-width="2"><circle cx="12" cy="5" r="2"/><path d="M5 22h14M12 7v10M8 12l4 5 4-5"/></svg>
+                    </div>
+                </div>
+                <!-- Card 3 -->
+                <div class="program-card" style="background-image: url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80');">
+                    <h3 class="program-title">Pilates</h3>
+                    <div class="program-icon">
+                        <!-- SVG Placeholder for Pilates -->
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ffcc00" stroke-width="2"><path d="M22 12h-4l-3-9L9 21l-3-9H2"/></svg>
+                    </div>
+                </div>
+                <!-- Card 4 -->
+                <div class="program-card" style="background-image: url('https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80');">
+                    <h3 class="program-title">Yoga</h3>
+                    <div class="program-icon">
+                        <!-- SVG Placeholder for Yoga -->
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ffcc00" stroke-width="2"><circle cx="12" cy="5" r="2"/><path d="M12 7v7M7 14l5-2 5 2M6 21l6-7 6 7"/></svg>
+                    </div>
+                </div>
+                <div class="carousel-arrow">❯</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT US -->
+    <section class="about">
+        <div class="decor-square" style="top: 20%; left: 60%;"></div>
+        <div class="container">
+            <div class="about-content">
+                <h2 class="about-title">ABOUT US</h2>
+                <p class="about-desc">
+                    Spacious, cozy, comfortable room with the best trainers. Achieve your goal with our team of professionals. We will help you choose the right diet, training program, you can also purchase dietary supplements and a sports uniform from us. Come and we will make your dreams come true.
+                </p>
+                <div class="about-hours">
+                    <div class="clock-icon">🕒</div>
+                    <div class="hours-text">
+                        <h4>Mon-Fri</h4>
+                        <p>7 AM - 11 PM</p>
+                    </div>
+                </div>
+            </div>
+            <div class="about-image">
+                <div class="decor-lines"></div>
+                <div class="decor-square" style="top: -40px; right: 0;"></div>
+                <div class="decor-square" style="bottom: -20px; left: 50%;"></div>
+                <div class="about-frame">
+                    <div class="about-img-inner"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FREE CONSULTATION -->
+    <section class="consultation">
+        <div class="container">
+            <div class="consult-image">
+                <img src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Professional Trainer">
+            </div>
+            <div class="consult-content">
+                <h2 class="consult-title">FREE CONSULTATION</h2>
+                <p class="consult-desc">
+                    Sign up now for a free consultation from a professional trainer. We will tell you which training program to choose for you, what kind of sport suits you.
+                </p>
+                <button class="btn">Request a Call Back</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- SPECIAL OFFER / FRIDAY -->
+    <section class="special-offer">
+        <div class="container">
+            <div class="special-text">
+                <div class="special-sub">THIS MONTH, EVERY</div>
+                <h2 class="special-main">FRIDAY</h2>
+                <div class="special-highlight"><span style="color:#ffcc00;">SPECIAL TRAINING</span> WITH PROFESSIONAL TRAINERS</div>
+                <button class="btn">Sign Up</button>
+            </div>
+            <div class="special-image">
+                <div class="special-bg-shape"></div>
+                <div class="decor-square" style="top: 20%; left: 0;"></div>
+                <div class="decor-square" style="top: 10%; right: 10%;"></div>
+                <!-- Group of Trainers Image Placeholder (using a generic fitness class image for transparency simulation) -->
+                <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Fitness Trainers" style="border-radius: 10px;">
+            </div>
+        </div>
+    </section>
+
+    <!-- IMAGE GALLERY -->
+    <section class="gallery">
+        <h2 class="section-title">Image Gallery</h2>
+        <div class="container">
+            <div class="gallery-grid">
+                <div class="gallery-item" style="background-image: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80');"></div>
+                <div class="gallery-item" style="background-image: url('https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80');"></div>
+                <div class="gallery-item" style="background-image: url('https://images.unsplash.com/photo-1518611012118-696072aa579a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80');"></div>
+                <div class="gallery-item" style="background-image: url('https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80');"></div>
+                <div class="gallery-item" style="background-image: url('https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80');"></div>
+                <div class="gallery-item" style="background-image: url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80');"></div>
+                <div class="gallery-item" style="background-image: url('https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80');"></div>
+                <div class="gallery-item" style="background-image: url('https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80');"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NEWSLETTER -->
+    <section class="newsletter">
+        <div class="decor-square" style="bottom: 20px; left: 10%;"></div>
+        <div class="decor-square" style="bottom: 50px; right: 35%;"></div>
+        <div class="container">
+            <h2 class="section-title" style="margin-bottom: 20px; text-transform: capitalize;">Subscribe us For Newsletter</h2>
+            <form class="newsletter-form">
+                <input type="email" class="newsletter-input" placeholder="Your e-mail">
+                <button type="submit" class="newsletter-btn">SUBSCRIBE</button>
+            </form>
+            <div class="social-links">
+                <a href="#">f</a>
+                <a href="#">ig</a>
+                <a href="#">tw</a>
+                <a href="#">g+</a>
+                <a href="#">yt</a>
+                <a href="#">wa</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            Your Company 2026. All rights reserved. Design by Someone
+        </div>
+    </footer>
+
+</body>
+</html>

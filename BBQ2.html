@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    
+    <title>Dinosaur Bar-B-Que</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Yellowtail&family=Open+Sans:wght@400;700&display=swap');
+
+        /* GLOBAL RESETS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #000;
+            color: #fff;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        /* TYPOGRAPHY UTILITIES */
+        .font-script {
+            font-family: 'Yellowtail', cursive;
+        }
+
+        .font-display {
+            font-family: 'Oswald', sans-serif;
+            text-transform: uppercase;
+        }
+
+        .text-red {
+            color: #d12525;
+        }
+
+        /* HEADER SECTION */
+        .header-top {
+            background: url('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover;
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #222;
+            position: relative;
+        }
+
+        .header-top::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .social-circle {
+            width: 30px;
+            height: 30px;
+            background-color: #fff;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #000;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .brand-logo {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .brand-dino {
+            font-size: 4rem;
+            color: #f7c942;
+            line-height: 0.8;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        }
+
+        .brand-bbq {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #fff;
+            margin-top: 15px;
+            letter-spacing: 1px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        }
+
+        .newsletter-btn-wrap {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        .newsletter-txt {
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .newsletter-btn {
+            background: linear-gradient(to bottom, #d12525, #8a1313);
+            border: 2px solid #550a0a;
+            color: #fff;
+            padding: 8px 20px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: 4px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.5);
+            cursor: pointer;
+        }
+
+        /* NAVIGATION */
+        .main-nav {
+            background-color: #050505;
+            border-bottom: 1px solid #333;
+            border-top: 1px solid #333;
+            padding: 12px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-list {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .nav-list li a {
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            transition: color 0.2s;
+        }
+
+        .nav-list li a:hover {
+            color: #d12525;
+        }
+
+        /* HERO SLIDER */
+        .hero-slider {
+            width: 100%;
+            height: 600px;
+            background: url('https://images.unsplash.com/photo-1615937657715-bc7b4b7962c1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+            position: relative;
+            border-bottom: 4px solid #d12525;
+        }
+
+        .slider-dots {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            background-color: rgba(255,255,255,0.4);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .dot.active {
+            background-color: #fff;
+        }
+
+        /* PROMO SECTION */
+        .promo-section {
+            background: url('https://images.unsplash.com/photo-1596767118816-6c9f694580b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover;
+            position: relative;
+            padding: 60px 40px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 40px;
+            border-bottom: 4px solid #444;
+        }
+
+        .promo-section::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle, rgba(40,10,10,0.7) 0%, rgba(0,0,0,0.9) 100%);
+            z-index: 1;
+        }
+
+        .promo-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Live Music Block */
+        .live-music-block {
+            max-width: 350px;
+        }
+
+        .lm-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .lm-icon {
+            background-color: #d12525;
+            color: #fff;
+            padding: 2px 8px;
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+
+        .lm-title {
+            font-size: 2.5rem;
+            letter-spacing: 2px;
+        }
+
+        .featured-tag {
+            background-color: #d12525;
+            display: inline-block;
+            padding: 4px 10px;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .artist-name {
+            font-size: 2.2rem;
+            line-height: 1.1;
+            margin-bottom: 15px;
+        }
+
+        .location-tag {
+            color: #d12525;
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .date-tag {
+            font-size: 1rem;
+            color: #ddd;
+            letter-spacing: 1px;
+            border-bottom: 1px solid #d12525;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+
+        /* Promo Image Center */
+        .promo-image {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: url('https://images.unsplash.com/photo-1549557262-d218204618e4?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80') center/cover;
+            border: 5px solid #222;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.8);
+        }
+
+        /* To Go Box */
+        .togo-box {
+            background-color: #1a1a1a;
+            padding: 40px;
+            text-align: center;
+            max-width: 350px;
+            border-top: 4px solid #d12525;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.9);
+        }
+
+        .togo-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .togo-script {
+            font-size: 4rem;
+            color: #fff;
+            transform: rotate(-5deg);
+        }
+
+        .togo-block {
+            background-color: #d12525;
+            padding: 5px 10px;
+            font-size: 1.5rem;
+            letter-spacing: 2px;
+        }
+
+        .togo-desc {
+            font-size: 0.9rem;
+            color: #ccc;
+            margin-bottom: 25px;
+            line-height: 1.4;
+        }
+
+        .togo-select {
+            width: 100%;
+            padding: 12px;
+            background-color: #333;
+            color: #fff;
+            border: 1px solid #555;
+            margin-bottom: 15px;
+            font-family: inherit;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .togo-btn {
+            width: 100%;
+            background-color: #d12525;
+            color: #fff;
+            border: none;
+            padding: 15px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .togo-btn:hover {
+            background-color: #a31a1a;
+        }
+
+        /* LOCATIONS SECTION */
+        .locations-section {
+            background: url('https://images.unsplash.com/photo-1511151125203-6058d86f7f2b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover;
+            padding: 60px 40px 100px;
+            position: relative;
+            border-top: 5px solid #222;
+        }
+
+        .locations-section::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1;
+        }
+
+        .loc-container {
+            position: relative;
+            z-index: 2;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .loc-title-wrapper {
+            text-align: center;
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .loc-title-wrapper::before, .loc-title-wrapper::after {
+            content: '';
+            height: 2px;
+            width: 100px;
+            background-color: #555;
+        }
+
+        .find-your {
+            font-size: 2rem;
+            letter-spacing: 2px;
+            background: #fff;
+            color: #000;
+            padding: 0 10px;
+        }
+
+        .dino-script-title {
+            font-size: 3.5rem;
+            color: #fff;
+        }
+
+        .locations-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            position: relative;
+        }
+
+        .loc-card {
+            background-color: rgba(20, 20, 20, 0.85);
+            border: 1px solid #333;
+            padding: 25px 20px;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .loc-card:hover {
+            transform: translateY(-5px);
+            border-color: #d12525;
+        }
+
+        .loc-city {
+            font-size: 1.4rem;
+            color: #d12525;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .loc-details {
+            font-size: 0.85rem;
+            color: #888;
+            line-height: 1.6;
+        }
+
+        .loc-details span {
+            display: block;
+        }
+
+        .graffiti-art {
+            position: absolute;
+            right: -50px;
+            top: 50%;
+            transform: translateY(-50%) rotate(-10deg);
+            opacity: 0.6;
+            text-align: center;
+            pointer-events: none;
+        }
+
+        .graffiti-script {
+            font-size: 4rem;
+            color: #c04225;
+        }
+
+        .graffiti-bold {
+            font-size: 3rem;
+            color: #a83b22;
+            letter-spacing: 2px;
+            line-height: 1;
+        }
+        
+        .graffiti-sub {
+            font-size: 1rem;
+            color: #a83b22;
+            letter-spacing: 5px;
+        }
+
+        /* FOOTER */
+        .site-footer {
+            background-color: #000;
+            padding: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 2px solid #333;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .footer-left p {
+            font-size: 0.85rem;
+            color: #888;
+            margin-bottom: 5px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .footer-links a {
+            font-size: 0.9rem;
+            color: #ccc;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: #d12525;
+        }
+
+        .footer-logos {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .footer-logo-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 2px solid #d12525;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.7rem;
+            text-align: center;
+            color: #d12525;
+            font-weight: bold;
+        }
+
+        .bills-logo {
+            text-align: center;
+            color: #fff;
+        }
+
+        .bills-mark {
+            width: 60px;
+            height: 30px;
+            background: linear-gradient(to right, #00338D, #C60C30);
+            border-radius: 15px;
+            margin: 0 auto 5px;
+        }
+        
+        .bills-text {
+            font-size: 0.65rem;
+            letter-spacing: 1px;
+            color: #888;
+        }
+
+        /* RESPONSIVE DESIGN */
+        @media (max-width: 600px) {
+            .locations-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .graffiti-art {
+                display: none;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .promo-section {
+                flex-direction: column;
+                text-align: center;
+            }
+            .lm-header {
+                justify-content: center;
+            }
+            .locations-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .header-top {
+                flex-direction: column;
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .locations-grid {
+                grid-template-columns: 1fr;
+            }
+            .nav-list {
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+            }
+            .site-footer {
+                flex-direction: column;
+                text-align: center;
+            }
+            .footer-links {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            .brand-dino {
+                font-size: 3rem;
+            }
+            .brand-bbq {
+                font-size: 1.5rem;
+            }
+            .hero-slider {
+                height: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER TOP -->
+    <header class="header-top">
+        <div class="social-icons">
+            <a href="#" class="social-circle">f</a>
+            <a href="#" class="social-circle">t</a>
+            <a href="#" class="social-circle">in</a>
+            <a href="#" class="social-circle">yt</a>
+        </div>
+        
+        <div class="brand-logo">
+            <span class="brand-dino font-script">Dinosaur</span>
+            <span class="brand-bbq font-display">BAR-B-QUE</span>
+        </div>
+
+        <div class="newsletter-btn-wrap font-display">
+            <div class="newsletter-txt">JOIN OUR</div>
+            <button class="newsletter-btn">NEWSLETTER</button>
+        </div>
+    </header>
+
+    <!-- NAVIGATION -->
+    <nav class="main-nav">
+        <ul class="nav-list font-display">
+            <li><a href="#">HISTORY</a></li>
+            <li><a href="#">LOCATIONS</a></li>
+            <li><a href="#">MENUS</a></li>
+            <li><a href="#">LIVE MUSIC</a></li>
+            <li><a href="#">CATERING & EVENTS</a></li>
+            <li><a href="#">BOOK A TABLE</a></li>
+            <li><a href="#">NEWS</a></li>
+            <li><a href="#">DINO STORE</a></li>
+        </ul>
+    </nav>
+
+    <!-- HERO SLIDER -->
+    <section class="hero-slider">
+        <div class="slider-dots">
+            <div class="dot active"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+    </section>
+
+    <!-- PROMO SECTION -->
+    <section class="promo-section">
+        <!-- Live Music Info -->
+        <div class="promo-content live-music-block font-display">
+            <div class="lm-header">
+                <span class="lm-icon">LIVE</span>
+                <span class="lm-title">MUSIC</span>
+            </div>
+            <div class="featured-tag">FEATURED ARTIST</div>
+            <h2 class="artist-name">MR. MONKEY<br>-- OPEN JAM</h2>
+            <div class="location-tag">SYRACUSE</div>
+            <div class="date-tag">WEDNESDAY JANUARY 4</div>
+        </div>
+
+        <!-- Featured Image -->
+        <div class="promo-content promo-image"></div>
+
+        <!-- To Go Box -->
+        <div class="promo-content togo-box">
+            <div class="togo-header">
+                <span class="togo-script font-script">Dino</span>
+                <span class="togo-block font-display">TO GO</span>
+            </div>
+            <p class="togo-desc font-display">ORDER ONLINE AT YOUR<br>NEAREST DINO LOCATION</p>
+            <select class="togo-select font-display">
+                <option>SELECT YOUR DINO</option>
+                <option>SYRACUSE</option>
+                <option>ROCHESTER</option>
+                <option>BROOKLYN</option>
+            </select>
+            <button class="togo-btn font-display">ORDER NOW</button>
+        </div>
+    </section>
+
+    <!-- LOCATIONS SECTION -->
+    <section class="locations-section">
+        <div class="loc-container">
+            <div class="loc-title-wrapper">
+                <span class="find-your font-display">FIND YOUR</span>
+                <span class="dino-script-title font-script">Dino</span>
+            </div>
+
+            <div class="locations-grid">
+                <!-- Row 1 Equivalent -->
+                <div class="loc-card">
+                    <h3 class="loc-city font-display">BALTIMORE, MD</h3>
+                    <div class="loc-details">
+                        <span>1401 FLEET ST.</span>
+                        <span>BALTIMORE, MD 21231</span>
+                        <span>443-708-9070</span>
+                    </div>
+                </div>
+                <div class="loc-card">
+                    <h3 class="loc-city font-display">BROOKLYN, NY</h3>
+                    <div class="loc-details">
+                        <span>604 UNION ST.</span>
+                        <span>BROOKLYN, NY 11215</span>
+                        <span>347-429-7030</span>
+                    </div>
+                </div>
+                <div class="loc-card">
+                    <h3 class="loc-city font-display">BUFFALO, NY</h3>
+                    <div class="loc-details">
+                        <span>301 FRANKLIN ST.</span>
+                        <span>BUFFALO, NY 14202</span>
+                        <span>716-880-1677</span>
+                    </div>
+                </div>
+                <div class="loc-card">
+                    <h3 class="loc-city font-display">NEW YORK, NY</h3>
+                    <div class="loc-details">
+                        <span>700 W. 125TH ST. AT 12TH</span>
+                        <span>NEW YORK, NY 10027</span>
+                        <span>212-694-1777</span>
+                    </div>
+                </div>
+
+                <!-- Row 2 Equivalent -->
+                <div class="loc-card">
+                    <h3 class="loc-city font-display">NEWARK, NJ</h3>
+                    <div class="loc-details">
+                        <span>224 MARKET ST.</span>
+                        <span>NEWARK, NJ 07102</span>
+                        <span>862-214-6100</span>
+                    </div>
+                </div>
+                <div class="loc-card">
+                    <h3 class="loc-city font-display">ROCHESTER, NY</h3>
+                    <div class="loc-details">
+                        <span>99 COURT ST.</span>
+                        <span>ROCHESTER, NY 14604</span>
+                        <span>585-325-7090</span>
+                    </div>
+                </div>
+                <div class="loc-card">
+                    <h3 class="loc-city font-display">STAMFORD, CT</h3>
+                    <div class="loc-details">
+                        <span>845 CANAL ST.</span>
+                        <span>STAMFORD, CT 06902</span>
+                        <span>203-517-3272</span>
+                    </div>
+                </div>
+                <div class="loc-card">
+                    <h3 class="loc-city font-display">SYRACUSE, NY</h3>
+                    <div class="loc-details">
+                        <span>246 W. WILLOW ST.</span>
+                        <span>SYRACUSE, NY 13202</span>
+                        <span>315-476-4937</span>
+                    </div>
+                </div>
+
+                <!-- Row 3 Equivalent -->
+                <div class="loc-card">
+                    <h3 class="loc-city font-display">TROY, NY</h3>
+                    <div class="loc-details">
+                        <span>377 RIVER ST.</span>
+                        <span>TROY, NY 12180</span>
+                        <span>518-308-0400</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Graffiti Element right side -->
+            <div class="graffiti-art font-script">
+                <div class="graffiti-script">Always</div>
+                <div class="graffiti-bold font-display">GOOD<br>SMOKE</div>
+                <div class="graffiti-sub font-display">SINCE 1988</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+        <div class="footer-left">
+            <p class="font-display">ALL CONTENT COPYRIGHT 2015</p>
+            <p class="font-display">DINOSAUR BAR-B-QUE</p>
+        </div>
+
+        <div class="footer-links font-display">
+            <a href="#">CONTACT US</a>
+            <a href="#">JOB OPPORTUNITIES</a>
+            <a href="#">GIFT CARDS</a>
+        </div>
+
+        <div class="footer-logos">
+            <div class="footer-logo-circle font-display">
+                DINO<br>BBQ
+            </div>
+            <div class="bills-logo">
+                <div class="bills-mark"></div>
+                <div class="bills-text font-display">THE OFFICIAL BBQ<br>OF THE BUFFALO<br><strong style="color: #C60C30; font-size: 0.8rem;">BILLS</strong></div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

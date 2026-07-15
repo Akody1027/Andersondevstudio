@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <title>Smokers Food Truck</title>
+    <style>
+        /* CSS Reset & Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --brand-orange: #dd5030;
+            --brand-dark: #1d1d1d;
+            --brand-dark-alt: #111111;
+            --brand-light: #f6f5f3;
+            --text-light: #ffffff;
+            --text-dark: #333333;
+            --text-gray: #888888;
+            --font-heading: Georgia, 'Times New Roman', Times, serif;
+            --font-body: 'Arial', Helvetica, sans-serif;
+            --font-condensed: 'Arial Narrow', Arial, sans-serif;
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--text-dark);
+            background-color: var(--brand-light);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-heading);
+            text-transform: uppercase;
+            font-weight: 800;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .text-orange { color: var(--brand-orange); }
+        .bg-orange { background-color: var(--brand-orange); }
+        .bg-dark { background-color: var(--brand-dark); color: var(--text-light); }
+
+        /* Button Standard */
+        .btn {
+            display: inline-block;
+            font-family: var(--font-condensed);
+            font-weight: bold;
+            font-size: 14px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 12px 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-solid {
+            background-color: var(--brand-orange);
+            color: var(--text-light);
+            border: 2px solid var(--brand-orange);
+        }
+        .btn-solid:hover {
+            background-color: transparent;
+            color: var(--brand-orange);
+        }
+        .btn-outline {
+            background-color: transparent;
+            color: var(--brand-orange);
+            border: 2px solid var(--brand-orange);
+        }
+        .btn-outline:hover {
+            background-color: var(--brand-orange);
+            color: var(--text-light);
+        }
+
+        /* Top Bar */
+        .top-bar {
+            background-color: transparent;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+        .top-bar-inner {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            font-size: 11px;
+            color: var(--text-light);
+            font-family: var(--font-condensed);
+            letter-spacing: 1px;
+        }
+        .top-bar-inner span { margin-left: 20px; display: flex; align-items: center; gap: 5px; }
+
+        /* Header Navigation */
+        .main-header {
+            position: absolute;
+            top: 40px;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+            padding: 15px 0;
+        }
+        .nav-list {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            font-family: var(--font-condensed);
+            font-weight: bold;
+            font-size: 14px;
+            letter-spacing: 1px;
+            color: var(--text-light);
+        }
+        .nav-list li a:hover { color: var(--brand-orange); }
+        .logo-container {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 140px;
+            height: 140px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            padding: 10px;
+            margin: 0 20px;
+            background: rgba(0,0,0,0.3);
+        }
+        .logo-main {
+            font-family: var(--font-heading);
+            font-size: 24px;
+            color: var(--text-light);
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+        .logo-sub {
+            font-family: var(--font-condensed);
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: var(--text-light);
+            border-top: 1px solid rgba(255,255,255,0.5);
+            padding-top: 4px;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            height: 80vh;
+            min-height: 600px;
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .hero-content {
+            color: var(--text-light);
+            max-width: 800px;
+            padding-top: 80px;
+        }
+        .hero h1 {
+            font-size: 4rem;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+        .hero h1::before, .hero h1::after {
+            content: '';
+            display: block;
+            height: 2px;
+            width: 60px;
+            background-color: var(--text-light);
+            opacity: 0.5;
+        }
+        .hero p {
+            font-size: 18px;
+            font-style: italic;
+            font-family: var(--font-heading);
+            margin-bottom: 30px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        /* Respect Section */
+        .respect-section {
+            background: url('https://images.unsplash.com/photo-1563401502444-0dbdfc76e00a?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+            position: relative;
+            padding: 100px 0;
+            background-blend-mode: overlay;
+            background-color: rgba(255,255,255,0.9);
+        }
+        .respect-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 50px;
+        }
+        .respect-left {
+            flex: 1;
+            position: relative;
+        }
+        .est-badge {
+            background-color: var(--brand-orange);
+            color: var(--text-light);
+            font-family: var(--font-condensed);
+            font-weight: bold;
+            font-size: 14px;
+            padding: 10px;
+            text-align: center;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+            position: absolute;
+            top: -20px;
+            left: 0;
+        }
+        .respect-left h2 {
+            font-size: 3rem;
+            line-height: 1.1;
+            color: var(--brand-orange);
+            padding-left: 80px;
+        }
+        .respect-left h2 span {
+            color: var(--brand-dark);
+            display: block;
+            font-size: 2.2rem;
+        }
+        .respect-right {
+            flex: 1;
+            padding-top: 10px;
+        }
+        .respect-right p {
+            color: #555;
+            font-size: 15px;
+            margin-bottom: 25px;
+        }
+
+        /* Ribbon Divider */
+        .ribbon-divider {
+            background-color: var(--brand-orange);
+            padding: 25px 0;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+        .ribbon-divider h3 {
+            color: var(--text-light);
+            font-size: 2rem;
+            letter-spacing: 2px;
+        }
+        .ribbon-badge {
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 50px;
+            background-color: var(--brand-orange);
+            border-radius: 50px 50px 0 0;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            padding-bottom: 10px;
+        }
+        .ribbon-badge svg {
+            width: 30px;
+            height: 30px;
+            fill: var(--text-light);
+        }
+
+        /* Skewed Menu Layouts */
+        .menu-wrapper {
+            position: relative;
+            overflow: hidden;
+            background-color: var(--brand-dark);
+            padding: 80px 0;
+            margin-top: -1px; /* fix subpixel gaps */
+        }
+        
+        .menu-skew-container {
+            transform: skewY(-3deg);
+            background-color: var(--brand-dark);
+            position: relative;
+            z-index: 1;
+        }
+        .menu-skew-container.light {
+            background-color: var(--brand-light);
+            color: var(--text-dark);
+        }
+        
+        .menu-content-unskew {
+            transform: skewY(3deg);
+            display: flex;
+            align-items: center;
+            min-height: 400px;
+            position: relative;
+        }
+
+        .menu-text {
+            flex: 1;
+            padding: 40px 80px;
+            z-index: 2;
+        }
+        .menu-text h2 {
+            font-size: 2.5rem;
+            color: var(--brand-orange);
+            margin-bottom: 15px;
+        }
+        .light .menu-text h2 {
+            color: var(--brand-dark);
+        }
+        .menu-text p {
+            font-size: 14px;
+            color: var(--text-gray);
+            margin-bottom: 20px;
+            max-width: 400px;
+        }
+        .light .menu-text p {
+            color: #666;
+        }
+        .menu-link {
+            color: var(--brand-orange);
+            font-family: var(--font-condensed);
+            font-size: 14px;
+            text-transform: uppercase;
+            font-weight: bold;
+            text-decoration: underline;
+        }
+        .social-mini {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 10px;
+            color: var(--text-gray);
+            font-size: 14px;
+            font-family: var(--font-heading);
+            font-style: italic;
+        }
+
+        .menu-image {
+            position: absolute;
+            top: -10%;
+            bottom: -10%;
+            width: 55%;
+            background-size: cover;
+            background-position: center;
+            z-index: 0;
+        }
+        .img-right { right: 0; }
+        .img-left { left: 0; }
+        .align-right { text-align: right; margin-left: 45%; }
+        .align-left { text-align: left; margin-right: 45%; }
+
+        /* Gallery Grid */
+        .gallery-section {
+            background-color: var(--brand-dark-alt);
+        }
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            grid-template-rows: 250px 250px;
+            width: 100%;
+        }
+        .grid-item {
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: flex-end;
+            padding: 20px;
+        }
+        .grid-item::before {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 60%;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            z-index: 1;
+        }
+        .grid-text {
+            position: relative;
+            z-index: 2;
+            color: var(--text-light);
+        }
+        .grid-text h4 {
+            font-family: var(--font-condensed);
+            font-size: 18px;
+            letter-spacing: 1px;
+            margin-bottom: 2px;
+        }
+        .grid-text p {
+            font-size: 11px;
+            font-style: italic;
+            color: #ccc;
+        }
+
+        .item-burger { 
+            grid-row: 1 / span 2; 
+            grid-column: 1; 
+            background-image: url('https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80'); 
+        }
+        .item-brisket { 
+            grid-row: 1; 
+            grid-column: 2; 
+            background-image: url('https://images.unsplash.com/photo-1603048297172-c92544798d5e?auto=format&fit=crop&w=400&q=80'); 
+        }
+        .item-slider { 
+            grid-row: 1; 
+            grid-column: 3; 
+            background-image: url('https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=400&q=80'); 
+        }
+        .item-ribs { 
+            grid-row: 2; 
+            grid-column: 2 / span 2; 
+            background-image: url('https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=80'); 
+        }
+        .item-carnitas { 
+            grid-row: 1 / span 2; 
+            grid-column: 4; 
+            background-image: url('https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=600&q=80'); 
+        }
+
+        /* Gallery Bottom Bar */
+        .gallery-bar {
+            background-color: #2a2a2a;
+            color: var(--text-light);
+            text-align: center;
+            padding: 20px 0;
+            font-family: var(--font-condensed);
+            font-size: 18px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            position: relative;
+        }
+        .gallery-badge {
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 40px;
+            background-color: #2a2a2a;
+            border-radius: 0 0 40px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+        .gallery-badge svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--text-light);
+            margin-top: -10px;
+        }
+
+        /* Events Section */
+        .events-section {
+            background-color: var(--text-light);
+            padding: 80px 0;
+            position: relative;
+        }
+        .events-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 60px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .events-img {
+            width: 300px;
+            height: 400px;
+            background: url('https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=400&q=80') center/cover;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .events-content {
+            flex: 1;
+        }
+        .events-content h2 {
+            font-size: 3.5rem;
+            color: var(--brand-orange);
+            line-height: 1;
+            margin-bottom: 5px;
+        }
+        .events-content h3 {
+            font-size: 1.5rem;
+            color: var(--brand-dark);
+            margin-bottom: 30px;
+        }
+        .event-list {
+            border-top: 1px solid #eee;
+        }
+        .event-item {
+            display: flex;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .event-date {
+            font-family: var(--font-condensed);
+            font-weight: bold;
+            font-size: 14px;
+            color: var(--brand-dark);
+            width: 100px;
+            text-transform: uppercase;
+        }
+        .event-details {
+            flex: 1;
+        }
+        .event-details h4 {
+            font-family: var(--font-condensed);
+            color: var(--brand-orange);
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+        .event-details p {
+            font-size: 11px;
+            color: var(--text-gray);
+        }
+        .event-icon {
+            width: 30px;
+            height: 30px;
+            border: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            color: #999;
+        }
+        .more-events {
+            display: block;
+            text-align: right;
+            margin-top: 20px;
+            font-size: 12px;
+            color: var(--brand-orange);
+        }
+
+        /* Map Section */
+        .map-section {
+            height: 300px;
+            background: url('https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&w=1920&q=80') center/cover;
+            filter: grayscale(100%) opacity(0.5);
+            position: relative;
+        }
+        .map-pin {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: var(--brand-orange);
+            color: white;
+            padding: 10px 15px;
+            font-family: var(--font-condensed);
+            font-size: 12px;
+            font-weight: bold;
+            border-radius: 4px;
+        }
+        .map-pin::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 8px 8px 0;
+            border-style: solid;
+            border-color: var(--brand-orange) transparent transparent transparent;
+        }
+
+        /* Footer */
+        .main-footer {
+            background-color: var(--brand-dark-alt);
+            color: var(--text-light);
+            padding: 60px 0 20px;
+            text-align: center;
+        }
+        .footer-logo {
+            margin: 0 auto 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 120px;
+            height: 120px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 50%;
+            padding: 10px;
+        }
+        .footer-logo-main {
+            font-family: var(--font-heading);
+            font-size: 20px;
+            line-height: 1;
+        }
+        .footer-logo-sub {
+            font-family: var(--font-condensed);
+            font-size: 8px;
+            letter-spacing: 2px;
+            border-top: 1px solid rgba(255,255,255,0.3);
+            margin-top: 4px;
+            padding-top: 4px;
+        }
+        .footer-nav {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            font-family: var(--font-condensed);
+            font-size: 12px;
+            letter-spacing: 1px;
+            margin-bottom: 40px;
+        }
+        .footer-nav a:hover { color: var(--brand-orange); }
+        
+        .footer-action-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            margin-bottom: 40px;
+            font-family: var(--font-condensed);
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
+        .mailing-list {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .mailing-list input {
+            background: transparent;
+            border: 1px solid #555;
+            padding: 8px 15px;
+            color: white;
+            font-size: 11px;
+            width: 200px;
+        }
+        .mailing-list button {
+            background: #555;
+            color: white;
+            border: none;
+            padding: 9px 15px;
+            font-size: 11px;
+            font-family: var(--font-condensed);
+            cursor: pointer;
+        }
+        .social-connect {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .social-icons-footer {
+            display: flex;
+            gap: 10px;
+        }
+        .social-icons-footer span {
+            width: 24px;
+            height: 24px;
+            border: 1px solid #555;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-heading);
+            font-size: 12px;
+            font-style: italic;
+            color: #888;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #333;
+            padding-top: 20px;
+            font-size: 10px;
+            color: #666;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .footer-bottom-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container top-bar-inner">
+            <span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M20 10.999h2C22 5.869 18.127 2 12.99 2v2C17.052 4 20 6.943 20 10.999z"/><path d="M13 8c2.103 0 3 .897 3 3h2c0-3.225-1.775-5-5-5v2zm3.422 5.443a1.001 1.001 0 0 0-1.391.043l-2.393 2.461c-.576-.11-1.734-.471-2.926-1.66-1.192-1.193-1.553-2.354-1.66-2.926l2.459-2.394a1 1 0 0 0 .043-1.391L6.859 3.513a1 1 0 0 0-1.391-.087l-2.17 1.861a1 1 0 0 0-.29.649c-.015.25-.301 6.172 4.291 10.766C11.305 20.707 16.323 21 17.705 21c.202 0 .326-.006.359-.008a.992.992 0 0 0 .648-.291l1.86-2.171a1 1 0 0 0-.086-1.391l-4.064-3.696z"/></svg>
+                +02 813 00 21
+            </span>
+            <span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                SMOKERS FOODTRUCK - 34 MAIN STREET, NEW YORK CITY, NY 10004
+            </span>
+        </div>
+    </div>
+
+    <!-- Header Navigation -->
+    <header class="main-header">
+        <div class="container">
+            <ul class="nav-list">
+                <li><a href="#">HOME</a></li>
+                <li><a href="#">SMOKERS FOOD TRUCK</a></li>
+                <li><a href="#">EVENTS & TOUR</a></li>
+                <li>
+                    <div class="logo-container">
+                        <div class="logo-main">SMOKERS</div>
+                        <div class="logo-sub">FOOD TRUCK</div>
+                    </div>
+                </li>
+                <li><a href="#">HAND CRAFTED MENU</a></li>
+                <li><a href="#">GALLERY</a></li>
+                <li><a href="#">CONTACT US</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>TRADITIONAL OLD SCHOOL</h1>
+            <p>We're a food truck specialized in smoke flavored foods.</p>
+            <a href="#" class="btn btn-solid">FIND THE TRUCK</a>
+        </div>
+    </section>
+
+    <!-- Respect Section -->
+    <section class="respect-section">
+        <div class="container respect-container">
+            <div class="respect-left">
+                <div class="est-badge">EST<br>2008</div>
+                <h2><span>SMOKERS</span> RESPECT FOR<br>THE INGREDIENTS</h2>
+            </div>
+            <div class="respect-right">
+                <p>We're a food truck specialized in smoke flavored foods. Our cooking is based on a lot of flavour and original combinations. We cook our products in a traditional way, old school with respect for the ingredients and all brought in a street food way.</p>
+                <a href="#" class="btn btn-outline">READ MORE</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ribbon Divider -->
+    <div class="ribbon-divider">
+        <div class="ribbon-badge">
+            <svg viewBox="0 0 24 24"><path d="M12 2a9 9 0 0 0-8.99 8H2v2h20v-2h-1.01A9 9 0 0 0 12 2zm0 2a7 7 0 0 1 6.92 6H5.08A7 7 0 0 1 12 4zM2 14v2h20v-2H2z"/></svg>
+        </div>
+        <h3>OUR COOKING BROUGHT IN A STREET</h3>
+    </div>
+
+    <!-- Diagonal Menu Section 1 -->
+    <div class="menu-skew-container">
+        <div class="container menu-content-unskew">
+            <div class="menu-text align-left">
+                <div class="social-mini">
+                    <span>f</span><span>t</span><span>p</span>
+                </div>
+                <h2>14OZ PRIME RIB</h2>
+                <p>Pork is a good thing. Don't save the prime rib for a special occasion, this thick and juicy cut is the upper echelon of deliciousness. Give it a low smoke of hickory to make a dab melt-in-your-mouth fantastic.</p>
+                <a href="#" class="menu-link">Learn More</a>
+            </div>
+            <div class="menu-image img-right" style="background-image: url('https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=80');"></div>
+        </div>
+    </div>
+
+    <!-- Diagonal Menu Section 2 -->
+    <div class="menu-skew-container light" style="margin-top: -60px; padding-top: 60px;">
+        <div class="container menu-content-unskew">
+            <div class="menu-image img-left" style="background-image: url('https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=80');"></div>
+            <div class="menu-text align-right">
+                <div class="social-mini">
+                    <span>f</span><span>t</span><span>p</span><span>m</span>
+                </div>
+                <h2>PORK BUTT STEAK</h2>
+                <p>A mild blend of salt & water that has been absorbed by a boneless pork loin, a great product for grilling so it stays moist & juicy when cooked.</p>
+                <a href="#" class="menu-link">Learn More</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Diagonal Menu Section 3 -->
+    <div class="menu-skew-container" style="margin-top: -60px; padding-top: 60px;">
+        <div class="container menu-content-unskew">
+            <div class="menu-text align-left">
+                <div class="social-mini">
+                    <span>f</span><span>t</span><span>p</span>
+                </div>
+                <h2>HICKORY SMOKED PRIME RIB</h2>
+                <p>Pork is a good thing. Don't save the prime rib for a special occasion, this thick and juicy cut is the upper echelon of deliciousness. Give it a low smoke of hickory to make a dab melt-in-your-mouth fantastic.</p>
+                <a href="#" class="menu-link">Learn More</a>
+            </div>
+            <div class="menu-image img-right" style="background-image: url('https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?auto=format&fit=crop&w=800&q=80');"></div>
+        </div>
+    </div>
+
+    <!-- Gallery Grid -->
+    <section class="gallery-section">
+        <div class="gallery-grid">
+            <div class="grid-item item-burger">
+                <div class="grid-text">
+                    <h4>SMOKED HONEY BOURBON BIG BURGER</h4>
+                    <p>American cheese, house mustard, salsa verde, pickles</p>
+                </div>
+            </div>
+            <div class="grid-item item-brisket">
+                <div class="grid-text">
+                    <h4>BEEF BRISKET</h4>
+                    <p>BBQ brisket, red onions</p>
+                </div>
+            </div>
+            <div class="grid-item item-slider">
+                <div class="grid-text">
+                    <h4>PORK BELLY SLIDER</h4>
+                    <p>Black brioche, sea salt, pepper</p>
+                </div>
+            </div>
+            <div class="grid-item item-ribs">
+                <div class="grid-text">
+                    <h4>SMOKED HONEY BOURBON RIBS</h4>
+                    <p>American cheese, house mustard, salsa verde, pickles</p>
+                </div>
+            </div>
+            <div class="grid-item item-carnitas">
+                <div class="grid-text">
+                    <h4>SMOKED PORK CARNITAS</h4>
+                    <p>Cilantro, roasted red onion & red pepper</p>
+                </div>
+            </div>
+        </div>
+        <div class="gallery-bar">
+            MORE PRIME QUALITY SMOKED FOODS >
+            <div class="gallery-badge">
+                <svg viewBox="0 0 24 24"><path d="M21.71 2.29a1 1 0 0 0-1.42 0l-18 18a1 1 0 0 0 1.42 1.42l18-18a1 1 0 0 0 0-1.42zM5.5 6.5A1.5 1.5 0 1 0 4 5a1.5 1.5 0 0 0 1.5 1.5zM17.5 20a1.5 1.5 0 1 0-1.5-1.5 1.5 1.5 0 0 0 1.5 1.5z"/></svg>
+            </div>
+        </div>
+    </section>
+
+    <!-- Events Section -->
+    <section class="events-section">
+        <div class="events-container">
+            <div class="events-img"></div>
+            <div class="events-content">
+                <h2>EVENTS</h2>
+                <h3>YOU CAN<br>FIND US...</h3>
+                <div class="event-list">
+                    <div class="event-item">
+                        <div class="event-date">JUN 11</div>
+                        <div class="event-details">
+                            <h4>Dallas St Brewery</h4>
+                            <p>Dallas, TX 75201 / Orange Sessions</p>
+                        </div>
+                        <div class="event-icon">📍</div>
+                    </div>
+                    <div class="event-item">
+                        <div class="event-date">JUN 15</div>
+                        <div class="event-details">
+                            <h4>On Boot Fest</h4>
+                            <p>Austin, TX 78701 / Central Market</p>
+                        </div>
+                        <div class="event-icon">📍</div>
+                    </div>
+                    <div class="event-item">
+                        <div class="event-date">EVERY<br>SUNDAY</div>
+                        <div class="event-details">
+                            <h4>$5 Natives</h4>
+                            <p>Austin, TX 78701 / 1100 AM</p>
+                        </div>
+                        <div class="event-icon">></div>
+                    </div>
+                </div>
+                <a href="#" class="more-events">More Events ></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Map Section -->
+    <section class="map-section">
+        <div class="map-pin">SMOKERS<br>FOOD TRUCK</div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-logo">
+                <div class="footer-logo-main">SMOKERS</div>
+                <div class="footer-logo-sub">FOOD TRUCK</div>
+            </div>
+            
+            <div class="footer-nav">
+                <a href="#">SMOKERS FOOD TRUCK</a>
+                <a href="#">EVENTS & TOUR</a>
+                <a href="#">MENU</a>
+                <a href="#">GALLERY</a>
+                <a href="#">CONTACT US</a>
+            </div>
+
+            <div class="footer-action-row">
+                <div class="mailing-list">
+                    OUR MAILING LIST:
+                    <input type="email" placeholder="ENTER YOUR EMAIL...">
+                    <button>SUBSCRIBE</button>
+                </div>
+                <div class="social-connect">
+                    CONNECT WITH US:
+                    <div class="social-icons-footer">
+                        <span>f</span>
+                        <span>t</span>
+                        <span>in</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="footer-bottom-links">
+                    <a href="#">Terms & Conditions</a> | 
+                    <a href="#">Privacy Policy</a> | 
+                    <a href="#">Site Map</a>
+                </div>
+                <p>Copyright © 2026 Smokers Food Truck. All Rights Reserved</p>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

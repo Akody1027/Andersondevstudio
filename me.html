@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anton Bobroff - Portfolio</title>
+    <style>
+        /* Base Reset & Variables */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-dark: #151515;
+            --accent-green: #00ff2a;
+            --text-main: #ffffff;
+            --text-muted: #888888;
+            --font-stack: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: var(--font-stack);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Fixed UI Layer */
+        .ui-layer {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .ui-interactive {
+            pointer-events: auto;
+        }
+
+        /* Header / Top Navigation */
+        header {
+            position: absolute;
+            top: 40px;
+            left: 80px;
+            right: 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+        }
+
+        .nav-links a {
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .header-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 25px;
+        }
+
+        .brand-name {
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .brand-name span {
+            color: var(--accent-green);
+        }
+
+        .lang-switch {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 12px;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .lang-switch span:first-child {
+            color: var(--accent-green);
+        }
+
+        /* Footer / Bottom Navigation */
+        footer {
+            position: absolute;
+            bottom: 40px;
+            left: 80px;
+            right: 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 40px;
+        }
+
+        .social-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: capitalize;
+            letter-spacing: 0.5px;
+            transition: color 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: var(--text-main);
+        }
+
+        .copyright {
+            font-size: 9px;
+            font-weight: 600;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+        }
+
+        /* Left Sidebar Nav Indicator */
+        .sidebar {
+            position: absolute;
+            left: 40px;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sidebar-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            background: var(--bg-dark);
+            padding: 10px 0;
+        }
+
+        .sidebar-menu .line {
+            width: 16px;
+            height: 2px;
+            background-color: var(--text-muted);
+        }
+
+        .sidebar-menu .dot {
+            width: 4px;
+            height: 4px;
+            background-color: var(--text-muted);
+            border-radius: 50%;
+            margin: 5px auto 0;
+        }
+
+        /* Green Accent Lines */
+        .accent-line {
+            position: absolute;
+            width: 2px;
+            background-color: var(--accent-green);
+            z-index: 50;
+        }
+
+        /* Layout Structure */
+        section {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            display: flex;
+            overflow: hidden;
+        }
+
+        .half {
+            width: 50%;
+            height: 100%;
+            position: relative;
+        }
+
+        /* Typography & Components */
+        .huge-title {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 6.5vw;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            white-space: nowrap;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .text-block {
+            width: 380px;
+            max-width: 80%;
+        }
+
+        .lorem-text {
+            font-size: 0.55rem;
+            line-height: 2.2;
+            font-weight: 700;
+            color: var(--text-main);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 14px 28px;
+            background-color: var(--text-main);
+            color: #000;
+            font-size: 0.6rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Section 1: Hero */
+        #hero {
+            background: linear-gradient(to right, rgba(21, 21, 21, 0.95) 0%, rgba(21, 21, 21, 0.7) 40%, rgba(21, 21, 21, 0.2) 100%), url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1920&q=80') center/cover;
+            align-items: center;
+        }
+
+        .hero-portrait {
+            position: absolute;
+            right: 5%;
+            bottom: 0;
+            width: 45vw;
+            height: 90vh;
+            background: url('https://images.unsplash.com/photo-1618077360395-f3068be8e001?auto=format&fit=crop&w=800&q=80') center top/cover;
+            filter: grayscale(100%) contrast(1.1);
+            mask-image: linear-gradient(to top, transparent 0%, black 15%);
+            -webkit-mask-image: linear-gradient(to top, transparent 0%, black 15%);
+            mix-blend-mode: lighten;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            margin-left: 10vw;
+            margin-top: 5vh;
+        }
+
+        .hero-content h1 {
+            color: var(--accent-green);
+            font-size: 7vw;
+            font-weight: 800;
+            letter-spacing: -2px;
+            margin-bottom: 25px;
+        }
+
+        .hero-content p {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        #hero .accent-line {
+            height: 60px;
+            right: 25vw;
+            top: 25vh;
+        }
+
+        /* Section 2: Ionic Tour */
+        #ionic .left-bg {
+            background: linear-gradient(rgba(0, 255, 42, 0.75), rgba(0, 255, 42, 0.75)), url('https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=1000&q=80') center/cover;
+            mix-blend-mode: screen;
+        }
+
+        #ionic .half:nth-child(2) {
+            display: flex;
+            align-items: center;
+            padding-left: 12%;
+        }
+
+        #ionic .accent-line {
+            height: 80px;
+            right: 25vw;
+            top: 28vh;
+        }
+
+        /* Section 3: Intertop */
+        #intertop .half:nth-child(1) {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 12%;
+        }
+
+        #intertop .text-block {
+            text-align: right;
+        }
+
+        #intertop .right-bg {
+            background: linear-gradient(rgba(0, 255, 42, 0.75), rgba(0, 255, 42, 0.75)), url('https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1000&q=80') center top/cover;
+            mix-blend-mode: screen;
+        }
+
+        #intertop .accent-line {
+            height: 80px;
+            left: 26vw;
+            bottom: 40vh;
+        }
+
+        /* Section 4: Helen Marlen */
+        #helen .half:nth-child(1) {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .helen-img {
+            width: 55%;
+            height: 65%;
+            background: url('https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80') center/cover;
+        }
+
+        #helen .half:nth-child(2) {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 12vh 10vw 10vh 5vw;
+        }
+
+        .marlen-bottom-layout {
+            display: flex;
+            align-items: flex-end;
+            gap: 30px;
+            height: 45%;
+        }
+
+        .marlen-img {
+            width: 65%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&w=800&q=80') center top/cover;
+        }
+
+        #helen .huge-title {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            line-height: 1.05;
+            top: 55%;
+        }
+
+        #helen .accent-line {
+            height: 60px;
+            left: 26vw;
+            bottom: 5vh;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Fixed UI Overlay -->
+    <div class="ui-layer">
+        <header class="ui-interactive">
+            <nav class="nav-links">
+                <a href="#">About me</a>
+                <a href="#">Blog</a>
+                <a href="#">Contact me</a>
+            </nav>
+            <div class="header-right">
+                <div class="brand-name">Anton Bobroff <span>::</span></div>
+                <div class="lang-switch">
+                    <span>En</span>
+                    <span>Ru</span>
+                    <span>De</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="sidebar ui-interactive">
+            <div class="sidebar-menu">
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="dot"></div>
+            </div>
+        </div>
+
+        <footer class="ui-interactive">
+            <div class="social-links">
+                <a href="#">Facebook</a>
+                <a href="#">Behance</a>
+                <a href="#">Twitter</a>
+            </div>
+            <div class="copyright">
+                © 2013-2016 Back&Front-End Developer. Anton Bobroff
+            </div>
+        </footer>
+    </div>
+
+    <!-- Scrollable Content -->
+    <main id="scroll-container">
+        
+        <!-- Section 1: Hero -->
+        <section id="hero">
+            <div class="hero-portrait"></div>
+            <div class="accent-line"></div>
+            <div class="hero-content">
+                <h1>Hello!</h1>
+                <p>I'm a Front-End & Back-End Developer.</p>
+                <p>It's a may portfolio.</p>
+            </div>
+        </section>
+
+        <!-- Section 2: Ionic Tour -->
+        <section id="ionic">
+            <div class="half left-bg"></div>
+            <div class="half">
+                <div class="accent-line"></div>
+                <div class="text-block">
+                    <p class="lorem-text">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    </p>
+                    <a href="#" class="btn">See more...</a>
+                </div>
+            </div>
+            <div class="huge-title">IONIC TOUR</div>
+        </section>
+
+        <!-- Section 3: Intertop -->
+        <section id="intertop">
+            <div class="half">
+                <div class="accent-line"></div>
+                <div class="text-block">
+                    <p class="lorem-text">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    </p>
+                    <a href="#" class="btn">See more...</a>
+                </div>
+            </div>
+            <div class="half right-bg"></div>
+            <div class="huge-title">INTERTOP</div>
+        </section>
+
+        <!-- Section 4: Helen Marlen -->
+        <section id="helen">
+            <div class="half">
+                <div class="helen-img"></div>
+                <div class="accent-line"></div>
+            </div>
+            <div class="half">
+                <div class="text-block">
+                    <p class="lorem-text">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    </p>
+                </div>
+                <div class="marlen-bottom-layout">
+                    <div class="marlen-img"></div>
+                    <a href="#" class="btn">See more...</a>
+                </div>
+            </div>
+            <div class="huge-title">
+                <div>HELEN</div>
+                <div>MARLEN</div>
+            </div>
+        </section>
+
+    </main>
+
+</body>
+</html>

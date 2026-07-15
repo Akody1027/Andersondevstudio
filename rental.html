@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <title>Pantheon Rentals - Backhoe Loader</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Roboto:wght@400;500&display=swap');
+
+        /* GLOBAL RESET & TYPOGRAPHY */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+             width:100vw;
+            font-family: 'Roboto', sans-serif;
+            background-color: #222222;
+            color: #ffffff;
+            overflow-x: hidden;
+            line-height: 1.5;
+            position: relative;
+        }
+
+        h1, h2, h3, h4, h5, h6, .brand-font {
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        /* BACKGROUND GEOMETRIC SHAPES */
+        .bg-shape {
+            position: absolute;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .shape-yellow {
+            background-color: #ffb800;
+            overflow: hidden;
+        }
+
+        .shape-grey {
+            background-color: #8c8c8c;
+        }
+
+        .shape-1 {
+            width: 800px;
+            height: 400px;
+            top: 100px;
+            right: -200px;
+            transform: rotate(-35deg);
+        }
+
+        .shape-2 {
+            width: 400px;
+            height: 800px;
+            top: -100px;
+            right: -250px;
+            transform: rotate(-35deg);
+        }
+
+        .shape-3 {
+            width: 600px;
+            height: 900px;
+            top: 700px;
+            left: -350px;
+            transform: rotate(-35deg);
+        }
+        
+        .shape-4 {
+            width: 800px;
+            height: 800px;
+            bottom: -200px;
+            right: -300px;
+            transform: rotate(-35deg);
+        }
+
+        /* LAYOUT CONTAINER */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* HEADER */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px 0;
+        }
+
+        .logo-wrap {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .logo-icon {
+            width: 24px;
+            height: 24px;
+            background-color: #ffffff;
+            color: #222;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 800;
+            border-radius: 2px;
+        }
+
+        .contact-info {
+            text-align: right;
+        }
+
+        .contact-phone {
+            font-size: 1.2rem;
+            font-weight: 800;
+            margin-bottom: 3px;
+        }
+
+        .contact-sub {
+            font-size: 0.75rem;
+            color: #aaaaaa;
+        }
+
+        /* HERO SECTION */
+        .hero {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 60px 0 100px;
+            gap: 40px;
+        }
+
+        .hero-content {
+            flex: 1;
+            max-width: 600px;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+
+        .hero-price {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #ffb800;
+            margin-bottom: 40px;
+        }
+
+        .hero-desc {
+            font-size: 0.9rem;
+            color: #cccccc;
+            margin-bottom: 25px;
+            max-width: 400px;
+        }
+
+        .lead-form {
+            max-width: 350px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.8rem;
+            margin-bottom: 8px;
+            color: #dddddd;
+        }
+
+        .form-input {
+            width: 100%;
+            background-color: #333333;
+            border: 1px solid #444444;
+            padding: 15px;
+            color: #ffffff;
+            border-radius: 4px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .form-input:focus {
+            border-color: #ffb800;
+        }
+
+        .btn-primary {
+            width: 100%;
+            background-color: #ffffff;
+            color: #222222;
+            border: none;
+            padding: 16px;
+            font-size: 1rem;
+            font-weight: 700;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-bottom: 10px;
+        }
+
+        .btn-primary:hover {
+            background-color: #e0e0e0;
+        }
+        
+        .btn-yellow {
+            background-color: #ffb800;
+            color: #111;
+        }
+
+        .btn-yellow:hover {
+            background-color: #e6a600;
+        }
+
+        .form-disclaimer {
+            font-size: 0.65rem;
+            color: #888888;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        .form-disclaimer a {
+            text-decoration: underline;
+        }
+
+        .hero-image {
+            flex: 1.2;
+            position: relative;
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: auto;
+            filter: drop-shadow(0 20px 30px rgba(0,0,0,0.5));
+        }
+
+        /* SECTION TITLES */
+        .section-title {
+            text-align: center;
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 50px;
+        }
+
+        /* FEATURES SECTION */
+        .features {
+            padding: 80px 0;
+        }
+
+        .features-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .feature-card {
+            background-color: #333333;
+            padding: 30px 20px;
+            border-radius: 8px;
+            text-align: center;
+            width: calc(33.333% - 20px);
+            max-width: 320px;
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            fill: #ffb800;
+            margin-bottom: 15px;
+        }
+
+        .feature-title {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .feature-desc {
+            font-size: 0.8rem;
+            color: #aaaaaa;
+            line-height: 1.5;
+        }
+
+        /* CAROUSEL SECTION */
+        .services {
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .carousel-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .carousel-arrow {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: transparent;
+            border: 1px solid #555;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .carousel-arrow:hover {
+            border-color: #ffb800;
+            color: #ffb800;
+        }
+
+        .service-items {
+            display: flex;
+            gap: 20px;
+            overflow: hidden;
+        }
+
+        .service-card {
+            width: 300px;
+            text-align: left;
+        }
+
+        .service-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            filter: grayscale(20%);
+        }
+
+        .service-card-title {
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #555;
+            cursor: pointer;
+        }
+
+        .dot.active {
+            background-color: #ffb800;
+        }
+
+        /* CALCULATOR SECTION */
+        .calculator {
+            padding: 80px 0 120px;
+        }
+
+        .calc-wrapper {
+            display: flex;
+            justify-content: space-between;
+            gap: 40px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .calc-col {
+            flex: 1;
+        }
+
+        .calc-heading {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .checkbox-group, .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .check-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+            color: #cccccc;
+            cursor: pointer;
+        }
+
+        .check-label input {
+            accent-color: #ffb800;
+            width: 16px;
+            height: 16px;
+        }
+
+        .range-slider {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            background: #ffb800;
+            cursor: pointer;
+            margin-top: -8px;
+            box-shadow: 0 0 10px rgba(255,184,0,0.5);
+        }
+
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: #555;
+            border-radius: 2px;
+        }
+
+        .range-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: #888;
+        }
+
+        .calc-note {
+            font-size: 0.7rem;
+            color: #888;
+            margin-top: 15px;
+            line-height: 1.4;
+        }
+
+        /* FOOTER */
+        .footer {
+            border-top: 1px solid #333333;
+            padding: 60px 0;
+            position: relative;
+            z-index: 10;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            gap: 40px;
+        }
+
+        .footer-info {
+            flex: 1;
+            max-width: 400px;
+        }
+
+        .footer-logo {
+            font-weight: 700;
+            margin-bottom: 25px;
+            display: inline-block;
+        }
+
+        .footer-phone {
+            font-size: 1.2rem;
+            color: #ffb800;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .footer-email {
+            color: #ccc;
+            font-size: 0.9rem;
+            margin-bottom: 25px;
+            display: inline-block;
+        }
+
+        .footer-address {
+            font-size: 0.85rem;
+            color: #aaaaaa;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .footer-link {
+            color: #ffb800;
+            font-size: 0.85rem;
+            text-decoration: underline;
+        }
+
+        .footer-map {
+            flex: 1.5;
+            height: 250px;
+            background-color: #333;
+            border-radius: 8px;
+            overflow: hidden;
+            background: url('https://images.unsplash.com/photo-1524661135-423995f22d0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80') center/cover;
+            position: relative;
+        }
+        
+        .map-overlay {
+            position: absolute;
+            top:0; left:0; right:0; bottom:0;
+            background: rgba(255,255,255,0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .map-marker {
+            width: 30px;
+            height: 30px;
+            background: #ffb800;
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(-45deg);
+            box-shadow: -2px 2px 5px rgba(0,0,0,0.3);
+        }
+
+        .copyright {
+            text-align: center;
+            font-size: 0.7rem;
+            color: #666666;
+            margin-top: 50px;
+            line-height: 1.5;
+        }
+
+        .copyright a {
+            color: #ffb800;
+        }
+
+        /* RESPONSIVE DESIGN */
+        @media (max-width: 600px) {
+            .hero {
+                flex-direction: column;
+                text-align: center;
+            }
+            .hero-content {
+                margin: 0 auto;
+            }
+            .hero-desc {
+                margin: 0 auto 25px;
+            }
+            .lead-form {
+                margin: 0 auto;
+            }
+            .feature-card {
+                width: calc(50% - 20px);
+            }
+            .calc-wrapper {
+                flex-direction: column;
+            }
+            .footer-content {
+                flex-direction: column;
+            }
+            .footer-map {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .hero-title {
+                font-size: 2.2rem;
+            }
+            .feature-card {
+                width: 100%;
+            }
+            .service-items {
+                flex-direction: column;
+            }
+            .service-card {
+                width: 100%;
+            }
+            .carousel-arrow {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- BACKGROUND SHAPES -->
+    <div class="bg-shape shape-grey shape-1"></div>
+    <div class="bg-shape shape-yellow shape-2"></div>
+    <div class="bg-shape shape-yellow shape-3"></div>
+    <div class="bg-shape shape-grey shape-4"></div>
+
+    <div class="container">
+        
+        <!-- HEADER -->
+        <header class="header">
+            <div class="logo-wrap">
+                <div class="logo-icon brand-font">P</div>
+                <span class="brand-font">Pantheon Rentals</span>
+            </div>
+            <div class="contact-info">
+                <div class="contact-phone brand-font">(555) 123-4567</div>
+                <div class="contact-sub">Available 24/7</div>
+            </div>
+        </header>
+
+        <!-- HERO SECTION -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1 class="hero-title">Rent a backhoe loader with an operator</h1>
+                <div class="hero-price">from $30 per hour</div>
+                <p class="hero-desc">Leave a request, and our manager will call you back within 5 minutes to confirm details.</p>
+                
+                <div class="lead-form">
+                    <div class="form-group">
+                        <label class="form-label">Phone number *</label>
+                        <input type="tel" class="form-input" placeholder="+1 (___) ___-____">
+                    </div>
+                    <button class="btn-primary brand-font">Order Now</button>
+                    <p class="form-disclaimer">By clicking the button, you agree to the <br><a href="#">processing of personal data</a></p>
+                </div>
+            </div>
+            <div class="hero-image">
+                <!-- Using a high quality Unsplash image of heavy machinery masking as the transparent original -->
+                <img src="https://images.unsplash.com/photo-1582298538104-fe2e74c878f4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Yellow Backhoe Loader" style="border-radius: 12px;">
+            </div>
+        </section>
+
+        <!-- FEATURES SECTION -->
+        <section class="features">
+            <h2 class="section-title">Favorable terms of cooperation</h2>
+            <div class="features-grid">
+                
+                <div class="feature-card">
+                    <svg class="feature-icon" viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+                    <h3 class="feature-title brand-font">Any payment method</h3>
+                    <p class="feature-desc">To a checking account, by cash, or via bank transfer.</p>
+                </div>
+
+                <div class="feature-card">
+                    <svg class="feature-icon" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                    <h3 class="feature-title brand-font">Experienced operators</h3>
+                    <p class="feature-desc">Qualified staff with more than 5 years of experience.</p>
+                </div>
+
+                <div class="feature-card">
+                    <svg class="feature-icon" viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7v-5z"/></svg>
+                    <h3 class="feature-title brand-font">No days off</h3>
+                    <p class="feature-desc">We visit sites on weekends and during all public holidays.</p>
+                </div>
+
+                <div class="feature-card">
+                    <svg class="feature-icon" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+                    <h3 class="feature-title brand-font">Work by contract</h3>
+                    <p class="feature-desc">We specify exact deadlines and provide quality guarantees.</p>
+                </div>
+
+                <div class="feature-card">
+                    <svg class="feature-icon" viewBox="0 0 24 24"><path d="M12.5 10c0-1.65-1.35-3-3-3s-3 1.35-3 3 1.35 3 3 3 3-1.35 3-3zm-3 1.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm8 2.5c-1.65 0-3 1.35-3 3s1.35 3 3 3 3-1.35 3-3-1.35-3-3-3zm0 4.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm-8-1.09l7.09-7.09 1.41 1.41-7.09 7.09z"/></svg>
+                    <h3 class="feature-title brand-font">Special offers</h3>
+                    <p class="feature-desc">Individual calculation of work cost based on your total volume.</p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- CAROUSEL SECTION -->
+        <section class="services">
+            <h2 class="section-title">We work in all directions</h2>
+            <div class="carousel-wrapper">
+                <button class="carousel-arrow">&lt;</button>
+                <div class="service-items">
+                    <div class="service-card">
+                        <img src="https://images.unsplash.com/photo-1598084991519-c4d93540ce80?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Snow Loading">
+                        <h4 class="service-card-title brand-font">Snow loading</h4>
+                    </div>
+                    <div class="service-card">
+                        <img src="https://images.unsplash.com/photo-1517495306984-f84210f9daa8?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Snow Clearing">
+                        <h4 class="service-card-title brand-font">Snow removal</h4>
+                    </div>
+                    <div class="service-card">
+                        <img src="https://images.unsplash.com/photo-1579970984951-409b68ebf63a?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Other Services">
+                        <h4 class="service-card-title brand-font">And other services</h4>
+                    </div>
+                </div>
+                <button class="carousel-arrow">&gt;</button>
+            </div>
+            <div class="carousel-dots">
+                <div class="dot active"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+        </section>
+
+        <!-- CALCULATOR SECTION -->
+        <section class="calculator">
+            <h2 class="section-title">Cost Calculation</h2>
+            <div class="calc-wrapper">
+                
+                <div class="calc-col">
+                    <h4 class="calc-heading brand-font">Select tasks *</h4>
+                    <div class="checkbox-group">
+                        <label class="check-label"><input type="checkbox"> Digging pits</label>
+                        <label class="check-label"><input type="checkbox"> Trenching</label>
+                        <label class="check-label"><input type="checkbox"> Loading building materials</label>
+                        <label class="check-label"><input type="checkbox"> Drilling</label>
+                        <label class="check-label"><input type="checkbox"> Land leveling</label>
+                        <label class="check-label"><input type="checkbox"> Stump removal</label>
+                        <label class="check-label"><input type="checkbox"> Other</label>
+                    </div>
+                </div>
+
+                <div class="calc-col">
+                    <h4 class="calc-heading brand-font">Where is the object *</h4>
+                    <div class="radio-group">
+                        <label class="check-label"><input type="radio" name="location" checked> Within the city limits</label>
+                        <label class="check-label"><input type="radio" name="location"> Outside the city</label>
+                    </div>
+
+                    <h4 class="calc-heading brand-font" style="margin-top: 40px;">Number of hours *</h4>
+                    <input type="range" class="range-slider" min="1" max="24" value="8">
+                    <div class="range-labels">
+                        <span>1</span>
+                        <span>24</span>
+                    </div>
+                    <p class="calc-note">If you need the equipment for more time, please select point 24 and discuss with manager.</p>
+                </div>
+
+                <div class="calc-col">
+                    <div class="form-group">
+                        <label class="form-label">Phone number *</label>
+                        <input type="tel" class="form-input" placeholder="+1 (___) ___-____">
+                    </div>
+                    <button class="btn-primary btn-yellow brand-font">Calculate Price</button>
+                    <p class="form-disclaimer">By clicking the button, you agree to the <br><a href="#">processing of personal data</a></p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <span class="footer-logo brand-font">Pantheon Rentals</span>
+                    <a href="tel:5551234567" class="footer-phone brand-font">(555) 123-4567</a>
+                    <a href="mailto:pantheon.rent@gmail.com" class="footer-email">pantheon.rent@gmail.com</a>
+                    
+                    <p class="footer-address">
+                        Office: City Center, 42 Main Street, Floor 2, Office 16/3<br>
+                        Available 24/7
+                    </p>
+                    
+                    <a href="#" class="footer-link">Company Requisites</a>
+                </div>
+                
+                <div class="footer-map">
+                    <div class="map-overlay">
+                        <!-- Simulated Map Marker -->
+                        <div class="map-marker"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                Development and promotion by<br>
+                <a href="#">Someone Special</a>
+            </div>
+        </footer>
+
+    </div>
+
+</body>
+</html>
