@@ -18,11 +18,12 @@
             font-family: 'Inter', -apple-system, sans-serif; 
         }
         
-        body { 
+         body { 
             background-color: var(--bg-color); 
             color: var(--text-main); 
             overflow: hidden; /* Prevents double scrollbars */
-            height: 100vh; 
+            height: 100vh; /* Fallback for older browsers */
+            height: 100dvh; /* Prevents mobile browser UI from clipping the bottom */
             display: flex; 
             flex-direction: column; 
         }
@@ -122,8 +123,6 @@
         iframe.loaded { opacity: 1; }
       
       
-
-
 /* Faint Swipe Instructions */
         .swipe-instructions {
             position: absolute;
@@ -152,9 +151,6 @@
             50% { opacity: 1; transform: translateX(-50%) scale(1.02); }
         }
 
-
-
-        
         .swipe-instructions span {
             transition: color 0.1s ease, text-shadow 0.1s ease;
         }
@@ -166,7 +162,11 @@
      
       
       
-      
+      @media (max-width: 768px) {
+            .swipe-instructions {
+                bottom: 70px;
+            }
+        }
       
      
     </style>
@@ -359,7 +359,11 @@
             resetSwipeHighlight();
             handleSwipe();
         });
-
+        
+ 
+      
+      
+      
         // Initialization Boot Sequence
         if (clientPlaylist.length > 0) {
             loadSite(0);
