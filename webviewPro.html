@@ -120,58 +120,28 @@
         }
         
         iframe.loaded { opacity: 1; }
-
-        /* Floating Navigation Controls */
-        .nav-controls { 
-            position: absolute; 
-            bottom: 80px; 
-            left: 50%; 
-            transform: translateX(-50%); 
-            z-index: 30; 
-            display: flex; 
-            gap: 20px; 
-            background: var(--glass-bg); 
-            backdrop-filter: blur(15px); 
-            -webkit-backdrop-filter: blur(15px);
-            padding: 10px 20px; 
-            border-radius: 50px; 
-            border: 1px solid var(--glass-border); 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
-            align-items: center;
+      
+      
+      
+      /* Faint Swipe Instructions */
+        .swipe-instructions {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 30;
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            pointer-events: none;
+            text-transform: uppercase;
         }
-        
-        .nav-btn { 
-            background: transparent; 
-            border: none; 
-            color: #fff; 
-            font-size: 1.5rem; 
-            cursor: pointer; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            width: 40px; 
-            height: 40px; 
-            border-radius: 50%; 
-            transition: all 0.3s; 
-        }
-        
-        .nav-btn:hover { 
-            background: rgba(168, 85, 247, 0.2); 
-            color: var(--accent); 
-        }
-        
-        .nav-btn:disabled { 
-            opacity: 0.3; 
-            cursor: not-allowed; 
-        }
-        
-        .site-counter { 
-            font-size: 0.9rem; 
-            font-weight: 600; 
-            color: var(--text-main); 
-            min-width: 60px; 
-            text-align: center; 
-        }
+      
+      
+      
+      
+      
+     
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
 </head>
@@ -191,12 +161,17 @@
         
         <!-- Sandboxed iframe protects the parent shell from the embedded site's scripts breaking layout -->
         <iframe id="presentationFrame" sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
-
-        <div class="nav-controls">
-            <button class="nav-btn" id="btnPrev" aria-label="Previous Site">&#8592;</button>
-            <div class="site-counter" id="siteCounter">1 / 1</div>
-            <button class="nav-btn" id="btnNext" aria-label="Next Site">&#8594;</button>
+      
+      
+      
+      <div class="swipe-instructions">
+            &#8592; Swipe to navigate &#8594;
         </div>
+      
+      
+      
+
+     
     </main>
 
     <script>
@@ -242,9 +217,19 @@
         let currentIndex = 0;
         const iframe = document.getElementById('presentationFrame');
         const spinner = document.getElementById('loadingSpinner');
-        const btnPrev = document.getElementById('btnPrev');
-        const btnNext = document.getElementById('btnNext');
-        const counterText = document.getElementById('siteCounter');
+      
+        let touchStartX = 0;
+        let touchEndX = 0;
+        
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            if (touchEndX < touchStartX - swipeThreshold) {
+                if (currentIndex < clientPlaylist.length - 1) loadSite(currentIndex + 1);
+            }
+            if (touchEndX > touchStartX + swipeThreshold) {
+                if (currentIndex > 0) loadSite(currentIndex - 1);
+            }
+        }
 
         // Logic to swap the iframe source and handle visual transitions
         function loadSite(index) {
@@ -259,11 +244,8 @@
             
             // Swap the iframe file source
             iframe.src = clientPlaylist[currentIndex];
-            
-            // Update the navigation control UI
-            counterText.innerText = `${currentIndex + 1} / ${clientPlaylist.length}`;
-            btnPrev.disabled = currentIndex === 0;
-            btnNext.disabled = currentIndex === clientPlaylist.length - 1;
+          
+     
         }
 
         // Listener that detects when the embedded HTML file has finished rendering
@@ -275,6 +257,8 @@
             try {
                 const embeddedWindow = iframe.contentWindow;
                 let lastScrollY = embeddedWindow.scrollY;
+              
+              
 
                 embeddedWindow.addEventListener('scroll', () => {
                     const currentScrollY = embeddedWindow.scrollY;
@@ -287,24 +271,27 @@
                     }
                     lastScrollY = currentScrollY;
                 });
+              
+                embeddedWindow.addEventListener('touchstart', e => touchStartX = e.changedTouches[0].screenX);
+                embeddedWindow.addEventListener('touchend', e => {
+                    touchEndX = e.changedTouches[0].screenX;
+                    handleSwipe();
+                });
+              
+              
+              
+              
             } catch (e) {
                 console.warn("Cross-origin restriction: Cannot track scrolling inside this external URL.");
             }
         });
         
-
-
-
-
-
-        
-        // Navigation Bindings
-        btnPrev.addEventListener('click', () => {
-            if (currentIndex > 0) loadSite(currentIndex - 1);
-        });
-
-        btnNext.addEventListener('click', () => {
-            if (currentIndex < clientPlaylist.length - 1) loadSite(currentIndex + 1);
+ 
+        // Global Swipe Bindings
+        window.addEventListener('touchstart', e => touchStartX = e.changedTouches[0].screenX);
+        window.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
         });
 
         // Initialization Boot Sequence
