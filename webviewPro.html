@@ -122,7 +122,6 @@
         iframe.loaded { opacity: 1; }
       
       
-      
       /* Faint Swipe Instructions */
         .swipe-instructions {
             position: absolute;
@@ -130,13 +129,29 @@
             left: 50%;
             transform: translateX(-50%);
             z-index: 30;
-            color: rgba(255, 255, 255, 0.3);
-            font-size: 0.85rem;
-            letter-spacing: 2px;
+            color: rgba(255, 255, 255, 0.2);
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 4px;
             pointer-events: none;
-            text-transform: uppercase;
+            display: flex;
+            animation: idlePulse 2.5s infinite;
         }
-      
+
+        @keyframes idlePulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        .swipe-instructions span {
+            transition: color 0.1s ease, text-shadow 0.1s ease;
+        }
+
+        .swipe-instructions span.highlight {
+            color: var(--accent);
+            text-shadow: 0 0 10px var(--accent);
+        }
+     
       
       
       
@@ -163,12 +178,10 @@
         <iframe id="presentationFrame" sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
       
       
-      
-      <div class="swipe-instructions">
-            &#8592; Swipe to navigate &#8594;
+      <div class="swipe-instructions" id="swipeText">
+            <span>&lt;</span><span>&lt;</span><span>&nbsp;</span><span>S</span><span>W</span><span>I</span><span>P</span><span>E</span><span>&nbsp;</span><span>&gt;</span><span>&gt;</span>
         </div>
-      
-      
+
       
 
      
@@ -220,6 +233,43 @@
       
         let touchStartX = 0;
         let touchEndX = 0;
+      
+      
+      
+      const swipeSpans = document.querySelectorAll('#swipeText span');
+
+        function updateSwipeHighlight(currentX) {
+            const deltaX = currentX - touchStartX;
+            const threshold = 50; 
+            const maxSpans = swipeSpans.length;
+            
+            swipeSpans.forEach(span => span.classList.remove('highlight'));
+            if (Math.abs(deltaX) < 5) return; 
+            
+            const progress = Math.min(Math.abs(deltaX) / threshold, 1);
+            const spansToHighlight = Math.ceil(progress * maxSpans);
+            
+            if (deltaX < 0) { 
+                for(let i = maxSpans - 1; i >= maxSpans - spansToHighlight; i--) {
+                    if(swipeSpans[i]) swipeSpans[i].classList.add('highlight');
+                }
+            } else { 
+                for(let i = 0; i < spansToHighlight; i++) {
+                    if(swipeSpans[i]) swipeSpans[i].classList.add('highlight');
+                }
+            }
+        }
+        
+        function resetSwipeHighlight() {
+            swipeSpans.forEach(span => span.classList.remove('highlight'));
+        }
+      
+      
+      
+      
+      
+      
+      
         
         function handleSwipe() {
             const swipeThreshold = 50;
@@ -272,15 +322,16 @@
                     lastScrollY = currentScrollY;
                 });
               
+  
                 embeddedWindow.addEventListener('touchstart', e => touchStartX = e.changedTouches[0].screenX);
+                embeddedWindow.addEventListener('touchmove', e => updateSwipeHighlight(e.changedTouches[0].screenX));
                 embeddedWindow.addEventListener('touchend', e => {
                     touchEndX = e.changedTouches[0].screenX;
+                    resetSwipeHighlight();
                     handleSwipe();
                 });
               
-              
-              
-              
+ 
             } catch (e) {
                 console.warn("Cross-origin restriction: Cannot track scrolling inside this external URL.");
             }
@@ -288,9 +339,12 @@
         
  
         // Global Swipe Bindings
+
         window.addEventListener('touchstart', e => touchStartX = e.changedTouches[0].screenX);
+        window.addEventListener('touchmove', e => updateSwipeHighlight(e.changedTouches[0].screenX));
         window.addEventListener('touchend', e => {
             touchEndX = e.changedTouches[0].screenX;
+            resetSwipeHighlight();
             handleSwipe();
         });
 
