@@ -317,6 +317,8 @@
                 if (!iframe.classList.contains('loaded')) {
                     spinner.style.opacity = '0';
                     iframe.classList.add('loaded');
+                    injectIframeListeners();
+
                 }
             }, 2500);
 
@@ -324,21 +326,21 @@
         }
 
         // Listener that detects when the embedded HTML file has finished rendering
-        
-        iframe.addEventListener('load', () => {
-            spinner.style.opacity = '0';
-            iframe.classList.add('loaded');
 
+
+
+
+
+                function injectIframeListeners() {
             try {
                 const embeddedWindow = iframe.contentWindow;
+                if (embeddedWindow.swipeAttached) return; 
+                
                 let lastScrollY = embeddedWindow.scrollY;
-              
-              
 
                 embeddedWindow.addEventListener('scroll', () => {
                     const currentScrollY = embeddedWindow.scrollY;
                     const header = document.querySelector('header');
-
                     if (currentScrollY > lastScrollY && currentScrollY > 50) {
                         header.classList.add('hidden');
                     } else {
@@ -347,7 +349,6 @@
                     lastScrollY = currentScrollY;
                 });
               
-  
                 embeddedWindow.addEventListener('touchstart', e => touchStartX = e.changedTouches[0].screenX);
                 embeddedWindow.addEventListener('touchmove', e => updateSwipeHighlight(e.changedTouches[0].screenX));
                 embeddedWindow.addEventListener('touchend', e => {
@@ -356,13 +357,27 @@
                     handleSwipe();
                 });
               
- 
+                embeddedWindow.swipeAttached = true;
             } catch (e) {
                 console.warn("Cross-origin restriction: Cannot track scrolling inside this external URL.");
             }
+        }
+
+        iframe.addEventListener('load', () => {
+            spinner.style.opacity = '0';
+            iframe.classList.add('loaded');
+            injectIframeListeners(); 
         });
+
         
- 
+
+
+
+
+
+
+
+        
         // Global Swipe Bindings
 
         window.addEventListener('touchstart', e => touchStartX = e.changedTouches[0].screenX);
