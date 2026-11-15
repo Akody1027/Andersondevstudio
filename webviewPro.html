@@ -308,8 +308,18 @@
             spinner.style.opacity = '1';
             
             // Swap the iframe file source
+            
+                      // Swap the iframe file source
             iframe.src = clientPlaylist[currentIndex];
-          
+            
+            // Failsafe: Force display after 2.5 seconds regardless of child asset status
+            setTimeout(() => {
+                if (!iframe.classList.contains('loaded')) {
+                    spinner.style.opacity = '0';
+                    iframe.classList.add('loaded');
+                }
+            }, 2500);
+
      
         }
 
